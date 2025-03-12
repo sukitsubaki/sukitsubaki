@@ -6,8 +6,8 @@ const sukiTheCoder = {
     level: 33,
     
     abilities: {
-        experienced: ["PHP", "Python", "HTML", "CSS", "TypoScript"],
-        levelingUp: ["Lua", "JavaScript", "SQL"],
+        experienced: ["CSS", "HTML", "PHP", "Python", "TypoScript"],
+        levelingUp: ["JavaScript", "Lua", "SQL"],
         specialSkills: [
             "Scribe of the Eternal Documentation",
             "Architect of Scalable Systems",
