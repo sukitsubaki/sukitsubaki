@@ -1,7 +1,24 @@
 ## やっほー 👋🏻
-<p align="justify">I'm Suki Tsubaki. 🌸 I'm not a professional developer, but I have a grasp of coding and enjoy it as a hobby since my childhood. I work on small side projects from time to time, constantly learning and exploring something new. Most of my larger repositories are very specific and private, but I enjoy revisiting and expanding, finding new ways to solve and improve it.</p>
+```javascript
+const profile = {
+    name: "Suki Tsubaki",
+    role: "Casual Developer",
+    experience: {
+        advanced: ["HTML", "CSS", "PHP", "Python", "TypoScript"],
+        beginner: ["Lua", "JavaScript", "SQL"]
+    },
+    interests: [
+        "Side projects",
+        "AI/ML on Raspberry Pi",
+        "Automating tasks with code",
+        "Self-hosting and server tinkering",
+        "Problem-solving & optimization"
+    ]
+};
 
-<p align="justify">I have advanced skills in HTML, CSS, PHP, Python and TypoScript, as well as beginner skills in Lua, JavaScript and SQL. In addition to coding, I plan to set up and train my own AI/ML model on my Raspberry Pi in the future, to explore the world of artificial intelligence and machine learning.</p>
+console.log(profile);
+```
+
 
 <p align="center">
   <a href="https://github.com/anuraghazra/github-readme-stats"><img src="https://github-stats-omega-ebon.vercel.app/api?username=sukitsubaki&layout=donut&show_icons=true&number_format=short&bg_color=ffffff&border_color=ffffff&icon_color=f2487b&&title_color=f2487b&text_color=1f2328&count_private=true&include_all_commits=true&rank_icon=github&hide_title=true" height="180px" width="auto" /></a>
