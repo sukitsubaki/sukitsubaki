@@ -1,22 +1,63 @@
 ## やっほー 👋🏻
 ```javascript
-const profile = {
+const sukiTheCoder = {
     name: "Suki Tsubaki",
-    role: "Casual Developer",
-    experience: {
-        advanced: ["HTML", "CSS", "PHP", "Python", "TypoScript"],
-        beginner: ["Lua", "JavaScript", "SQL"]
+    title: "Code Explorer",
+    level: 33,
+    
+    abilities: {
+        experienced: ["PHP", "Python", "HTML", "CSS", "TypoScript"],
+        levelingUp: ["Lua", "JavaScript", "SQL"],
+        specialSkills: [
+            "Scribe of the Eternal Documentation",
+            "Architect of Scalable Systems",
+            "Sorceress of Data Extraction"
+        ]
     },
-    interests: [
-        "Side projects",
-        "AI/ML on Raspberry Pi",
-        "Automating tasks with code",
-        "Self-hosting and server tinkering",
-        "Problem-solving & optimization"
-    ]
+
+    quests: {
+        main: [
+            "Master CSS Animations",
+            "Unlock the Secrets of Machine Learning"
+        ],
+        side: [
+            "Automate Daily Tasks",
+            "Tame the AI on Raspberry Pi",
+            "Explore the Lands of JavaScript",
+            "Optimize Old Scripts for Maximum Efficiency",
+            "Set Up a Self-Hosted Email Server"
+        ]
+    },
+
+    inventory: {
+        tools: ["Brackets", "Safari", "Terminal"],
+        enchantedItems: [
+            "Keyboard of Precision",
+            "Elixir of Tea-fueled Focus",
+            "Symphony of the Abyss"
+        ]
+    },
+
+    guilds: [
+        "Casual Cougars", // a circle of friends
+        "Discord Enthusiasts",
+        "Creative Cloud Explorers"
+    ],
+
+    lore: [
+        "Discovered the magic of coding as a child",
+        "Loves crafting digital solutions just for fun",
+        "Enjoys traveling back in time to fix past coding mistakes",
+        "Believes that code is not just logic, but also art",
+        "Has been known to debug in the dead of night"
+    ],
+
+    statusEffects: {
+        buffs: ["Endless Curiosity", "Creative Thinking"],
+        debuffs: ["Occasionally Overengineers Solutions", "Too Many Side Projects"]
+    }
 };
 
-console.log(profile);
 ```
 
 
