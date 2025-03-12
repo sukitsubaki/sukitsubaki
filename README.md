@@ -58,6 +58,7 @@ const sukiTheCoder = {
     }
 };
 
+console.log(sukiTheCoder);
 ```
 
 
