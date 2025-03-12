@@ -3,8 +3,10 @@
 
 <p align="justify">I have advanced skills in HTML, CSS, PHP, Python and TypoScript, as well as beginner skills in Lua, JavaScript and SQL. In addition to coding, I plan to set up and train my own AI/ML model on my Raspberry Pi in the future, to explore the world of artificial intelligence and machine learning.</p>
 
-<a href="https://github.com/anuraghazra/github-readme-stats"><img src="https://github-stats-omega-ebon.vercel.app/api?username=sukitsubaki&layout=donut&show_icons=true&number_format=short&border_color=f2487b&icon_color=ffffff&bg_color=f2487b&title_color=fff&text_color=fff&count_private=true&include_all_commits=true&rank_icon=github" height="209px" width="auto" /></a>
-<a href="https://github.com/anuraghazra/github-readme-stats"><img src="https://github-stats-omega-ebon.vercel.app/api/top-langs/?username=sukitsubaki&layout=donut&border_color=f2487b&bg_color=ffffff&title_color=f2487b&text_color=f2487b&size_weight=0.5&count_weight=0.5&count_private=true&include_all_commits=true&rank_icon=github" height="209px" width="auto" /></a>
+<p align="center">
+  <a href="https://github.com/anuraghazra/github-readme-stats"><img src="https://github-stats-omega-ebon.vercel.app/api?username=sukitsubaki&layout=donut&show_icons=true&number_format=short&bg_color=ffffff&border_color=ffffff&icon_color=f2487b&&title_color=f2487b&text_color=1f2328&count_private=true&include_all_commits=true&rank_icon=github&hide_title=true" height="180px" width="auto" /></a>
+  <a href="https://github.com/anuraghazra/github-readme-stats"><img src="https://github-stats-omega-ebon.vercel.app/api/top-langs/?username=sukitsubaki&layout=compact&bg_color=ffffff&border_color=ffffff&title_color=f2487b&text_color=1f2328&size_weight=0.5&count_weight=0.5&count_private=true&include_all_commits=true&custom_title=Code%20Composition" height="160px" width="auto" /></a>
+</p>
 
 <!--
 **sukitsubaki/sukitsubaki** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
