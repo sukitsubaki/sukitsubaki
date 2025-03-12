@@ -1,4 +1,9 @@
 ## やっほー 👋🏻
+<p align="center">
+  <a href="https://github.com/anuraghazra/github-readme-stats"><img src="https://github-stats-omega-ebon.vercel.app/api?username=sukitsubaki&layout=donut&show_icons=true&number_format=short&bg_color=ffffff&border_color=ffffff&icon_color=f2487b&&title_color=f2487b&text_color=1f2328&count_private=true&include_all_commits=true&rank_icon=github&hide_title=true" height="180px" width="auto" /></a>
+  <a href="https://github.com/anuraghazra/github-readme-stats"><img src="https://github-stats-omega-ebon.vercel.app/api/top-langs/?username=sukitsubaki&layout=compact&bg_color=ffffff&border_color=ffffff&title_color=f2487b&text_color=1f2328&size_weight=0.5&count_weight=0.5&count_private=true&include_all_commits=true&custom_title=Code%20Composition" height="160px" width="auto" /></a>
+</p>
+
 ```javascript
 const sukiTheCoder = {
     name: "Suki Tsubaki",
@@ -60,12 +65,6 @@ const sukiTheCoder = {
 
 console.log(sukiTheCoder);
 ```
-
-
-<p align="center">
-  <a href="https://github.com/anuraghazra/github-readme-stats"><img src="https://github-stats-omega-ebon.vercel.app/api?username=sukitsubaki&layout=donut&show_icons=true&number_format=short&bg_color=ffffff&border_color=ffffff&icon_color=f2487b&&title_color=f2487b&text_color=1f2328&count_private=true&include_all_commits=true&rank_icon=github&hide_title=true" height="180px" width="auto" /></a>
-  <a href="https://github.com/anuraghazra/github-readme-stats"><img src="https://github-stats-omega-ebon.vercel.app/api/top-langs/?username=sukitsubaki&layout=compact&bg_color=ffffff&border_color=ffffff&title_color=f2487b&text_color=1f2328&size_weight=0.5&count_weight=0.5&count_private=true&include_all_commits=true&custom_title=Code%20Composition" height="160px" width="auto" /></a>
-</p>
 
 <!--
 **sukitsubaki/sukitsubaki** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
