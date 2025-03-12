@@ -12,7 +12,7 @@ const sukiTheCoder = {
     
     abilities: {
         experienced: ["CSS", "HTML", "PHP", "Python", "TypoScript"],
-        levelingUp: ["JavaScript", "Lua", "SQL"],
+        levelingUp: ["JavaScript", "Lua", "SQL", "Swift"],
         specialSkills: [
             "Scribe of the Eternal Documentation",
             "Architect of Scalable Systems",
@@ -28,8 +28,8 @@ const sukiTheCoder = {
         side: [
             "Automate Daily Tasks",
             "Tame the AI on Raspberry Pi",
-            "Explore the Lands of JavaScript",
-            "Optimize Old Scripts for Maximum Efficiency",
+            "Explore the Lands of Swift",
+            "Optimize Old Code for Maximum Efficiency",
             "Set Up a Self-Hosted Email Server"
         ]
     },
