@@ -44,9 +44,9 @@ const sukiTheCoder = {
     },
 
     guilds: [
-        "Casual Cougars", // a circle of friends
-        "Discord Enthusiasts",
-        "Creative Cloud Explorers"
+        "kawaii-kode", // a circle of friends
+        "bento-bytes", // another circle of friends
+        "neoneko-horizon" // psst
     ],
 
     lore: [
