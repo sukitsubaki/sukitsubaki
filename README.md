@@ -35,7 +35,7 @@ const sukiTheCoder = {
     },
 
     inventory: {
-        tools: ["Brackets", "Safari", "Terminal"],
+        tools: ["Brackets", "Xcode", "Terminal", "Safari"],
         enchantedItems: [
             "Keyboard of Precision",
             "Elixir of Tea-fueled Focus",
