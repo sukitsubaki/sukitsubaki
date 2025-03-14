@@ -9,6 +9,7 @@ const sukiTheCoder = {
     name: "Suki Tsubaki",
     title: "Code Explorer",
     level: 33,
+    nexus: "sukitsubaki.github.io",
     
     abilities: {
         experienced: ["CSS", "HTML", "PHP", "Python", "TypoScript"],
@@ -45,8 +46,6 @@ const sukiTheCoder = {
 
     guilds: [
         "kawaii-kode", // a circle of friends
-        "bento-bytes", // another circle of friends
-        "neoneko-horizon" // psst
     ],
 
     lore: [
