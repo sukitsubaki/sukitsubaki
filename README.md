@@ -1,4 +1,4 @@
-![Name banner](banner-01.svg)
+![Name banner](banner.svg)
 
 
 <p align="center">
