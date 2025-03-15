@@ -31,11 +31,7 @@
   },
   "inventory": {
     "tools": ["Brackets", "Xcode", "Terminal", "Safari"],
-    "enchantedItems": [
-      "Keyboard of Precision",
-      "Elixir of Tea-fueled Focus",
-      "Symphony of the Abyss"
-    ]
+    "enchantedItems": ["Keyboard of Precision", "Elixir of Tea-fueled Focus", "Symphony of the Abyss"]
   },
   "guilds": [
     "kawaii-kode"
