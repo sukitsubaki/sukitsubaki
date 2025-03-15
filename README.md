@@ -1,4 +1,5 @@
-![Profile banner](banner.png)
+![Name banner](banner2.png)
+![Image banner](banner.png)
 
 ## やっほー 👋🏻
 <p align="center">
