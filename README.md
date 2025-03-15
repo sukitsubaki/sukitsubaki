@@ -16,11 +16,7 @@ const sukiTheCoder = {
     abilities: {
         experienced: ["CSS", "HTML", "PHP", "Python", "TypoScript"],
         levelingUp: ["JavaScript", "Lua", "SQL", "Swift"],
-        specialSkills: [
-            "Scribe of the Eternal Documentation",
-            "Architect of Scalable Systems",
-            "Sorceress of Data Extraction"
-        ]
+        specialSkills: ["Architect of Scalable Systems"]
     },
 
     quests: {
@@ -32,7 +28,6 @@ const sukiTheCoder = {
             "Automate Daily Tasks",
             "Tame the AI on Raspberry Pi",
             "Explore the Lands of Swift",
-            "Optimize Old Code for Maximum Efficiency",
             "Set Up a Self-Hosted Email Server"
         ]
     },
@@ -54,8 +49,7 @@ const sukiTheCoder = {
         "Discovered the magic of coding as a child",
         "Loves crafting digital solutions just for fun",
         "Enjoys traveling back in time to fix past coding mistakes",
-        "Believes that code is not just logic, but also art",
-        "Has been known to debug in the dead of night"
+        "Believes that code is not just logic, but also art"
     ],
 
     statusEffects: {
