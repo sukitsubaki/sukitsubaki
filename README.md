@@ -1,4 +1,4 @@
-![Name banner](banner.svg)
+<a href="https://sukitsubaki.github.io">![Name banner](banner.svg)</a>
 
 
 <p align="center">
@@ -11,7 +11,6 @@
   "name": "Suki Tsubaki",
   "title": "Code Explorer",
   "level": 33,
-  "nexus": "sukitsubaki.github.io",
   "abilities": {
     "experienced": ["CSS", "HTML", "PHP", "Python", "TypoScript"],
     "levelingUp": ["JavaScript", "Lua", "SQL", "Swift"],
@@ -33,9 +32,7 @@
     "tools": ["Brackets", "Xcode", "Terminal", "Safari"],
     "enchantedItems": ["Keyboard of Precision", "Elixir of Tea-fueled Focus", "Symphony of the Abyss"]
   },
-  "guilds": [
-    "kawaii-kode"
-  ],
+  "guilds": ["kawaii-kode"],
   "lore": [
     "Discovered the magic of coding as a child",
     "Loves crafting digital solutions just for fun",
@@ -44,7 +41,7 @@
   ],
   "statusEffects": {
     "buffs": ["Endless Curiosity", "Creative Thinking"],
-    "debuffs": ["Occasionally Overengineers Solutions", "Too Many Side Projects"]
+    "debuffs": ["Over-engineering", "Side Projects"]
   }
 }
 ```
