@@ -103,10 +103,15 @@ jobs:
           // Create SVG visualization
           const svgWidth = 900;         // Width in pixels
           const barHeight = 20;         // Bar height 20px as requested
-          const percentFontSize = 14;   // Larger font for percentages (inside bar)
+          const percentFontSize = 12;   // Reduced to 12px as requested
           const langFontSize = 10;      // Font size for language names (below bar)
-          const textSpacing = 4;        // Space between bar and language text
-          const svgHeight = barHeight + textSpacing + langFontSize + 2; // Total SVG height
+          const textSpacing = 6;        // Increased space between bar and language text
+          const bottomPadding = 4;      // Added padding at the bottom
+          const borderRadius = 6;       // Border radius in pixels
+          
+          // Total SVG height with increased spacing to prevent text cutoff
+          const svgHeight = barHeight + textSpacing + langFontSize + bottomPadding;
+          
           const fontFamily = "'Noto Sans', Helvetica, Arial, sans-serif";  // Font family with fallbacks
           const langTextColor = "#1f2328"; // Language text color
           
@@ -130,11 +135,23 @@ jobs:
           // Create SVG with explicit viewBox and preserveAspectRatio
           let svg = `<svg width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">\n`;
           
-          // Add bar segments - ensure x=0 for first bar to eliminate any left margin
+          // Create a group for the bar with a clipping path for the rounded corners
+          svg += `  <defs>\n`;
+          svg += `    <clipPath id="roundedBar">\n`;
+          svg += `      <rect x="0" y="0" width="${svgWidth}" height="${barHeight}" rx="${borderRadius}" ry="${borderRadius}" />\n`;
+          svg += `    </clipPath>\n`;
+          svg += `  </defs>\n`;
+          
+          // Add a group with the clipping path
+          svg += `  <g clip-path="url(#roundedBar)">\n`;
+          
+          // Add bar segments
           languages.forEach((lang, index) => {
             const x = index === 0 ? 0 : lang.x;
-            svg += `  <rect x="${x}" y="0" width="${lang.width}" height="${barHeight}" fill="${lang.color}" />\n`;
+            svg += `    <rect x="${x}" y="0" width="${lang.width}" height="${barHeight}" fill="${lang.color}" />\n`;
           });
+          
+          svg += `  </g>\n`;
           
           // Add percentage text inside each bar segment
           languages.forEach(lang => {
@@ -150,7 +167,7 @@ jobs:
           // Add language names below each bar segment
           languages.forEach(lang => {
             const textX = lang.x + (lang.width / 2);
-            const langY = barHeight + textSpacing + langFontSize; // Position below the bar
+            const langY = barHeight + textSpacing + (langFontSize / 2); // Adjusted position
             
             // Only add language name if there's enough space (bar width > 30px)
             if (lang.width > 30) {
