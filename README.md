@@ -60,13 +60,14 @@
 <!-- START_LANGUAGE_STATS -->
 ## My Programming Languages
 
-- PHP: 44.01%
-- JavaScript: 17.90%
-- HTML: 13.11%
-- Swift: 10.72%
-- Python: 7.63%
+- PHP: 44.28%
+- JavaScript: 18.01%
+- HTML: 13.19%
+- Swift: 10.79%
+- Python: 7.68%
+- CSS: 6.05%
 
-*Statistics based on all my repositories with 50/50 weighting between bytes and file count.*
+*Top 6 languages rescaled to 100%. Based on all repositories with 50/50 weighting between bytes and file count.*
 <!-- END_LANGUAGE_STATS -->
 
 <!--
