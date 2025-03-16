@@ -57,6 +57,9 @@
 }
 ```
 
+<!-- START_LANGUAGE_STATS -->
+<!-- END_LANGUAGE_STATS -->
+
 <!--
 **sukitsubaki/sukitsubaki** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
