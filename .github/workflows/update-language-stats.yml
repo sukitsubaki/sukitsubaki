@@ -28,7 +28,7 @@ jobs:
           # Fetch the API and save results
           curl -s "https://sukitsubaki.vercel.app/language-stats" > stats.json
           
-          # Generate the new README with language statistics
+          # Generate the new README with language statistics and SVG
           node -e '
             const fs = require("fs");
             const stats = JSON.parse(fs.readFileSync("stats.json", "utf8"));
@@ -38,8 +38,25 @@ jobs:
             const showOthers = process.env.SHOW_OTHERS === "true";
             const topCount = parseInt(process.env.TOP_LANGUAGES) || 6;
             
-            // Create the language stats section
-            let langSection = "## My Programming Languages\n\n";
+            // Language colors (GitHub colors)
+            const languageColors = {
+              "PHP": { bg: "#8993be", text: "#ffffff" },
+              "JavaScript": { bg: "#f1e05a", text: "#000000" },
+              "TypeScript": { bg: "#3178c6", text: "#ffffff" },
+              "HTML": { bg: "#e34c26", text: "#ffffff" },
+              "CSS": { bg: "#563d7c", text: "#ffffff" },
+              "Python": { bg: "#3572A5", text: "#ffffff" },
+              "Java": { bg: "#b07219", text: "#ffffff" },
+              "Ruby": { bg: "#701516", text: "#ffffff" },
+              "Go": { bg: "#00ADD8", text: "#ffffff" },
+              "Swift": { bg: "#ffac45", text: "#000000" },
+              "C": { bg: "#555555", text: "#ffffff" },
+              "C++": { bg: "#f34b7d", text: "#ffffff" },
+              "C#": { bg: "#178600", text: "#ffffff" },
+              "Shell": { bg: "#89e051", text: "#000000" },
+              "Rust": { bg: "#dea584", text: "#000000" },
+              "Other": { bg: "#ededed", text: "#000000" }
+            };
             
             // Get the language entries and sort by percentage
             const langEntries = Object.entries(stats.languages)
@@ -61,29 +78,103 @@ jobs:
             // Function to format percentage
             const formatPercentage = (pct) => pct.toFixed(2) + "%";
             
+            // Prepare final percentages for visualization
+            let languages = [];
+            
             if (showOthers) {
-              // Show top languages with original percentages
-              topLanguages.forEach(lang => {
-                langSection += `- ${lang.language}: ${formatPercentage(lang.percentage)}\n`;
-              });
+              // Use original percentages and add "Other"
+              languages = topLanguages.map(lang => ({
+                language: lang.language,
+                percentage: lang.percentage,
+                color: languageColors[lang.language]?.bg || "#808080"
+              }));
               
-              // Add "Other" category if there are more languages
               if (langEntries.length > topCount && otherPercentage > 0) {
-                langSection += `- Other: ${formatPercentage(otherPercentage)}\n`;
+                languages.push({
+                  language: "Other",
+                  percentage: otherPercentage,
+                  color: languageColors["Other"].bg
+                });
               }
             } else {
               // Rescale percentages to total 100%
-              topLanguages.forEach(lang => {
-                const scaledPercentage = (lang.percentage / topSum) * 100;
-                langSection += `- ${lang.language}: ${formatPercentage(scaledPercentage)}\n`;
-              });
+              languages = topLanguages.map(lang => ({
+                language: lang.language,
+                percentage: (lang.percentage / topSum) * 100,
+                color: languageColors[lang.language]?.bg || "#808080"
+              }));
             }
+            
+            // Create SVG visualization
+            const svgWidth = 800;
+            const svgHeight = 130;
+            const barHeight = 30;
+            const textAreaHeight = 100;
+            const fontSize = 16;
+            const spacing = 25;
+            
+            // Calculate bar widths and positions
+            let currentX = 0;
+            languages.forEach(lang => {
+              lang.width = (lang.percentage / 100) * svgWidth;
+              lang.x = currentX;
+              currentX += lang.width;
+            });
+            
+            // Create SVG
+            let svg = `<svg width="${svgWidth}" height="${svgHeight}" xmlns="http://www.w3.org/2000/svg">\n`;
+            
+            // Add bar segments
+            languages.forEach(lang => {
+              svg += `  <rect x="${lang.x}" y="0" width="${lang.width}" height="${barHeight}" fill="${lang.color}" />\n`;
+            });
+            
+            // Split languages into two rows for better display
+            const halfway = Math.ceil(languages.length / 2);
+            const firstRow = languages.slice(0, halfway);
+            const secondRow = languages.slice(halfway);
+            
+            // Add language labels and percentages - first row
+            firstRow.forEach((lang, index) => {
+              const textX = lang.x + (lang.width / 2);
+              const textColor = languageColors[lang.language]?.text || "#000000";
+              
+              // Add connector line
+              svg += `  <line x1="${textX}" y1="${barHeight}" x2="${textX}" y2="${barHeight + 10}" stroke="#666666" stroke-width="1" />\n`;
+              
+              // Add language name and percentage
+              svg += `  <text x="${textX}" y="${barHeight + spacing}" text-anchor="middle" font-family="Arial" font-size="${fontSize}" fill="#000000">● ${lang.language} ${formatPercentage(lang.percentage)}</text>\n`;
+              
+              // Add colored dot (using the same color as the bar)
+              svg += `  <circle cx="${textX - (fontSize * 2.5)}" cy="${barHeight + spacing - 5}" r="5" fill="${lang.color}" />\n`;
+            });
+            
+            // Add language labels and percentages - second row
+            secondRow.forEach((lang, index) => {
+              const textX = lang.x + (lang.width / 2);
+              const textColor = languageColors[lang.language]?.text || "#000000";
+              
+              // Add connector line
+              svg += `  <line x1="${textX}" y1="${barHeight}" x2="${textX}" y2="${barHeight + 10}" stroke="#666666" stroke-width="1" />\n`;
+              
+              // Add language name and percentage
+              svg += `  <text x="${textX}" y="${barHeight + (spacing * 2)}" text-anchor="middle" font-family="Arial" font-size="${fontSize}" fill="#000000">● ${lang.language} ${formatPercentage(lang.percentage)}</text>\n`;
+              
+              // Add colored dot (using the same color as the bar)
+              svg += `  <circle cx="${textX - (fontSize * 2.5)}" cy="${barHeight + (spacing * 2) - 5}" r="5" fill="${lang.color}" />\n`;
+            });
+            
+            svg += "</svg>";
+            
+            // Create language stats section
+            let langSection = "";
+            langSection += svg + "\n\n";
             
             // Add a note about the calculation method
             if (showOthers) {
-              langSection += "\n*Statistics based on all repositories with 50/50 weighting between bytes and file count.*";
+              langSection += "*Statistics based on all repositories with 50/50 weighting between bytes and file count.*";
             } else {
-              langSection += "\n*Top 6 languages rescaled to 100%. Based on all repositories with 50/50 weighting between bytes and file count.*";
+              langSection += "*Top ${topCount} languages rescaled to 100%. Based on all repositories with 50/50 weighting between bytes and file count.*";
             }
             
             // Replace existing section or append to the end
