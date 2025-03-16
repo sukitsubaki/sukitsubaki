@@ -12,12 +12,8 @@
 
 </div>
 
-<p align="center">
-  My Used Languages
-</p>
-<!-- START_LANGUAGE_STATS -->
-<img src="api/language-stats/language-stats-1742152140546.svg" width="100%" alt="My Programming Languages">
-<!-- END_LANGUAGE_STATS -->
+<!-- START_LANGUAGE_STATS_TEXT -->
+<!-- END_LANGUAGE_STATS_TEXT -->
 
 </p>
 
