@@ -1,4 +1,4 @@
-name: Update Language Stats
+name: Update Language Stats (SVG)
 
 on:
   schedule:
