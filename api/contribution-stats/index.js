@@ -108,12 +108,18 @@ async function fetchContributionStats(username, token) {
     totalForks += repo.forkCount;
   });
   
-  // Calculate total discussions
+  // Calculate total discussions and discussion comments
   const totalDiscussions = user.repositoryDiscussions.totalCount;
   const totalDiscussionComments = user.repositoryDiscussionComments.totalCount;
+  
+  // Combine discussions and comments
+  const totalDiscussionsAndComments = totalDiscussions + totalDiscussionComments;
 
   // Create contribution summary
   const contribs = user.contributionsCollection;
+  
+  // Combine pull requests and reviews
+  const totalPullRequestsAndReviews = user.pullRequests.totalCount + contribs.totalPullRequestReviewContributions;
   
   // Calculate total contributions
   const totalContributions = 
@@ -136,10 +142,12 @@ async function fetchContributionStats(username, token) {
     pullRequestsCreated: user.pullRequests.totalCount,
     pullRequestContributions: contribs.totalPullRequestContributions,
     pullRequestReviews: contribs.totalPullRequestReviewContributions,
+    pullRequestsAndReviews: totalPullRequestsAndReviews,
     repositoriesCreated: contribs.totalRepositoryContributions,
     repositoriesCount: user.repositories.totalCount,
     discussions: totalDiscussions,
     discussionComments: totalDiscussionComments,
+    discussionsAndComments: totalDiscussionsAndComments,
     stars: totalStars,
     forks: totalForks
   };
