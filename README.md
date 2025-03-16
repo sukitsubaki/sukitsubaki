@@ -1,6 +1,7 @@
 <a href="https://sukitsubaki.github.io">![Name banner](banner.svg)</a>
+----
 <div align="center">
-
+  
 ![TYPO3](https://img.shields.io/badge/typo3-292929.svg?style=for-the-badge&logo=typo3&logoColor=)
 ![CSS](https://img.shields.io/badge/css-663399.svg?style=for-the-badge&logo=css&logoColor=white)
 ![HTML](https://img.shields.io/badge/html-3366cc.svg?style=for-the-badge&logo=htmx&logoColor=white)
@@ -10,6 +11,10 @@
 ![](https://komarev.com/ghpvc/?username=sukitsubaki&color=3178c6&style=for-the-badge&label=№)
 
 </div>
+<p align="center">
+  <a href="https://github.com/anuraghazra/github-readme-stats"><img src="https://github-stats-omega-ebon.vercel.app/api?username=sukitsubaki&layout=donut&show_icons=true&number_format=short&bg_color=ffffff&border_color=ffffff&icon_color=f2487b&&title_color=ff506e&text_color=1f2328&count_private=true&include_all_commits=true&rank_icon=github&hide_title=true&cache_seconds=32400" height="180px" width="auto" /></a>
+  <a href="https://github.com/anuraghazra/github-readme-stats"><img src="https://github-stats-omega-ebon.vercel.app/api/top-langs/?username=sukitsubaki&layout=compact&bg_color=ffffff&border_color=ffffff&title_color=ff506e&text_color=1f2328&size_weight=0.5&count_weight=0.5&count_private=true&include_all_commits=true&custom_title=Code%20Composition&cache_seconds=32400" height="160px" width="auto" /></a>
+</p>
 </p>
 
 ```json
@@ -51,11 +56,6 @@
   }
 }
 ```
-
-<p align="center">
-  <a href="https://github.com/anuraghazra/github-readme-stats"><img src="https://github-stats-omega-ebon.vercel.app/api?username=sukitsubaki&layout=donut&show_icons=true&number_format=short&bg_color=ffffff&border_color=ffffff&icon_color=f2487b&&title_color=ff506e&text_color=1f2328&count_private=true&include_all_commits=true&rank_icon=github&hide_title=true&cache_seconds=32400" height="180px" width="auto" /></a>
-  <a href="https://github.com/anuraghazra/github-readme-stats"><img src="https://github-stats-omega-ebon.vercel.app/api/top-langs/?username=sukitsubaki&layout=compact&bg_color=ffffff&border_color=ffffff&title_color=ff506e&text_color=1f2328&size_weight=0.5&count_weight=0.5&count_private=true&include_all_commits=true&custom_title=Code%20Composition&cache_seconds=32400" height="160px" width="auto" /></a>
-</p>
 
 <!--
 **sukitsubaki/sukitsubaki** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
