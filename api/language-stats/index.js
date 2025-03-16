@@ -51,6 +51,10 @@ async function getLanguageStats(username, token) {
   
   // iterate all repositories
   for (const repo of repos) {
+
+    // skip forks
+    if (repo.fork) continue;
+    
     const langResponse = await fetch(repo.languages_url, { headers });
     
     if (!langResponse.ok) {
