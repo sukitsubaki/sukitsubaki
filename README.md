@@ -14,7 +14,7 @@
 
 <!-- START_LANGUAGE_STATS_TEXT -->
 ```io
-contributions
+#contributions
 
 PHP            █████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░     33.45 %  |    1.27 MB
 JavaScript     ███████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░     18.47 %  |  395.24 KB
