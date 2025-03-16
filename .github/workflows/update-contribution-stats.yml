@@ -1,0 +1,120 @@
+name: Update Contribution Stats
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Runs every hour
+  workflow_dispatch:  # Allows manual triggering
+
+permissions:
+  contents: write
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          
+      - name: Create script file
+        run: |
+          cat > generate-contribution-stats.js << 'EOF'
+          const fs = require("fs");
+          
+          // Fetch contribution stats from API
+          async function fetchStats() {
+            try {
+              const response = await fetch(process.env.API_URL);
+              if (!response.ok) {
+                throw new Error(`API responded with status: ${response.status}`);
+              }
+              return await response.json();
+            } catch (error) {
+              console.error('Error fetching stats:', error);
+              throw error;
+            }
+          }
+          
+          // Format numbers with comma separators
+          function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          }
+          
+          // Main function to update README
+          async function updateReadme() {
+            try {
+              // Read the README file
+              const readme = fs.readFileSync('README.md', 'utf8');
+              
+              // Fetch stats
+              const stats = await fetchStats();
+              
+              // Calculate combined metrics
+              const totalDiscussionsAndComments = stats.discussions + stats.discussionComments;
+              const totalPullRequestsAndReviews = stats.pullRequestsCreated + stats.pullRequestReviews;
+              
+              // Create formatted markdown
+              const contributionStats = `## GitHub Contributions
+
+Contribution Stats
+
+- Total Contributions: ${formatNumber(stats.totalContributions)}
+- Commits: ${formatNumber(stats.commits)}
+- Issues Created: ${formatNumber(stats.issuesCreated)}
+- Issue Contributions: ${formatNumber(stats.issueContributions)}
+- Pull Requests & Reviews: ${formatNumber(totalPullRequestsAndReviews)}
+- Repositories: ${formatNumber(stats.repositoriesCount)}
+- Discussions & Comments: ${formatNumber(totalDiscussionsAndComments)}
+- Total Stars: ${formatNumber(stats.stars)}
+- Total Forks: ${formatNumber(stats.forks)}`;
+              
+              // Replace or add the stats section
+              const startMarker = '<!-- START_CONTRIBUTION_STATS -->';
+              const endMarker = '<!-- END_CONTRIBUTION_STATS -->';
+              
+              if (readme.includes(startMarker) && readme.includes(endMarker)) {
+                // Replace existing section
+                const regex = new RegExp(`${startMarker}[\\s\\S]*?${endMarker}`, 'g');
+                const newReadme = readme.replace(
+                  regex,
+                  `${startMarker}\n${contributionStats}\n${endMarker}`
+                );
+                fs.writeFileSync('README.md', newReadme);
+              } else {
+                // Add to the end
+                const newReadme = `${readme}\n\n${startMarker}\n${contributionStats}\n${endMarker}`;
+                fs.writeFileSync('README.md', newReadme);
+              }
+              
+              console.log('README updated successfully!');
+            } catch (error) {
+              console.error('Failed to update README:', error);
+              process.exit(1);
+            }
+          }
+          
+          // Run the update
+          updateReadme();
+          EOF
+      
+      - name: Install node-fetch
+        run: npm install node-fetch@2
+      
+      - name: Fetch and update README
+        run: |
+          # Set API URL to your deployed endpoint
+          export API_URL="https://sukitsubaki.vercel.app/api/contribution-stats?username=sukitsubaki"
+          
+          # Run the Node.js script
+          node generate-contribution-stats.js
+          
+      - name: Commit changes
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add README.md
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update contribution stats in README"
+          git push
