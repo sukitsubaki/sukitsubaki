@@ -178,7 +178,7 @@ jobs:
           # Configuration
           export SHOW_OTHERS="false"  # Set to "true" to show "Other" category, "false" to rescale top 6 to 100%
           export TOP_LANGUAGES=6      # Show top 6 languages
-          export SVG_FILENAME="language-stats.svg"  # Name of the SVG file to generate
+          export SVG_FILENAME="api/language-stats/language-stats.svg"  # Name of the SVG file to generate
           
           # Fetch the API and save results
           curl -s "https://sukitsubaki.vercel.app/language-stats" > stats.json
