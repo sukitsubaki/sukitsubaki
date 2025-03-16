@@ -34,6 +34,31 @@ jobs:
           const sizeWeight = 0.5;
           const countWeight = 0.5;
           
+          // Language to file extension mapping
+          const languageToExtension = {
+            "PHP": ".php",
+            "JavaScript": ".js",
+            "TypeScript": ".ts",
+            "HTML": ".html",
+            "CSS": ".css",
+            "Python": ".py",
+            "Swift": ".swift",
+            "Java": ".java",
+            "Ruby": ".rb",
+            "Go": ".go",
+            "C": ".c",
+            "C++": ".cpp",
+            "C#": ".cs",
+            "Shell": ".sh",
+            "Rust": ".rs",
+            "SCSS": ".scss",
+            "Sass": ".sass",
+            "Less": ".less",
+            "JSON": ".json",
+            "YAML": ".yml",
+            "Markdown": ".md"
+          };
+          
           // Initialize language data structure
           const languages = {};
           
@@ -47,13 +72,15 @@ jobs:
               languages[lang] = {
                 name: lang,
                 size: 0,
+                fileCount: 0,
                 count: 0,
                 score: 0
               };
             }
             
-            // Add byte count
+            // Add byte count and file count
             languages[lang].size = data.bytes;
+            languages[lang].fileCount = data.fileCount || 0;
             languages[lang].count = 1; // Minimum count for each language
             
             // Track totals
@@ -138,8 +165,12 @@ jobs:
             // Percentage
             const percentField = lang.percentage.toFixed(2).padStart(percentWidth, ' ') + ' %';
             
+            // File count with extension
+            const extension = languageToExtension[lang.name] || `.${lang.name.toLowerCase()}`;
+            const fileCountField = `${lang.fileCount}x ${extension}`;
+            
             // Spacing
-            statsText += `${nameField}   ${progressBar}  ${percentField}  |  ${sizeValueField} ${sizeUnitField}\n`;
+            statsText += `${nameField}   ${progressBar}  ${percentField}  |  ${sizeValueField} ${sizeUnitField}  |  ${fileCountField}\n`;
           });
           
           // Create markdown for README with code block
