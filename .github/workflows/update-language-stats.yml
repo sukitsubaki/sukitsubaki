@@ -102,18 +102,25 @@ jobs:
           }
           
           // Create SVG visualization
-          const svgWidth = 800;
-          const svgHeight = 60;  // Reduced height since text is inside bars
-          const barHeight = 60;
-          const fontSize = 12;  // Smaller font size
+          const svgWidth = 900;   // Increased width to ensure it spans 100% of available space
+          const svgHeight = 40;   // Reduced height as requested
+          const barHeight = 40;   // Reduced bar height as requested
+          const fontSize = 12;    // Keep font size the same
           
           // Calculate bar widths and positions
           let currentX = 0;
           languages.forEach(lang => {
-            lang.width = (lang.percentage / 100) * svgWidth;
+            // Make sure we calculate precise widths based on percentage
+            lang.width = Math.floor((lang.percentage / 100) * svgWidth);
             lang.x = currentX;
             currentX += lang.width;
           });
+          
+          // Add any remaining pixels to the last bar to ensure full width
+          if (currentX < svgWidth && languages.length > 0) {
+            const lastLang = languages[languages.length - 1];
+            lastLang.width += (svgWidth - currentX);
+          }
           
           // Create SVG
           let svg = `<svg width="${svgWidth}" height="${svgHeight}" xmlns="http://www.w3.org/2000/svg">\n`;
@@ -126,8 +133,8 @@ jobs:
           // Add text inside each bar segment
           languages.forEach(lang => {
             const textX = lang.x + (lang.width / 2);
-            const percentY = 24;  // Position for percentage text
-            const langY = 42;     // Position for language name text
+            const percentY = 14;  // Reduced distance for percentage text
+            const langY = 28;     // Reduced distance for language name text
             
             // Only add text if there's enough space (bar width > 40px)
             if (lang.width > 40) {
