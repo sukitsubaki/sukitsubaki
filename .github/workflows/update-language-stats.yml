@@ -1,4 +1,4 @@
-name: Update language stats
+name: Update Language Stats
 
 on:
   schedule:
@@ -102,8 +102,8 @@ jobs:
           
           // Create SVG visualization
           const svgWidth = 900;   // Width in pixels
-          const svgHeight = 35;   // Height in pixels
-          const barHeight = 35;   // Bar height equals SVG height to remove any margin
+          const svgHeight = 30;   // Reduced to 30px as requested
+          const barHeight = 30;   // Bar height equals SVG height to remove any margin
           const percentFontSize = 10;    // Font size for percentage
           const langFontSize = 10;    // Font size for language name
           const fontFamily = "'Noto Sans', Helvetica, Arial, sans-serif";  // Font family with fallbacks
@@ -134,11 +134,11 @@ jobs:
             svg += `  <rect x="${x}" y="0" width="${lang.width}" height="${barHeight}" fill="${lang.color}" />\n`;
           });
           
-          // Add text inside each bar segment
+          // Add text inside each bar segment - vertically centered positions
           languages.forEach(lang => {
             const textX = lang.x + (lang.width / 2);
-            const percentY = 14;  // Position for percentage text
-            const langY = 28;     // Position for language name text
+            const percentY = 10;  // Adjusted for vertical centering with height 30
+            const langY = 21;     // Adjusted for vertical centering with height 30
             
             // Only add text if there's enough space (bar width > 40px)
             if (lang.width > 40) {
@@ -179,10 +179,7 @@ jobs:
           
           // Create markdown for README with HTML to ensure full width
           let langSection = `<img src="${svgDir}/${uniqueSvgFilename}" width="100%" alt="My Programming Languages">\n\n`;
-          
-          // Add a note about the calculation method
-          langSection += `*Top ${topCount} languages rescaled to 100%. Based on all repositories with 50/50 weighting between bytes and file count.*`;
-          
+                    
           // Replace existing section or append to the end
           const startMarker = "<!-- START_LANGUAGE_STATS -->";
           const endMarker = "<!-- END_LANGUAGE_STATS -->";
@@ -217,5 +214,5 @@ jobs:
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           git add api/language-stats/language-stats-*.svg README.md
-          git diff --quiet && git diff --staged --quiet || git commit -m "Update language stats"
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update language stats in README"
           git push
