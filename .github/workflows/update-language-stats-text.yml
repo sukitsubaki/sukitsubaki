@@ -1,4 +1,4 @@
-name: Update Language Stats Text
+name: Update Language Stats (TXT)
 
 on:
   schedule:
@@ -138,8 +138,8 @@ jobs:
             // Percentage
             const percentField = lang.percentage.toFixed(2).padStart(percentWidth, ' ') + ' %';
             
-            // Note the spacing: 3 spaces after name, 3 spaces after progress bar, 2 spaces after separator
-            statsText += `${nameField}   ${progressBar}   ${percentField} |  ${sizeValueField} ${sizeUnitField}\n`;
+            // Spacing
+            statsText += `${nameField}   ${progressBar}  ${percentField}  |  ${sizeValueField} ${sizeUnitField}\n`;
           });
           
           // Create markdown for README with code block
