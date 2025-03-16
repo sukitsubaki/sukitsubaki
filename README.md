@@ -58,7 +58,7 @@
 ```
 
 <!-- START_LANGUAGE_STATS -->
-<img src="api/language-stats/language-stats.svg?v=1742146943886" width="100%" alt="My Programming Languages">
+<img src="api/language-stats/language-stats.svg?v=1742147044798" width="100%" alt="My Programming Languages">
 
 *Top 6 languages rescaled to 100%. Based on all repositories with 50/50 weighting between bytes and file count.*
 <!-- END_LANGUAGE_STATS -->
