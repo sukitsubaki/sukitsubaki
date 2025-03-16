@@ -42,7 +42,7 @@ jobs:
             "PHP": { bg: "#777bb4", text: "#ffffff" },
             "JavaScript": { bg: "#f7df1e", text: "#1f2328" },
             "TypeScript": { bg: "#3178c6", text: "#ffffff" },
-            "HTML": { bg: "#3366cc", text: "#ffffff" },
+            "HTML": { bg: "#f06529", text: "#ffffff" },
             "CSS": { bg: "#663399", text: "#ffffff" },
             "Python": { bg: "#3670a0", text: "#ffffff" },
             "Java": { bg: "#f89820", text: "#1f2328" },
