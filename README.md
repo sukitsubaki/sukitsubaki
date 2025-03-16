@@ -13,7 +13,7 @@
 </div>
 
 <!-- START_LANGUAGE_STATS -->
-<img src="api/language-stats/language-stats-1742149527166.svg" width="100%" alt="My Programming Languages">
+<img src="api/language-stats/language-stats-1742149720432.svg" width="100%" alt="My Programming Languages">
 <!-- END_LANGUAGE_STATS -->
 
 </p>
