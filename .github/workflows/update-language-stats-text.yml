@@ -31,8 +31,8 @@ jobs:
           const topCount = parseInt(process.env.TOP_LANGUAGES) || 6;
           
           // Weights for calculation
-          const sizeWeight = 0.5;
-          const countWeight = 0.5;
+          const sizeWeight = 0.6;
+          const countWeight = 0.4;
           
           // Initialize language data structure
           const languages = {};
@@ -110,27 +110,17 @@ jobs:
           // Width settings for formatting
           const percentWidth = 8;
           
-          // Get max width for size values and units for right alignment
-          let maxSizeValueWidth = 0;
-          let maxSizeUnitWidth = 0;
-          
           // Find the length of the longest language name
           const maxNameLength = topLanguages.reduce((max, lang) => 
             Math.max(max, lang.name.length), 0);
-          
-          // Calculate widths for alignment
-          topLanguages.forEach(lang => {
-            const [sizeValue, sizeUnit] = formatBytes(lang.size);
-            maxSizeValueWidth = Math.max(maxSizeValueWidth, sizeValue.length);
-            maxSizeUnitWidth = Math.max(maxSizeUnitWidth, sizeUnit.length);
-          });
           
           // Add language stats in Python dictionary format
           topLanguages.forEach((lang, index) => {
             // Format language name - align all colons to the same position
             const nameField = `    "${lang.name}"`;
-            // Calculate spaces needed to align colons
-            const colonPosition = maxNameLength + 8; // "    "" + name + "" + spaces
+            // Calculate spaces needed to align colons 
+            // Adding +1 to make them have a bit more space than before
+            const colonPosition = maxNameLength + 10; // "    "" + name + "" + spaces
             const spacesToColon = ' '.repeat(colonPosition - nameField.length);
             
             // Progress bar
@@ -139,12 +129,8 @@ jobs:
             // Format percentage (right-aligned with space before %)
             const percentField = lang.percentage.toFixed(2).padStart(percentWidth - 1, ' ') + " %";
             
-            // Format size with right-aligned number and left-aligned unit
-            const [sizeValue, sizeUnit] = formatBytes(lang.size);
-            const sizeValueField = sizeValue.padStart(maxSizeValueWidth, ' ');
-            
-            // Build the line with Python syntax
-            statsText += `${nameField}${spacesToColon}: "${progressBar}", # ${percentField} | ${sizeValueField} ${sizeUnit}`;
+            // Build the line with Python syntax with 2 spaces after comma
+            statsText += `${nameField}${spacesToColon}: "${progressBar}",  # ${percentField}`;
             
             // Add comma if not the last item
             if (index < topLanguages.length - 1) {
