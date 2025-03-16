@@ -1,8 +1,6 @@
-name: Update Language Stats (TXT)
+name: Update Language Stats (SVG)
 
 on:
-  schedule:
-    - cron: '0 * * * *'  # Runs every hour
   workflow_dispatch:  # Allows manual triggering
 
 permissions:
@@ -21,25 +19,44 @@ jobs:
           
       - name: Create script file
         run: |
-          cat > generate-stats-text.js << 'EOF'
+          cat > generate-stats.js << 'EOF'
           const fs = require("fs");
           const path = require("path");
           const stats = JSON.parse(fs.readFileSync("stats.json", "utf8"));
           let readme = fs.readFileSync("README.md", "utf8");
           
           // Configuration from environment variables
-          const topCount = parseInt(process.env.TOP_LANGUAGES) || 7;
+          const showOthers = process.env.SHOW_OTHERS === "true";
+          const topCount = parseInt(process.env.TOP_LANGUAGES) || 6;
+          const svgFilename = "language-stats.svg";
+          const svgDir = path.dirname(process.env.SVG_FILENAME) || "api/language-stats";
           
           // Weights for calculation
           const sizeWeight = 0.5;
           const countWeight = 0.5;
           
+          // Language colors
+          const languageColors = {
+            "PHP": { bg: "#777bb4", text: "#ffffff" },
+            "JavaScript": { bg: "#f7df1e", text: "#1f2328" },
+            "TypeScript": { bg: "#3178c6", text: "#ffffff" },
+            "HTML": { bg: "#f06529", text: "#ffffff" },
+            "CSS": { bg: "#663399", text: "#ffffff" },
+            "Python": { bg: "#3670a0", text: "#ffffff" },
+            "Java": { bg: "#f89820", text: "#1f2328" },
+            "Ruby": { bg: "#cc342d", text: "#ffffff" },
+            "Go": { bg: "#00add8", text: "#ffffff" },
+            "Swift": { bg: "#f05138", text: "#ffffff" },
+            "C": { bg: "#a8b9cc", text: "#ffffff" },
+            "C++": { bg: "#00599c", text: "#ffffff" },
+            "C#": { bg: "#178600", text: "#ffffff" },
+            "Shell": { bg: "#4eaa25", text: "#ffffff" },
+            "Rust": { bg: "#000000", text: "#ffffff" },
+            "Other": { bg: "#ededed", text: "#1f2328" }
+          };
+          
           // Initialize language data structure
           const languages = {};
-          
-          // Track totals
-          let totalBytes = 0;
-          let totalFiles = 0;
           
           // Parse stats data
           Object.entries(stats.languages).forEach(([lang, data]) => {
@@ -47,21 +64,16 @@ jobs:
             if (!languages[lang]) {
               languages[lang] = {
                 name: lang,
+                color: languageColors[lang]?.bg || "#808080",
+                textColor: languageColors[lang]?.text || "#1f2328",
                 size: 0,
-                fileCount: 0,
                 count: 0,
                 score: 0
               };
             }
             
-            // Add byte count and file count
             languages[lang].size = data.bytes;
-            languages[lang].fileCount = data.fileCount || 0;
             languages[lang].count = 1; // Minimum count for each language
-            
-            // Track totals
-            totalBytes += data.bytes;
-            totalFiles += data.fileCount || 0;
           });
           
           // Calculate weighted scores
@@ -71,109 +83,116 @@ jobs:
               Math.pow(languages[lang].count, countWeight);
           });
           
-          // Sort languages by score and get top languages
+          // Sort languages by score and limit to top count
           const sortedLanguages = Object.values(languages)
-            .sort((a, b) => b.score - a.score);
-            
-          const topLanguages = sortedLanguages.slice(0, topCount);
+            .sort((a, b) => b.score - a.score)
+            .slice(0, topCount);
           
           // Calculate total score for percentage calculation
-          const totalScore = topLanguages.reduce((sum, lang) => sum + lang.score, 0);
+          const totalScore = sortedLanguages.reduce((sum, lang) => sum + lang.score, 0);
           
           // Calculate percentages
-          topLanguages.forEach(lang => {
+          sortedLanguages.forEach(lang => {
             lang.percentage = (lang.score / totalScore) * 100;
           });
           
-          // Format numbers with comma separators
-          const formatNumber = (num) => {
-            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-          };
+          // Formatting helper function
+          const formatPercentage = (pct) => pct.toFixed(2) + "%";
           
-          // Function to create progress bar
-          const createProgressBar = (percentage) => {
-            const barLength = 40; // Total length of progress bar
-            const filledLength = Math.round((percentage / 100) * barLength);
-            const emptyLength = barLength - filledLength;
-            
-            // Using black blocks and dotted blocks as seen in the screenshot
-            return '█'.repeat(filledLength) + '░'.repeat(emptyLength);
-          };
+          // SVG visualization parameters
+          const svgWidth = 900;         // Width in pixels
+          const barHeight = 20;         // Bar height
+          const percentFontSize = 12;   // Font size for percentages
+          const langFontSize = 10;      // Font size for language names
+          const textSpacing = 6;        // Space between bar and language text
+          const bottomPadding = 4;      // Bottom padding
           
-          // Format file size in a human-readable way with separated number and unit
-          const formatBytes = (bytes) => {
-            if (bytes === 0) return ['0', 'B'];
-            
-            const k = 1024;
-            const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-            
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            
-            const value = parseFloat((bytes / Math.pow(k, i)).toFixed(2));
-            return [value.toString(), sizes[i]];
-          };
+          // Total SVG height calculation
+          const svgHeight = barHeight + textSpacing + langFontSize + bottomPadding;
           
-          // Generate text output
-          let statsText = "";
+          // Text styling
+          const fontFamily = "'Noto Sans', Helvetica, Arial, sans-serif";
+          const langTextColor = "#1f2328";
           
-          // Width settings for formatting
-          const nameWidth = 12;
-          const percentWidth = 8;
-          const fileNumWidth = 4;
-          
-          // Get max width for size values and units for right alignment
-          let maxSizeValueWidth = 0;
-          let maxSizeUnitWidth = 0;
-          
-          // Calculate widths for alignment
-          topLanguages.forEach(lang => {
-            const [sizeValue, sizeUnit] = formatBytes(lang.size);
-            maxSizeValueWidth = Math.max(maxSizeValueWidth, sizeValue.length);
-            maxSizeUnitWidth = Math.max(maxSizeUnitWidth, sizeUnit.length);
+          // Calculate bar widths and positions
+          let totalWidth = 0;
+          sortedLanguages.forEach(lang => {
+            lang.percentage_width = lang.percentage / 100;
+            lang.width = Math.floor(lang.percentage_width * svgWidth);
+            lang.x = totalWidth;
+            totalWidth += lang.width;
           });
           
-          // Same for the total row
-          const [totalSizeValue, totalSizeUnit] = formatBytes(totalBytes);
-          maxSizeValueWidth = Math.max(maxSizeValueWidth, totalSizeValue.length);
-          maxSizeUnitWidth = Math.max(maxSizeUnitWidth, totalSizeUnit.length);
+          // Adjust for any rounding discrepancies
+          if (totalWidth !== svgWidth) {
+            const diff = svgWidth - totalWidth;
+            const widestLang = [...sortedLanguages].sort((a, b) => b.width - a.width)[0];
+            widestLang.width += diff;
+          }
           
-          // Add language stats
-          topLanguages.forEach(lang => {
-            // Format language name
-            const nameField = lang.name.padEnd(nameWidth, ' ');
-            
-            // Format size with right-aligned number and left-aligned unit
-            const [sizeValue, sizeUnit] = formatBytes(lang.size);
-            const sizeValueField = sizeValue.padStart(maxSizeValueWidth, ' ');
-            const sizeUnitField = sizeUnit.padEnd(maxSizeUnitWidth, ' ');
-            
-            // Progress bar
-            const progressBar = createProgressBar(lang.percentage);
-            
-            // Percentage
-            const percentField = lang.percentage.toFixed(2).padStart(percentWidth, ' ') + ' %';
-            
-            // Files count
-            const filesField = lang.fileCount.toString().padStart(fileNumWidth, ' ') + ' files';
-            
-            statsText += `${nameField} ${progressBar} ${percentField} | ${sizeValueField} ${sizeUnitField} ${filesField}\n`;
+          // Create SVG markup
+          let svg = `<svg width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">\n`;
+          
+          // Add bar segments
+          sortedLanguages.forEach(lang => {
+            svg += `  <rect x="${lang.x}" y="0" width="${lang.width}" height="${barHeight}" fill="${lang.color}" />\n`;
           });
           
-          // Add Total line at the end
-          const totalNameField = "Total".padEnd(nameWidth, ' ');
-          const [totalSizeValue, totalSizeUnit] = formatBytes(totalBytes);
-          const totalSizeValueField = totalSizeValue.padStart(maxSizeValueWidth, ' ');
-          const totalSizeUnitField = totalSizeUnit.padEnd(maxSizeUnitWidth, ' ');
-          const totalFilesField = totalFiles.toString().padStart(fileNumWidth, ' ') + ' files';
+          // Add percentage text inside each bar segment
+          sortedLanguages.forEach(lang => {
+            const textX = lang.x + (lang.width / 2);
+            const percentY = barHeight / 2; // Centered vertically
+            
+            // Only add text if there's enough space
+            if (lang.width > 40) {
+              svg += `  <text x="${textX}" y="${percentY}" text-anchor="middle" dominant-baseline="middle" font-family="${fontFamily}" font-size="${percentFontSize}" font-weight="bolder" fill="${lang.textColor}">${formatPercentage(lang.percentage)}</text>\n`;
+            }
+          });
           
-          statsText += `${totalNameField} ${createProgressBar(100)} 100.00 % | ${totalSizeValueField} ${totalSizeUnitField} ${totalFilesField}\n`;
+          // Add language names below each bar segment
+          sortedLanguages.forEach(lang => {
+            const textX = lang.x + (lang.width / 2);
+            const langY = barHeight + textSpacing + (langFontSize / 2);
+            
+            // Only add language name if there's enough space
+            if (lang.width > 30) {
+              svg += `  <text x="${textX}" y="${langY}" text-anchor="middle" dominant-baseline="middle" font-family="${fontFamily}" font-size="${langFontSize}" fill="${langTextColor}">${lang.name}</text>\n`;
+            }
+          });
           
-          // Create markdown for README with code block
-          let langSection = "```\n" + statsText + "```";
+          svg += "</svg>";
+          
+          // Cache-busting filename
+          const timestamp = new Date().getTime();
+          const uniqueSvgFilename = svgFilename.replace('.svg', `-${timestamp}.svg`);
+          
+          // Ensure directory exists
+          if (!fs.existsSync(svgDir)) {
+            fs.mkdirSync(svgDir, { recursive: true });
+          }
+          
+          // Save SVG file
+          fs.writeFileSync(path.join(svgDir, uniqueSvgFilename), svg);
+          
+          // Clean up old SVG files
+          const files = fs.readdirSync(svgDir);
+          files.forEach(file => {
+            if (file.startsWith('language-stats-') && file.endsWith('.svg') && file !== uniqueSvgFilename) {
+              try {
+                fs.unlinkSync(path.join(svgDir, file));
+                console.log(`Deleted old file: ${file}`);
+              } catch (err) {
+                console.error(`Error deleting file ${file}:`, err);
+              }
+            }
+          });
+          
+          // Create markdown for README
+          let langSection = `<img src="${svgDir}/${uniqueSvgFilename}" width="100%" alt="My Programming Languages">`;
           
           // Update README content
-          const startMarker = "<!-- START_LANGUAGE_STATS_TEXT -->";
-          const endMarker = "<!-- END_LANGUAGE_STATS_TEXT -->";
+          const startMarker = "<!-- START_LANGUAGE_STATS_SVG -->";
+          const endMarker = "<!-- END_LANGUAGE_STATS_SVG -->";
           
           if (readme.includes(startMarker) && readme.includes(endMarker)) {
             // Replace existing section
@@ -187,21 +206,23 @@ jobs:
           fs.writeFileSync("README.md", readme);
           EOF
       
-      - name: Generate Language Stats Text and Update README
+      - name: Generate Language Stats SVG and Update README
         run: |
           # Configuration
-          export TOP_LANGUAGES=7      # Show top 7 languages
+          export SHOW_OTHERS="false"  # Set to "true" to show "Other" category, "false" to rescale top 6 to 100%
+          export TOP_LANGUAGES=6      # Show top 6 languages
+          export SVG_FILENAME="api/language-stats/language-stats.svg"  # Name of the SVG file to generate
           
           # Fetch the API and save results
           curl -s "https://sukitsubaki.vercel.app/language-stats" > stats.json
           
-          # Run the Node.js script
-          node generate-stats-text.js
+          # Run the Node.js script from file instead of inline
+          node generate-stats.js
           
       - name: Commit changes
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
-          git add README.md
-          git diff --quiet && git diff --staged --quiet || git commit -m "Update language stats text in README"
+          git add api/language-stats/language-stats-*.svg README.md
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update language stats in README"
           git push
