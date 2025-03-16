@@ -1,27 +1,31 @@
 <a href="https://sukitsubaki.github.io">![Name banner](banner.svg)</a>
 ----
-<div align="center">
-  
-![TYPO3](https://img.shields.io/badge/typo3-292929.svg?style=for-the-badge&logo=typo3&logoColor=)
-![CSS](https://img.shields.io/badge/css-663399.svg?style=for-the-badge&logo=css&logoColor=white)
-![HTML](https://img.shields.io/badge/html-f06529.svg?style=for-the-badge&logo=htmx&logoColor=white)
-![PHP](https://img.shields.io/badge/php-777bb4.svg?style=for-the-badge&logo=php&logoColor=white)
-![PYTHON](https://img.shields.io/badge/python-3670a0?style=for-the-badge&logo=python&logoColor=ffd43b)
-![PI](https://img.shields.io/badge/raspberry_pi-a22846.svg?style=for-the-badge&logo=raspberrypi&logoColor=white)
-![](https://komarev.com/ghpvc/?username=sukitsubaki&color=3178c6&style=for-the-badge&label=№)
-
-</div>
-
 <!-- START_LANGUAGE_STATS_TEXT -->
 ```python
-language_stats = {
-    "PHP"           : "███████████████░░░░░░░░░░░░░░░░░░░░░░░░░",  #   37.22 %
-    "JavaScript"    : "███████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░",  #   18.37 %
-    "HTML"          : "███████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░",  #   18.23 %
-    "Python"        : "█████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░",  #   11.92 %
-    "CSS"           : "████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░",  #   10.01 %
-    "Swift"         : "██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░",  #    4.25 %
-}
+class SukisGithubStats:
+    def __init__(self):
+        self.language_stats = {
+            "PHP"           : "███████████████░░░░░░░░░░░░░░░░░░░░░░░░░", # 37.22 %
+            "JavaScript"    : "███████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 18.37 %
+            "HTML"          : "███████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 18.23 %
+            "Python"        : "█████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 11.92 %
+            "CSS"           : "████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 10.01 %
+            "Swift"         : "██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", #  4.25 %
+        }
+        self.contribution_stats = { # in progress
+            "Commits"       : 0,
+            "Issues": {
+                "Created"   : 0,
+                "Contrib"   : 0,
+            },
+            "PR": {
+                "Created"   : 0,
+                "Review"    : 0,
+            },
+            "Discussions"   : 0,
+        }
+
+        self.profile_views = 0 # in progress
 ```
 <!-- END_LANGUAGE_STATS_TEXT -->
 <!-- START_CONTRIBUTION_STATS -->
