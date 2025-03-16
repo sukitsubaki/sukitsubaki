@@ -36,7 +36,7 @@ class SukisGithubStats:
   "title": "Code Explorer",
   "level": 33,
   "abilities": {
-    "experienced": ["CSS", "HTML", "PHP", "Python", "TypoScript"],
+    "experienced": ["CSS", "HTML", "PHP", "Python", "TYPO3"],
     "levelingUp": ["JavaScript", "Lua", "SQL", "Swift"],
     "specialSkills": ["Architect of Scalable Systems"]
   },
