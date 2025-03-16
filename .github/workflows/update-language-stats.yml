@@ -103,7 +103,7 @@ jobs:
           // Create SVG visualization
           const svgWidth = 900;         // Width in pixels
           const barHeight = 20;         // Bar height 20px as requested
-          const percentFontSize = 12;   // Reduced to 12px as requested
+          const percentFontSize = 12;   // Font size 12px as requested
           const langFontSize = 10;      // Font size for language names (below bar)
           const textSpacing = 6;        // Increased space between bar and language text
           const bottomPadding = 4;      // Added padding at the bottom
@@ -135,23 +135,32 @@ jobs:
           // Create SVG with explicit viewBox and preserveAspectRatio
           let svg = `<svg width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">\n`;
           
-          // Create a group for the bar with a clipping path for the rounded corners
-          svg += `  <defs>\n`;
-          svg += `    <clipPath id="roundedBar">\n`;
-          svg += `      <rect x="0" y="0" width="${svgWidth}" height="${barHeight}" rx="${borderRadius}" ry="${borderRadius}" />\n`;
-          svg += `    </clipPath>\n`;
-          svg += `  </defs>\n`;
+          // Draw the background container with border radius
+          svg += `  <rect x="0" y="0" width="${svgWidth}" height="${barHeight}" rx="${borderRadius}" fill="#ffffff" />\n`;
           
-          // Add a group with the clipping path
-          svg += `  <g clip-path="url(#roundedBar)">\n`;
+          // Calculate positions for first and last segments for special border-radius treatment
+          const firstLang = languages[0];
+          const lastLang = languages[languages.length - 1];
           
-          // Add bar segments
+          // Draw the bar segments
           languages.forEach((lang, index) => {
-            const x = index === 0 ? 0 : lang.x;
-            svg += `    <rect x="${x}" y="0" width="${lang.width}" height="${barHeight}" fill="${lang.color}" />\n`;
+            const x = lang.x;
+            let rx = 0, ry = 0;
+            
+            // Apply border radius only to first and last segments
+            if (index === 0) {
+              // Left side gets rounded corners
+              rx = borderRadius;
+              ry = borderRadius;
+            } else if (index === languages.length - 1) {
+              // Right side gets rounded corners
+              rx = borderRadius;
+              ry = borderRadius;
+            }
+            
+            // Draw the segment with appropriate rounding
+            svg += `  <rect x="${x}" y="0" width="${lang.width}" height="${barHeight}" fill="${lang.color}" rx="${rx}" ry="${ry}" />\n`;
           });
-          
-          svg += `  </g>\n`;
           
           // Add percentage text inside each bar segment
           languages.forEach(lang => {
@@ -205,8 +214,7 @@ jobs:
           // Create markdown for README with HTML to ensure full width
           let langSection = `<img src="${svgDir}/${uniqueSvgFilename}" width="100%" alt="My Programming Languages">\n\n`;
           
-          // Add a note about the calculation method
-          langSection += `*Top ${topCount} languages rescaled to 100%. Based on all repositories with 50/50 weighting between bytes and file count.*`;
+          // Explanatory text removed as requested
           
           // Replace existing section or append to the end
           const startMarker = "<!-- START_LANGUAGE_STATS -->";
