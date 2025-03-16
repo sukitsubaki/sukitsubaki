@@ -33,6 +33,10 @@ jobs:
           const svgFilename = "language-stats.svg";
           const svgDir = path.dirname(process.env.SVG_FILENAME) || "api/language-stats";
           
+          // Use same weights as github-readme-stats
+          const sizeWeight = 0.5;
+          const countWeight = 0.5;
+          
           // Language colors (GitHub colors)
           const languageColors = {
             "PHP": { bg: "#8993be", text: "#ffffff" },
@@ -53,59 +57,72 @@ jobs:
             "Other": { bg: "#ededed", text: "#000000" }
           };
           
-          // Get the language entries and sort by percentage
-          const langEntries = Object.entries(stats.languages)
-            .map(([lang, data]) => ({
-              language: lang,
-              percentage: parseFloat(data.percentage.replace("%", ""))
-            }))
-            .sort((a, b) => b.percentage - a.percentage);
+          // Calculate language percentages using the github-readme-stats formula
           
-          // Get the top languages
-          const topLanguages = langEntries.slice(0, topCount);
+          // Start by extracting the same data structure from our API result
+          const languages = {};
           
-          // Calculate sum of top language percentages
-          const topSum = topLanguages.reduce((sum, lang) => sum + lang.percentage, 0);
+          // Create a map of repos to track which languages appear in which repos
+          const repoLanguages = {};
+          
+          // Parse original stats data
+          Object.entries(stats.languages).forEach(([lang, data]) => {
+            // Initialize language entry if not exists
+            if (!languages[lang]) {
+              languages[lang] = {
+                name: lang,
+                color: languageColors[lang]?.bg || "#808080",
+                textColor: languageColors[lang]?.text || "#000000",
+                size: 0,
+                count: 0,
+                score: 0
+              };
+            }
+            
+            // Add byte count
+            languages[lang].size = data.bytes;
+          });
+          
+          // Now we need to count repos that contain each language
+          // Since our API doesn't directly provide this, we need to estimate
+          // or use the data we have from our private repos
+          
+          // For this demo, we'll assume each language appears in at least one repo
+          // This is a starting approximation
+          Object.keys(languages).forEach(lang => {
+            languages[lang].count = 1;
+          });
+          
+          // Apply the github-readme-stats formula for weighting
+          Object.keys(languages).forEach(lang => {
+            // Their formula: Score = Size^(size_weight) * Count^(count_weight)
+            languages[lang].score = 
+              Math.pow(languages[lang].size, sizeWeight) * 
+              Math.pow(languages[lang].count, countWeight);
+          });
+          
+          // Sort languages by score
+          const sortedLanguages = Object.values(languages)
+            .sort((a, b) => b.score - a.score)
+            .slice(0, topCount);
+          
+          // Calculate total score for percentage calculation
+          const totalScore = sortedLanguages.reduce((sum, lang) => sum + lang.score, 0);
+          
+          // Calculate percentages
+          sortedLanguages.forEach(lang => {
+            lang.percentage = (lang.score / totalScore) * 100;
+          });
           
           // Function to format percentage
           const formatPercentage = (pct) => pct.toFixed(2) + "%";
           
-          // Prepare final percentages for visualization
-          let languages = [];
-          
-          if (showOthers) {
-            // Use original percentages and add "Other"
-            languages = topLanguages.map(lang => ({
-              language: lang.language,
-              percentage: lang.percentage,
-              color: languageColors[lang.language]?.bg || "#808080",
-              textColor: languageColors[lang.language]?.text || "#000000"
-            }));
-            
-            if (langEntries.length > topCount && 100 - topSum > 0) {
-              languages.push({
-                language: "Other",
-                percentage: 100 - topSum,
-                color: languageColors["Other"].bg,
-                textColor: languageColors["Other"].text
-              });
-            }
-          } else {
-            // Rescale percentages to total 100%
-            languages = topLanguages.map(lang => ({
-              language: lang.language,
-              percentage: (lang.percentage / topSum) * 100,
-              color: languageColors[lang.language]?.bg || "#808080",
-              textColor: languageColors[lang.language]?.text || "#000000"
-            }));
-          }
-          
           // Create SVG visualization
           const svgWidth = 900;         // Width in pixels
           const barHeight = 20;         // Bar height 20px as requested
-          const percentFontSize = 12;   // Reduced to 12px as requested
+          const percentFontSize = 12;   // Font size 12px as requested
           const langFontSize = 10;      // Font size for language names (below bar)
-          const textSpacing = 6;        // Increased space between bar and language text
+          const textSpacing = 6;        // Space between bar and language text
           const bottomPadding = 4;      // Added padding at the bottom
           
           // Total SVG height with increased spacing to prevent text cutoff
@@ -116,7 +133,7 @@ jobs:
           
           // Calculate cumulative width for each language
           let totalWidth = 0;
-          languages.forEach(lang => {
+          sortedLanguages.forEach(lang => {
             lang.percentage_width = lang.percentage / 100;
             lang.width = Math.floor(lang.percentage_width * svgWidth);
             lang.x = totalWidth;
@@ -127,21 +144,33 @@ jobs:
           if (totalWidth !== svgWidth) {
             const diff = svgWidth - totalWidth;
             // Add the difference to the widest bar to minimize visual impact
-            const widestLang = [...languages].sort((a, b) => b.width - a.width)[0];
+            const widestLang = [...sortedLanguages].sort((a, b) => b.width - a.width)[0];
             widestLang.width += diff;
           }
           
           // Create SVG with explicit viewBox and preserveAspectRatio
           let svg = `<svg width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">\n`;
           
-          // Add bar segments directly (no rounded corners)
-          languages.forEach((lang, index) => {
-            const x = index === 0 ? 0 : lang.x;
-            svg += `  <rect x="${x}" y="0" width="${lang.width}" height="${barHeight}" fill="${lang.color}" />\n`;
+          // Add border-radius of 6px through rect with border-radius and clipping
+          svg += `  <defs>\n`;
+          svg += `    <clipPath id="roundedBar">\n`;
+          svg += `      <rect x="0" y="0" width="${svgWidth}" height="${barHeight}" rx="6" ry="6" />\n`;
+          svg += `    </clipPath>\n`;
+          svg += `  </defs>\n`;
+          
+          // Add a group with the clipping path
+          svg += `  <g clip-path="url(#roundedBar)">\n`;
+          
+          // Add bar segments
+          sortedLanguages.forEach((lang, index) => {
+            const x = lang.x;
+            svg += `    <rect x="${x}" y="0" width="${lang.width}" height="${barHeight}" fill="${lang.color}" />\n`;
           });
           
+          svg += `  </g>\n`;
+          
           // Add percentage text inside each bar segment
-          languages.forEach(lang => {
+          sortedLanguages.forEach(lang => {
             const textX = lang.x + (lang.width / 2);
             const percentY = barHeight / 2; // Centered vertically in the bar
             
@@ -152,13 +181,13 @@ jobs:
           });
           
           // Add language names below each bar segment
-          languages.forEach(lang => {
+          sortedLanguages.forEach(lang => {
             const textX = lang.x + (lang.width / 2);
             const langY = barHeight + textSpacing + (langFontSize / 2); // Adjusted position
             
             // Only add language name if there's enough space (bar width > 30px)
             if (lang.width > 30) {
-              svg += `  <text x="${textX}" y="${langY}" text-anchor="middle" dominant-baseline="middle" font-family="${fontFamily}" font-size="${langFontSize}" fill="${langTextColor}">${lang.language}</text>\n`;
+              svg += `  <text x="${textX}" y="${langY}" text-anchor="middle" dominant-baseline="middle" font-family="${fontFamily}" font-size="${langFontSize}" fill="${langTextColor}">${lang.name}</text>\n`;
             }
           });
           
@@ -192,8 +221,6 @@ jobs:
           // Create markdown for README with HTML to ensure full width
           let langSection = `<img src="${svgDir}/${uniqueSvgFilename}" width="100%" alt="My Programming Languages">`;
           
-          // No explanatory text as requested
-          
           // Replace existing section or append to the end
           const startMarker = "<!-- START_LANGUAGE_STATS -->";
           const endMarker = "<!-- END_LANGUAGE_STATS -->";
@@ -201,7 +228,7 @@ jobs:
           if (readme.includes(startMarker) && readme.includes(endMarker)) {
             // Replace existing section
             const regex = new RegExp(`${startMarker}[\\s\\S]*?${endMarker}`, "g");
-            readme = readme.replace(regex, `${startMarker}\n${langSection}\n${endMarker}`);
+            readme = replace(regex, `${startMarker}\n${langSection}\n${endMarker}`);
           } else {
             // Append at the end
             readme += `\n\n${startMarker}\n${langSection}\n${endMarker}`;
