@@ -19,16 +19,17 @@ jobs:
         with:
           node-version: '16'
           
-      - name: Update README with Language Stats
+      - name: Generate Language Stats SVG and Update README
         run: |
           # Configuration
           SHOW_OTHERS="false"  # Set to "true" to show "Other" category, "false" to rescale top 6 to 100%
           TOP_LANGUAGES=6      # Show top 6 languages
+          SVG_FILENAME="language-stats.svg"  # Name of the SVG file to generate
           
           # Fetch the API and save results
           curl -s "https://sukitsubaki.vercel.app/language-stats" > stats.json
           
-          # Generate the new README with language statistics and SVG
+          # Generate SVG file and update README
           node -e '
             const fs = require("fs");
             const stats = JSON.parse(fs.readFileSync("stats.json", "utf8"));
@@ -37,6 +38,7 @@ jobs:
             // Get configuration from environment variables
             const showOthers = process.env.SHOW_OTHERS === "true";
             const topCount = parseInt(process.env.TOP_LANGUAGES) || 6;
+            const svgFilename = process.env.SVG_FILENAME || "language-stats.svg";
             
             // Language colors (GitHub colors)
             const languageColors = {
@@ -86,14 +88,16 @@ jobs:
               languages = topLanguages.map(lang => ({
                 language: lang.language,
                 percentage: lang.percentage,
-                color: languageColors[lang.language]?.bg || "#808080"
+                color: languageColors[lang.language]?.bg || "#808080",
+                textColor: languageColors[lang.language]?.text || "#000000"
               }));
               
               if (langEntries.length > topCount && otherPercentage > 0) {
                 languages.push({
                   language: "Other",
                   percentage: otherPercentage,
-                  color: languageColors["Other"].bg
+                  color: languageColors["Other"].bg,
+                  textColor: languageColors["Other"].text
                 });
               }
             } else {
@@ -101,7 +105,8 @@ jobs:
               languages = topLanguages.map(lang => ({
                 language: lang.language,
                 percentage: (lang.percentage / topSum) * 100,
-                color: languageColors[lang.language]?.bg || "#808080"
+                color: languageColors[lang.language]?.bg || "#808080",
+                textColor: languageColors[lang.language]?.text || "#000000"
               }));
             }
             
@@ -137,7 +142,6 @@ jobs:
             // Add language labels and percentages - first row
             firstRow.forEach((lang, index) => {
               const textX = lang.x + (lang.width / 2);
-              const textColor = languageColors[lang.language]?.text || "#000000";
               
               // Add connector line
               svg += `  <line x1="${textX}" y1="${barHeight}" x2="${textX}" y2="${barHeight + 10}" stroke="#666666" stroke-width="1" />\n`;
@@ -152,7 +156,6 @@ jobs:
             // Add language labels and percentages - second row
             secondRow.forEach((lang, index) => {
               const textX = lang.x + (lang.width / 2);
-              const textColor = languageColors[lang.language]?.text || "#000000";
               
               // Add connector line
               svg += `  <line x1="${textX}" y1="${barHeight}" x2="${textX}" y2="${barHeight + 10}" stroke="#666666" stroke-width="1" />\n`;
@@ -166,9 +169,11 @@ jobs:
             
             svg += "</svg>";
             
-            // Create language stats section
-            let langSection = "";
-            langSection += svg + "\n\n";
+            // Save SVG to file
+            fs.writeFileSync(svgFilename, svg);
+            
+            // Create markdown for README
+            let langSection = `![My Programming Languages](${svgFilename})\n\n`;
             
             // Add a note about the calculation method
             if (showOthers) {
@@ -191,12 +196,12 @@ jobs:
             }
             
             fs.writeFileSync("README.md", readme);
-          ' SHOW_OTHERS="$SHOW_OTHERS" TOP_LANGUAGES="$TOP_LANGUAGES"
+          ' SHOW_OTHERS="$SHOW_OTHERS" TOP_LANGUAGES="$TOP_LANGUAGES" SVG_FILENAME="$SVG_FILENAME"
           
       - name: Commit changes
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
-          git add README.md
+          git add language-stats.svg README.md
           git diff --quiet && git diff --staged --quiet || git commit -m "Update language stats in README"
           git push
