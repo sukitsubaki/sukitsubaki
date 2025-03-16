@@ -4,7 +4,7 @@
   
 ![TYPO3](https://img.shields.io/badge/typo3-292929.svg?style=for-the-badge&logo=typo3&logoColor=)
 ![CSS](https://img.shields.io/badge/css-663399.svg?style=for-the-badge&logo=css&logoColor=white)
-![HTML](https://img.shields.io/badge/html-3366cc.svg?style=for-the-badge&logo=htmx&logoColor=white)
+![HTML](https://img.shields.io/badge/html-f06529.svg?style=for-the-badge&logo=htmx&logoColor=white)
 ![PHP](https://img.shields.io/badge/php-777bb4.svg?style=for-the-badge&logo=php&logoColor=white)
 ![PYTHON](https://img.shields.io/badge/python-3670a0?style=for-the-badge&logo=python&logoColor=ffd43b)
 ![PI](https://img.shields.io/badge/raspberry_pi-a22846.svg?style=for-the-badge&logo=raspberrypi&logoColor=white)
@@ -12,8 +12,11 @@
 
 </div>
 
+<p align="center">
+  My Used Languages
+</p>
 <!-- START_LANGUAGE_STATS -->
-<img src="api/language-stats/language-stats-1742152318196.svg" width="100%" alt="My Programming Languages">
+<img src="api/language-stats/language-stats-1742152140546.svg" width="100%" alt="My Programming Languages">
 <!-- END_LANGUAGE_STATS -->
 
 </p>
