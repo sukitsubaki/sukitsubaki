@@ -26,7 +26,7 @@ jobs:
           TOP_LANGUAGES=6      # Show top 6 languages
           
           # Fetch the API and save results
-          curl -s "https://sukitsubaki-.vercel.app/language-stats" > stats.json
+          curl -s "https://sukitsubaki.vercel.app/language-stats" > stats.json
           
           # Generate the new README with language statistics
           node -e '
