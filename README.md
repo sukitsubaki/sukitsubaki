@@ -60,7 +60,7 @@
 <!-- START_LANGUAGE_STATS -->
 ![My Programming Languages](language-stats.svg)
 
-*Top ${topCount} languages rescaled to 100%. Based on all repositories with 50/50 weighting between bytes and file count.*
+*Top 6 languages rescaled to 100%. Based on all repositories with 50/50 weighting between bytes and file count.*
 <!-- END_LANGUAGE_STATS -->
 
 <!--
