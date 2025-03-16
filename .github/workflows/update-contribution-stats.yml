@@ -18,10 +18,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
+      
+      - name: Install dependencies
+        run: npm install node-fetch@2
           
       - name: Create script file
         run: |
-          cat > update-contribution-stats.js << 'EOL'
+          cat > update-stats.js << 'EOL'
           const fs = require("fs");
           
           // Fetch contribution stats from API
@@ -58,8 +61,6 @@ jobs:
               
               // Create formatted markdown
               const contributionStats = `## GitHub Contributions
-
-**Contribution Stats**
 
 - Total Contributions: ${formatNumber(stats.totalContributions)}
 - Commits: ${formatNumber(stats.commits)}
@@ -106,7 +107,7 @@ jobs:
           export API_URL="https://sukitsubaki.vercel.app/api/contribution-stats?username=sukitsubaki"
           
           # Run the Node.js script
-          node update-contribution-stats.js
+          node update-stats.js
           
       - name: Commit changes
         run: |
