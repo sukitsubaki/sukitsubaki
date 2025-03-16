@@ -102,7 +102,7 @@ jobs:
           }
           
           // Create SVG visualization
-          const svgWidth = 900;   // Increased width to ensure it spans 100% of available space
+          const svgWidth = 1280;   // Increased width to ensure it spans 100% of available space
           const svgHeight = 40;   // Reduced height as requested
           const barHeight = 40;   // Reduced bar height as requested
           const fontSize = 12;    // Keep font size the same
