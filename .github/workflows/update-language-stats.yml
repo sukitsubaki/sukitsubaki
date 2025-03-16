@@ -147,7 +147,7 @@ jobs:
             
             // Only add text if there's enough space
             if (lang.width > 40) {
-              svg += `  <text x="${textX}" y="${percentY}" text-anchor="middle" dominant-baseline="middle" font-family="${fontFamily}" font-size="${percentFontSize}" fill="${lang.textColor}">${formatPercentage(lang.percentage)}</text>\n`;
+              svg += `  <text x="${textX}" y="${percentY}" text-anchor="middle" dominant-baseline="middle" font-family="${fontFamily}" font-size="${percentFontSize}" font-weight="bolder" fill="${lang.textColor}">${formatPercentage(lang.percentage)}</text>\n`;
             }
           });
           
