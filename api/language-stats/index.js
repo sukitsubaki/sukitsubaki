@@ -1,7 +1,6 @@
 const fetch = require('node-fetch');
-
 module.exports = async (req, res) => {
-  // CORS-Header setzen
+  // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -40,7 +39,7 @@ async function getLanguageStats(username, token) {
   );
   
   if (!reposResponse.ok) {
-    throw new Error(`GitHub API Fehler: ${reposResponse.status} ${reposResponse.statusText}`);
+    throw new Error(`GitHub API Error: ${reposResponse.status} ${reposResponse.statusText}`);
   }
   
   const repos = await reposResponse.json();
@@ -49,18 +48,66 @@ async function getLanguageStats(username, token) {
   const languageBytes = {};
   let totalBytes = 0;
   
-  // count in how many repositories a language is used
-  const languageRepoCount = {};
+  // count files per language
+  const languageFileCount = {};
+  let totalFiles = 0;
+  
+  // filter out forks
+  const relevantRepos = repos.filter(repo => !repo.fork);
+  
+  // extension to language mapping
+  const extensionToLanguage = {
+    // Programming languages
+    '.js': 'JavaScript',
+    '.jsx': 'JavaScript',
+    '.ts': 'TypeScript',
+    '.tsx': 'TypeScript',
+    '.php': 'PHP',
+    '.py': 'Python',
+    '.rb': 'Ruby',
+    '.java': 'Java',
+    '.go': 'Go',
+    '.c': 'C',
+    '.cpp': 'C++',
+    '.h': 'C++',
+    '.hpp': 'C++',
+    '.cs': 'C#',
+    '.swift': 'Swift',
+    '.kt': 'Kotlin',
+    '.rs': 'Rust',
+    '.dart': 'Dart',
+    '.sh': 'Shell',
+    '.bash': 'Shell',
+    '.pl': 'Perl',
+    '.lua': 'Lua',
+    '.r': 'R',
+    '.scala': 'Scala',
+    
+    // Markup and styling
+    '.html': 'HTML',
+    '.htm': 'HTML',
+    '.css': 'CSS',
+    '.scss': 'SCSS',
+    '.sass': 'SCSS',
+    '.less': 'Less',
+    '.xml': 'XML',
+    '.md': 'Markdown',
+    '.json': 'JSON',
+    '.yaml': 'YAML',
+    '.yml': 'YAML',
+    
+    // Others
+    '.sql': 'SQL',
+    '.graphql': 'GraphQL'
+  };
   
   // iterate all repositories
-  for (const repo of repos) {
-    // Überspringe Forks
-    if (repo.fork) continue;
-    
+  for (const repo of relevantRepos) {
+    // Get language bytes
     const langResponse = await fetch(repo.languages_url, { headers });
     
     if (!langResponse.ok) {
-      console.warn(`Warnung: Konnte Sprachen für ${repo.name} nicht abrufen: ${langResponse.status}`);
+      console.warn(`Warning: Could not fetch languages for ${repo.name}: ${langResponse.status}`);
       continue;
     }
     
@@ -68,12 +115,44 @@ async function getLanguageStats(username, token) {
     
     // add bytes for each language
     for (const [language, bytes] of Object.entries(languages)) {
-      // sum up
       languageBytes[language] = (languageBytes[language] || 0) + bytes;
       totalBytes += bytes;
+    }
+    
+    // Now get files and count them by language
+    try {
+      // Get all files in the repository
+      const contentResponse = await fetch(`https://api.github.com/repos/${username}/${repo.name}/git/trees/HEAD?recursive=1`, { headers });
       
-      // increase repository counter
-      languageRepoCount[language] = (languageRepoCount[language] || 0) + 1;
+      if (!contentResponse.ok) {
+        console.warn(`Warning: Could not fetch files for ${repo.name}: ${contentResponse.status}`);
+        continue;
+      }
+      
+      const content = await contentResponse.json();
+      
+      // Filter only files (not directories)
+      const files = content.tree.filter(item => item.type === 'blob');
+      
+      // Count files by language
+      for (const file of files) {
+        // Get file extension
+        const path = file.path;
+        const lastDotIndex = path.lastIndexOf('.');
+        if (lastDotIndex === -1) continue; // Skip files without extension
+        
+        const extension = path.substring(lastDotIndex).toLowerCase();
+        const language = extensionToLanguage[extension];
+        
+        // Only count if we know the language and it exists in our byte calculation
+        if (language && languageBytes[language]) {
+          languageFileCount[language] = (languageFileCount[language] || 0) + 1;
+          totalFiles++;
+        }
+      }
+    } catch (error) {
+      console.error(`Error fetching files for ${repo.name}:`, error);
+      // Continue with next repository
     }
   }
   
@@ -83,29 +162,30 @@ async function getLanguageStats(username, token) {
     bytesPercentages[language] = (bytes / totalBytes) * 100;
   }
   
-  // calculate percentage for repositories
-  const totalReposCounted = Object.values(languageRepoCount).reduce((sum, count) => sum + count, 0);
-  const repoPercentages = {};
-  for (const [language, count] of Object.entries(languageRepoCount)) {
-    repoPercentages[language] = (count / totalReposCounted) * 100;
+  // calculate percentage for files
+  const filePercentages = {};
+  for (const [language, count] of Object.entries(languageFileCount)) {
+    filePercentages[language] = (count / totalFiles) * 100;
   }
   
   // combine both metrics with 50-50 weighting
   const combinedPercentages = {};
-  for (const language of Object.keys(languageBytes)) {
-    combinedPercentages[language] = 
-      (bytesPercentages[language] * 0.5) + 
-      (repoPercentages[language] * 0.5);
+  const allLanguages = new Set([...Object.keys(languageBytes), ...Object.keys(languageFileCount)]);
+  
+  for (const language of allLanguages) {
+    const bytePercent = bytesPercentages[language] || 0;
+    const filePercent = filePercentages[language] || 0;
+    combinedPercentages[language] = (bytePercent * 0.5) + (filePercent * 0.5);
   }
   
   // sort percentage results
   const languagePercentages = Object.entries(combinedPercentages)
     .map(([language, percentage]) => ({
       language,
-      bytes: languageBytes[language],
-      repoCount: languageRepoCount[language],
-      bytesPercentage: bytesPercentages[language].toFixed(2),
-      repoPercentage: repoPercentages[language].toFixed(2),
+      bytes: languageBytes[language] || 0,
+      fileCount: languageFileCount[language] || 0,
+      bytesPercentage: (bytesPercentages[language] || 0).toFixed(2),
+      filePercentage: (filePercentages[language] || 0).toFixed(2),
       percentage: percentage.toFixed(2)
     }))
     .sort((a, b) => b.percentage - a.percentage);
@@ -113,17 +193,18 @@ async function getLanguageStats(username, token) {
   // format results
   const results = {
     username,
-    totalRepos: repos.filter(repo => !repo.fork).length,
+    totalRepos: relevantRepos.length,
     totalBytes,
+    totalFiles,
     languages: {}
   };
   
   languagePercentages.forEach(item => {
     results.languages[item.language] = {
       bytes: item.bytes,
-      repoCount: item.repoCount,
+      fileCount: item.fileCount,
       bytesPercentage: `${item.bytesPercentage}%`,
-      repoPercentage: `${item.repoPercentage}%`,
+      filePercentage: `${item.filePercentage}%`,
       percentage: `${item.percentage}%`
     };
   });
