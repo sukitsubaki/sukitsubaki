@@ -52,22 +52,24 @@ jobs:
               // Fetch stats
               const stats = await fetchStats();
               
+              // Calculate combined metrics
+              const totalDiscussionsAndComments = stats.discussions + stats.discussionComments;
+              const totalPullRequestsAndReviews = stats.pullRequestsCreated + stats.pullRequestReviews;
+              
               // Create formatted markdown
               const contributionStats = `## GitHub Contributions
 
-📊 **Contribution Stats**
+**Contribution Stats**
 
-- 🔄 Total Contributions: ${formatNumber(stats.totalContributions)}
-- 📝 Commits: ${formatNumber(stats.commits)}
-- 🐛 Issues Created: ${formatNumber(stats.issuesCreated)}
-- 🛠️ Issue Contributions: ${formatNumber(stats.issueContributions)}
-- 🔍 Pull Requests: ${formatNumber(stats.pullRequestsCreated)}
-- 👀 PR Reviews: ${formatNumber(stats.pullRequestReviews)}
-- 📦 Repositories: ${formatNumber(stats.repositoriesCount)}
-- 💬 Discussions: ${formatNumber(stats.discussions)}
-- 💭 Discussion Comments: ${formatNumber(stats.discussionComments)}
-- ⭐ Total Stars: ${formatNumber(stats.stars)}
-- 🍴 Total Forks: ${formatNumber(stats.forks)}`;
+- Total Contributions: ${formatNumber(stats.totalContributions)}
+- Commits: ${formatNumber(stats.commits)}
+- Issues Created: ${formatNumber(stats.issuesCreated)}
+- Issue Contributions: ${formatNumber(stats.issueContributions)}
+- Pull Requests & Reviews: ${formatNumber(totalPullRequestsAndReviews)}
+- Repositories: ${formatNumber(stats.repositoriesCount)}
+- Discussions & Comments: ${formatNumber(totalDiscussionsAndComments)}
+- Total Stars: ${formatNumber(stats.stars)}
+- Total Forks: ${formatNumber(stats.forks)}`;
               
               // Replace or add the stats section
               const startMarker = '<!-- START_CONTRIBUTION_STATS -->';
