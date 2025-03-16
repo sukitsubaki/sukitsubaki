@@ -6,9 +6,8 @@
 ![HTML](https://img.shields.io/badge/html-3366cc.svg?style=for-the-badge&logo=htmx&logoColor=white)
 ![PHP](https://img.shields.io/badge/php-777bb4.svg?style=for-the-badge&logo=php&logoColor=white)
 ![PYTHON](https://img.shields.io/badge/python-3670a0?style=for-the-badge&logo=python&logoColor=ffd43b)
-![BASH](https://img.shields.io/badge/typoscript-3178c6?style=for-the-badge&logo=typescript&logoColor=white)
 ![PI](https://img.shields.io/badge/raspberry_pi-a22846.svg?style=for-the-badge&logo=raspberrypi&logoColor=white)
-![](https://komarev.com/ghpvc/?username=sukitsubaki&color=ff506e&style=for-the-badge&label=№)
+![](https://komarev.com/ghpvc/?username=sukitsubaki&color=3178c6&style=for-the-badge&label=№)
 
 </div>
 </p>
