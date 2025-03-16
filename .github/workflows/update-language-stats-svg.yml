@@ -2,7 +2,6 @@ name: Update Language Stats (SVG)
 
 on:
   schedule:
-#    - cron: '0 * * * *'
   workflow_dispatch:  # Allows manual triggering
 
 permissions:
@@ -193,8 +192,8 @@ jobs:
           let langSection = `<img src="${svgDir}/${uniqueSvgFilename}" width="100%" alt="My Programming Languages">`;
           
           // Update README content
-          const startMarker = "<!-- START_LANGUAGE_STATS -->";
-          const endMarker = "<!-- END_LANGUAGE_STATS -->";
+          const startMarker = "<!-- START_LANGUAGE_STATS_SVG -->";
+          const endMarker = "<!-- END_LANGUAGE_STATS_SVG -->";
           
           if (readme.includes(startMarker) && readme.includes(endMarker)) {
             // Replace existing section
