@@ -21,7 +21,7 @@ jobs:
           
       - name: Create script file
         run: |
-          cat > update-contribution-stats.js << 'EOF'
+          cat > update-contribution-stats.js << 'EOL'
           const fs = require("fs");
           
           // Fetch contribution stats from API
@@ -98,7 +98,7 @@ jobs:
           
           // Run the update
           updateReadme();
-          EOF
+          EOL
       
       - name: Fetch and update README
         run: |
