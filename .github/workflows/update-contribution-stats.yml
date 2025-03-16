@@ -19,10 +19,14 @@ jobs:
         with:
           node-version: '16'
           
+      - name: Install node-fetch
+        run: npm install node-fetch@2
+          
       - name: Create script file
         run: |
           cat > generate-contribution-stats.js << 'EOF'
           const fs = require("fs");
+          const fetch = require("node-fetch");
           
           // Fetch contribution stats from API
           async function fetchStats() {
@@ -56,7 +60,7 @@ jobs:
               const totalDiscussionsAndComments = stats.discussions + stats.discussionComments;
               const totalPullRequestsAndReviews = stats.pullRequestsCreated + stats.pullRequestReviews;
               
-              // Format contribution stats
+              // Format the contribution stats in a code block style
               let statsText = "";
               statsText += "Total Contributions: " + formatNumber(stats.totalContributions) + "\n";
               statsText += "Commits:             " + formatNumber(stats.commits) + "\n";
@@ -99,9 +103,6 @@ jobs:
           // Run the update
           updateReadme();
           EOF
-      
-      - name: Install node-fetch
-        run: npm install node-fetch@2
       
       - name: Fetch and update README
         run: |
