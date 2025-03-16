@@ -13,6 +13,15 @@
 </div>
 
 <!-- START_LANGUAGE_STATS_TEXT -->
+```
+Total Files: 389  |  Total Size: 2.41 MB
+PHP              1.27 MB    ████████░░░░░░░░░░░░░░░░░  33.45 % |   169 files
+JavaScript       395.24 KB  █████░░░░░░░░░░░░░░░░░░░░  18.47 % |    89 files
+HTML             394.78 KB  █████░░░░░░░░░░░░░░░░░░░░  18.46 % |    49 files
+Python           194.41 KB  ███░░░░░░░░░░░░░░░░░░░░░░  12.95 % |    34 files
+CSS              145.23 KB  ███░░░░░░░░░░░░░░░░░░░░░░  11.19 % |    28 files
+Swift            34.87 KB   █░░░░░░░░░░░░░░░░░░░░░░░░   5.49 % |    17 files
+```
 <!-- END_LANGUAGE_STATS_TEXT -->
 
 </p>
