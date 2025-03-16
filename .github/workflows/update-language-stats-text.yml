@@ -1,145 +1,189 @@
-const fs = require("fs");
-const path = require("path");
-const stats = JSON.parse(fs.readFileSync("stats.json", "utf8"));
-let readme = fs.readFileSync("README.md", "utf8");
+name: Update Language Stats (TXT)
 
-// Configuration from environment variables
-const topCount = parseInt(process.env.TOP_LANGUAGES) || 6;
+on:
+  schedule:
+    - cron: '0 * * * *'  # Runs every hour
+  workflow_dispatch:  # Allows manual triggering
 
-// Weights for calculation
-const sizeWeight = 0.5;
-const countWeight = 0.5;
+permissions:
+  contents: write
 
-// Initialize language data structure
-const languages = {};
-
-// Track totals
-let totalBytes = 0;
-
-// Parse stats data
-Object.entries(stats.languages).forEach(([lang, data]) => {
-  // Initialize language entry
-  if (!languages[lang]) {
-    languages[lang] = {
-      name: lang,
-      size: 0,
-      count: 0,
-      score: 0
-    };
-  }
-  
-  // Add byte count
-  languages[lang].size = data.bytes;
-  languages[lang].count = 1; // Minimum count for each language
-  
-  // Track totals
-  totalBytes += data.bytes;
-});
-
-// Calculate weighted scores
-Object.keys(languages).forEach(lang => {
-  languages[lang].score = 
-    Math.pow(languages[lang].size, sizeWeight) * 
-    Math.pow(languages[lang].count, countWeight);
-});
-
-// Sort languages by score and get top languages
-const sortedLanguages = Object.values(languages)
-  .sort((a, b) => b.score - a.score);
-  
-const topLanguages = sortedLanguages.slice(0, topCount);
-
-// Calculate total score for percentage calculation
-const totalScore = topLanguages.reduce((sum, lang) => sum + lang.score, 0);
-
-// Calculate percentages
-topLanguages.forEach(lang => {
-  lang.percentage = (lang.score / totalScore) * 100;
-});
-
-// Function to create progress bar
-const createProgressBar = (percentage) => {
-  const barLength = 40; // Total length of progress bar
-  const filledLength = Math.round((percentage / 100) * barLength);
-  const emptyLength = barLength - filledLength;
-  
-  // Using black blocks and dotted blocks as seen in the screenshot
-  return '█'.repeat(filledLength) + '░'.repeat(emptyLength);
-};
-
-// Format file size in a human-readable way with separated number and unit
-const formatBytes = (bytes) => {
-  if (bytes === 0) return ['0', 'B'];
-  
-  const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-  
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  
-  const value = parseFloat((bytes / Math.pow(k, i)).toFixed(2));
-  return [value.toString(), sizes[i]];
-};
-
-// Generate text output in Python format
-let statsText = "language_stats = {\n";
-
-// Width settings for formatting
-const nameWidth = 12;
-const percentWidth = 8;
-
-// Get max width for size values and units for right alignment
-let maxSizeValueWidth = 0;
-let maxSizeUnitWidth = 0;
-
-// Calculate widths for alignment
-topLanguages.forEach(lang => {
-  const [sizeValue, sizeUnit] = formatBytes(lang.size);
-  maxSizeValueWidth = Math.max(maxSizeValueWidth, sizeValue.length);
-  maxSizeUnitWidth = Math.max(maxSizeUnitWidth, sizeUnit.length);
-});
-
-// Add language stats in Python dictionary format
-topLanguages.forEach((lang, index) => {
-  // Format language name
-  const nameField = `    "${lang.name}"`;
-  const namePadding = ' '.repeat(Math.max(0, nameWidth - lang.name.length - 4));
-  
-  // Progress bar
-  const progressBar = createProgressBar(lang.percentage);
-  
-  // Format percentage (right-aligned with space before %)
-  const percentField = lang.percentage.toFixed(2).padStart(percentWidth - 1, ' ') + " %";
-  
-  // Format size with right-aligned number and left-aligned unit
-  const [sizeValue, sizeUnit] = formatBytes(lang.size);
-  const sizeValueField = sizeValue.padStart(maxSizeValueWidth, ' ');
-  
-  // Build the line with Python syntax
-  statsText += `${nameField}${namePadding}: "${progressBar}", # ${percentField} | ${sizeValueField} ${sizeUnit}`;
-  
-  // Add comma if not the last item
-  if (index < topLanguages.length - 1) {
-    statsText += "\n";
-  }
-});
-
-// Close the Python dictionary
-statsText += "\n}";
-
-// Create markdown for README with Python code block
-let langSection = "```python\n" + statsText + "\n```";
-
-// Update README content
-const startMarker = "<!-- START_LANGUAGE_STATS_TEXT -->";
-const endMarker = "<!-- END_LANGUAGE_STATS_TEXT -->";
-
-if (readme.includes(startMarker) && readme.includes(endMarker)) {
-  // Replace existing section
-  const regex = new RegExp(`${startMarker}[\\s\\S]*?${endMarker}`, "g");
-  readme = readme.replace(regex, `${startMarker}\n${langSection}\n${endMarker}`);
-} else {
-  // Append at the end
-  readme += `\n\n${startMarker}\n${langSection}\n${endMarker}`;
-}
-
-fs.writeFileSync("README.md", readme);
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          
+      - name: Create script file
+        run: |
+          cat > generate-stats-text.js << 'EOF'
+          const fs = require("fs");
+          const path = require("path");
+          const stats = JSON.parse(fs.readFileSync("stats.json", "utf8"));
+          let readme = fs.readFileSync("README.md", "utf8");
+          
+          // Configuration from environment variables
+          const topCount = parseInt(process.env.TOP_LANGUAGES) || 6;
+          
+          // Weights for calculation
+          const sizeWeight = 0.5;
+          const countWeight = 0.5;
+          
+          // Initialize language data structure
+          const languages = {};
+          
+          // Track totals
+          let totalBytes = 0;
+          
+          // Parse stats data
+          Object.entries(stats.languages).forEach(([lang, data]) => {
+            // Initialize language entry
+            if (!languages[lang]) {
+              languages[lang] = {
+                name: lang,
+                size: 0,
+                count: 0,
+                score: 0
+              };
+            }
+            
+            // Add byte count
+            languages[lang].size = data.bytes;
+            languages[lang].count = 1; // Minimum count for each language
+            
+            // Track totals
+            totalBytes += data.bytes;
+          });
+          
+          // Calculate weighted scores
+          Object.keys(languages).forEach(lang => {
+            languages[lang].score = 
+              Math.pow(languages[lang].size, sizeWeight) * 
+              Math.pow(languages[lang].count, countWeight);
+          });
+          
+          // Sort languages by score and get top languages
+          const sortedLanguages = Object.values(languages)
+            .sort((a, b) => b.score - a.score);
+            
+          const topLanguages = sortedLanguages.slice(0, topCount);
+          
+          // Calculate total score for percentage calculation
+          const totalScore = topLanguages.reduce((sum, lang) => sum + lang.score, 0);
+          
+          // Calculate percentages
+          topLanguages.forEach(lang => {
+            lang.percentage = (lang.score / totalScore) * 100;
+          });
+          
+          // Function to create progress bar
+          const createProgressBar = (percentage) => {
+            const barLength = 40; // Total length of progress bar
+            const filledLength = Math.round((percentage / 100) * barLength);
+            const emptyLength = barLength - filledLength;
+            
+            // Using black blocks and dotted blocks as seen in the screenshot
+            return '█'.repeat(filledLength) + '░'.repeat(emptyLength);
+          };
+          
+          // Format file size in a human-readable way with separated number and unit
+          const formatBytes = (bytes) => {
+            if (bytes === 0) return ['0', 'B'];
+            
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+            
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            
+            const value = parseFloat((bytes / Math.pow(k, i)).toFixed(2));
+            return [value.toString(), sizes[i]];
+          };
+          
+          // Generate text output in Python format
+          let statsText = "language_stats = {\n";
+          
+          // Width settings for formatting
+          const nameWidth = 12;
+          const percentWidth = 8;
+          
+          // Get max width for size values and units for right alignment
+          let maxSizeValueWidth = 0;
+          let maxSizeUnitWidth = 0;
+          
+          // Calculate widths for alignment
+          topLanguages.forEach(lang => {
+            const [sizeValue, sizeUnit] = formatBytes(lang.size);
+            maxSizeValueWidth = Math.max(maxSizeValueWidth, sizeValue.length);
+            maxSizeUnitWidth = Math.max(maxSizeUnitWidth, sizeUnit.length);
+          });
+          
+          // Add language stats in Python dictionary format
+          topLanguages.forEach((lang, index) => {
+            // Format language name
+            const nameField = `    "${lang.name}"`;
+            const namePadding = ' '.repeat(Math.max(0, nameWidth - lang.name.length - 4));
+            
+            // Progress bar
+            const progressBar = createProgressBar(lang.percentage);
+            
+            // Format percentage (right-aligned with space before %)
+            const percentField = lang.percentage.toFixed(2).padStart(percentWidth - 1, ' ') + " %";
+            
+            // Format size with right-aligned number and left-aligned unit
+            const [sizeValue, sizeUnit] = formatBytes(lang.size);
+            const sizeValueField = sizeValue.padStart(maxSizeValueWidth, ' ');
+            
+            // Build the line with Python syntax
+            statsText += `${nameField}${namePadding}: "${progressBar}", # ${percentField} | ${sizeValueField} ${sizeUnit}`;
+            
+            // Add comma if not the last item
+            if (index < topLanguages.length - 1) {
+              statsText += "\n";
+            }
+          });
+          
+          // Close the Python dictionary
+          statsText += "\n}";
+          
+          // Create markdown for README with Python code block
+          let langSection = "```python\n" + statsText + "\n```";
+          
+          // Update README content
+          const startMarker = "<!-- START_LANGUAGE_STATS_TEXT -->";
+          const endMarker = "<!-- END_LANGUAGE_STATS_TEXT -->";
+          
+          if (readme.includes(startMarker) && readme.includes(endMarker)) {
+            // Replace existing section
+            const regex = new RegExp(`${startMarker}[\\s\\S]*?${endMarker}`, "g");
+            readme = readme.replace(regex, `${startMarker}\n${langSection}\n${endMarker}`);
+          } else {
+            // Append at the end
+            readme += `\n\n${startMarker}\n${langSection}\n${endMarker}`;
+          }
+          
+          fs.writeFileSync("README.md", readme);
+          EOF
+      
+      - name: Generate Language Stats Text and Update README
+        run: |
+          # Configuration
+          export TOP_LANGUAGES=6      # Show top 6 languages
+          
+          # Fetch the API and save results
+          curl -s "https://sukitsubaki.vercel.app/language-stats" > stats.json
+          
+          # Run the Node.js script
+          node generate-stats-text.js
+          
+      - name: Commit changes
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add README.md
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update language stats text in README"
+          git push
