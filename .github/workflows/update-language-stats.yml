@@ -100,10 +100,10 @@ jobs:
           
           // Create SVG visualization
           const svgWidth = 900;   // Width in pixels
-          const svgHeight = 40;   // Height in pixels
-          const barHeight = 40;   // Bar height equals SVG height to remove any margin
-          const percentFontSize = 12;    // Font size for percentage
-          const langFontSize = 10;    // smaller font size for language name
+          const svgHeight = 35;   // Height in pixels
+          const barHeight = 35;   // Bar height equals SVG height to remove any margin
+          const percentFontSize = 10;    // Font size for percentage
+          const langFontSize = 10;    // Font size for language name
           const fontFamily = "'Noto Sans', Helvetica, Arial, sans-serif";  // Font family with fallbacks
           
           // Calculate cumulative width for each language
