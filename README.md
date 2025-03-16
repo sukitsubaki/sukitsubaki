@@ -1,5 +1,4 @@
 <a href="https://sukitsubaki.github.io">![Name banner](banner.svg)</a>
-![](https://komarev.com/ghpvc/?username=sukitsubaki&color=ff506e&style=pixel)
 <div align="center">
 
 ![TYPO3](https://img.shields.io/badge/typo3-292929.svg?style=for-the-badge&logo=typo3&logoColor=)
@@ -9,6 +8,7 @@
 ![PYTHON](https://img.shields.io/badge/python-3670a0?style=for-the-badge&logo=python&logoColor=ffd43b)
 ![BASH](https://img.shields.io/badge/typoscript-3178c6?style=for-the-badge&logo=typescript&logoColor=white)
 ![PI](https://img.shields.io/badge/raspberry_pi-a22846.svg?style=for-the-badge&logo=raspberrypi&logoColor=white)
+![](https://komarev.com/ghpvc/?username=sukitsubaki&color=ff506e&style=for-the-badge&label=№)
 
 </div>
 </p>
