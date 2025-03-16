@@ -27,156 +27,156 @@ jobs:
           const stats = JSON.parse(fs.readFileSync("stats.json", "utf8"));
           let readme = fs.readFileSync("README.md", "utf8");
           
-          // Get configuration from environment variables
+          // Configuration from environment variables
           const showOthers = process.env.SHOW_OTHERS === "true";
           const topCount = parseInt(process.env.TOP_LANGUAGES) || 6;
           const svgFilename = "language-stats.svg";
           const svgDir = path.dirname(process.env.SVG_FILENAME) || "api/language-stats";
           
-          // Language colors (GitHub colors)
+          // Weights for calculation
+          const sizeWeight = 0.5;
+          const countWeight = 0.5;
+          
+          // Language colors
           const languageColors = {
-            "PHP": { bg: "#8993be", text: "#ffffff" },
-            "JavaScript": { bg: "#f1e05a", text: "#000000" },
+            "PHP": { bg: "#777bb4", text: "#ffffff" },
+            "JavaScript": { bg: "#f7df1e", text: "#1f2328" },
             "TypeScript": { bg: "#3178c6", text: "#ffffff" },
-            "HTML": { bg: "#e34c26", text: "#ffffff" },
-            "CSS": { bg: "#563d7c", text: "#ffffff" },
-            "Python": { bg: "#3572A5", text: "#ffffff" },
-            "Java": { bg: "#b07219", text: "#ffffff" },
-            "Ruby": { bg: "#701516", text: "#ffffff" },
-            "Go": { bg: "#00ADD8", text: "#ffffff" },
-            "Swift": { bg: "#ffac45", text: "#000000" },
-            "C": { bg: "#555555", text: "#ffffff" },
-            "C++": { bg: "#f34b7d", text: "#ffffff" },
+            "HTML": { bg: "#3366cc", text: "#ffffff" },
+            "CSS": { bg: "#663399", text: "#ffffff" },
+            "Python": { bg: "#3670a0", text: "#ffffff" },
+            "Java": { bg: "#f89820", text: "#1f2328" },
+            "Ruby": { bg: "#cc342d", text: "#ffffff" },
+            "Go": { bg: "#00add8", text: "#ffffff" },
+            "Swift": { bg: "#f05138", text: "#ffffff" },
+            "C": { bg: "#a8b9cc", text: "#ffffff" },
+            "C++": { bg: "#00599c", text: "#ffffff" },
             "C#": { bg: "#178600", text: "#ffffff" },
-            "Shell": { bg: "#89e051", text: "#000000" },
-            "Rust": { bg: "#dea584", text: "#000000" },
-            "Other": { bg: "#ededed", text: "#000000" }
+            "Shell": { bg: "#4eaa25", text: "#ffffff" },
+            "Rust": { bg: "#000000", text: "#ffffff" },
+            "Other": { bg: "#ededed", text: "#1f2328" }
           };
           
-          // Get the language entries and sort by percentage
-          const langEntries = Object.entries(stats.languages)
-            .map(([lang, data]) => ({
-              language: lang,
-              percentage: parseFloat(data.percentage.replace("%", ""))
-            }))
-            .sort((a, b) => b.percentage - a.percentage);
+          // Initialize language data structure
+          const languages = {};
           
-          // Get the top languages
-          const topLanguages = langEntries.slice(0, topCount);
+          // Parse stats data
+          Object.entries(stats.languages).forEach(([lang, data]) => {
+            // Initialize language entry
+            if (!languages[lang]) {
+              languages[lang] = {
+                name: lang,
+                color: languageColors[lang]?.bg || "#808080",
+                textColor: languageColors[lang]?.text || "#1f2328",
+                size: 0,
+                count: 0,
+                score: 0
+              };
+            }
+            
+            languages[lang].size = data.bytes;
+            languages[lang].count = 1; // Minimum count for each language
+          });
           
-          // Calculate sum of top language percentages
-          const topSum = topLanguages.reduce((sum, lang) => sum + lang.percentage, 0);
+          // Calculate weighted scores
+          Object.keys(languages).forEach(lang => {
+            languages[lang].score = 
+              Math.pow(languages[lang].size, sizeWeight) * 
+              Math.pow(languages[lang].count, countWeight);
+          });
           
-          // Function to format percentage
+          // Sort languages by score and limit to top count
+          const sortedLanguages = Object.values(languages)
+            .sort((a, b) => b.score - a.score)
+            .slice(0, topCount);
+          
+          // Calculate total score for percentage calculation
+          const totalScore = sortedLanguages.reduce((sum, lang) => sum + lang.score, 0);
+          
+          // Calculate percentages
+          sortedLanguages.forEach(lang => {
+            lang.percentage = (lang.score / totalScore) * 100;
+          });
+          
+          // Formatting helper function
           const formatPercentage = (pct) => pct.toFixed(2) + "%";
           
-          // Prepare final percentages for visualization
-          let languages = [];
-          
-          if (showOthers) {
-            // Use original percentages and add "Other"
-            languages = topLanguages.map(lang => ({
-              language: lang.language,
-              percentage: lang.percentage,
-              color: languageColors[lang.language]?.bg || "#808080",
-              textColor: languageColors[lang.language]?.text || "#000000"
-            }));
-            
-            if (langEntries.length > topCount && 100 - topSum > 0) {
-              languages.push({
-                language: "Other",
-                percentage: 100 - topSum,
-                color: languageColors["Other"].bg,
-                textColor: languageColors["Other"].text
-              });
-            }
-          } else {
-            // Rescale percentages to total 100%
-            languages = topLanguages.map(lang => ({
-              language: lang.language,
-              percentage: (lang.percentage / topSum) * 100,
-              color: languageColors[lang.language]?.bg || "#808080",
-              textColor: languageColors[lang.language]?.text || "#000000"
-            }));
-          }
-          
-          // Create SVG visualization
+          // SVG visualization parameters
           const svgWidth = 900;         // Width in pixels
-          const barHeight = 20;         // Bar height 20px as requested
-          const percentFontSize = 12;   // Reduced to 12px as requested
-          const langFontSize = 10;      // Font size for language names (below bar)
-          const textSpacing = 6;        // Increased space between bar and language text
-          const bottomPadding = 4;      // Added padding at the bottom
+          const barHeight = 20;         // Bar height
+          const percentFontSize = 12;   // Font size for percentages
+          const langFontSize = 10;      // Font size for language names
+          const textSpacing = 6;        // Space between bar and language text
+          const bottomPadding = 4;      // Bottom padding
           
-          // Total SVG height with increased spacing to prevent text cutoff
+          // Total SVG height calculation
           const svgHeight = barHeight + textSpacing + langFontSize + bottomPadding;
           
-          const fontFamily = "'Noto Sans', Helvetica, Arial, sans-serif";  // Font family with fallbacks
-          const langTextColor = "#1f2328"; // Language text color
+          // Text styling
+          const fontFamily = "'Noto Sans', Helvetica, Arial, sans-serif";
+          const langTextColor = "#1f2328";
           
-          // Calculate cumulative width for each language
+          // Calculate bar widths and positions
           let totalWidth = 0;
-          languages.forEach(lang => {
+          sortedLanguages.forEach(lang => {
             lang.percentage_width = lang.percentage / 100;
             lang.width = Math.floor(lang.percentage_width * svgWidth);
             lang.x = totalWidth;
             totalWidth += lang.width;
           });
           
-          // Adjust to ensure the total width equals svgWidth exactly
+          // Adjust for any rounding discrepancies
           if (totalWidth !== svgWidth) {
             const diff = svgWidth - totalWidth;
-            // Add the difference to the widest bar to minimize visual impact
-            const widestLang = [...languages].sort((a, b) => b.width - a.width)[0];
+            const widestLang = [...sortedLanguages].sort((a, b) => b.width - a.width)[0];
             widestLang.width += diff;
           }
           
-          // Create SVG with explicit viewBox and preserveAspectRatio
+          // Create SVG markup
           let svg = `<svg width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">\n`;
           
-          // Add bar segments directly (no rounded corners)
-          languages.forEach((lang, index) => {
-            const x = index === 0 ? 0 : lang.x;
-            svg += `  <rect x="${x}" y="0" width="${lang.width}" height="${barHeight}" fill="${lang.color}" />\n`;
+          // Add bar segments
+          sortedLanguages.forEach(lang => {
+            svg += `  <rect x="${lang.x}" y="0" width="${lang.width}" height="${barHeight}" fill="${lang.color}" />\n`;
           });
           
           // Add percentage text inside each bar segment
-          languages.forEach(lang => {
+          sortedLanguages.forEach(lang => {
             const textX = lang.x + (lang.width / 2);
-            const percentY = barHeight / 2; // Centered vertically in the bar
+            const percentY = barHeight / 2; // Centered vertically
             
-            // Only add percentage text if there's enough space (bar width > 40px)
+            // Only add text if there's enough space
             if (lang.width > 40) {
               svg += `  <text x="${textX}" y="${percentY}" text-anchor="middle" dominant-baseline="middle" font-family="${fontFamily}" font-size="${percentFontSize}" font-weight="bold" fill="${lang.textColor}">${formatPercentage(lang.percentage)}</text>\n`;
             }
           });
           
           // Add language names below each bar segment
-          languages.forEach(lang => {
+          sortedLanguages.forEach(lang => {
             const textX = lang.x + (lang.width / 2);
-            const langY = barHeight + textSpacing + (langFontSize / 2); // Adjusted position
+            const langY = barHeight + textSpacing + (langFontSize / 2);
             
-            // Only add language name if there's enough space (bar width > 30px)
+            // Only add language name if there's enough space
             if (lang.width > 30) {
-              svg += `  <text x="${textX}" y="${langY}" text-anchor="middle" dominant-baseline="middle" font-family="${fontFamily}" font-size="${langFontSize}" fill="${langTextColor}">${lang.language}</text>\n`;
+              svg += `  <text x="${textX}" y="${langY}" text-anchor="middle" dominant-baseline="middle" font-family="${fontFamily}" font-size="${langFontSize}" fill="${langTextColor}">${lang.name}</text>\n`;
             }
           });
           
           svg += "</svg>";
           
-          // Generate a unique filename to prevent caching issues
+          // Cache-busting filename
           const timestamp = new Date().getTime();
           const uniqueSvgFilename = svgFilename.replace('.svg', `-${timestamp}.svg`);
           
-          // Make sure the directory exists
+          // Ensure directory exists
           if (!fs.existsSync(svgDir)) {
             fs.mkdirSync(svgDir, { recursive: true });
           }
           
-          // Save SVG to file with timestamp in name
+          // Save SVG file
           fs.writeFileSync(path.join(svgDir, uniqueSvgFilename), svg);
           
-          // Clean up old SVG files (keep only the latest)
+          // Clean up old SVG files
           const files = fs.readdirSync(svgDir);
           files.forEach(file => {
             if (file.startsWith('language-stats-') && file.endsWith('.svg') && file !== uniqueSvgFilename) {
@@ -189,12 +189,10 @@ jobs:
             }
           });
           
-          // Create markdown for README with HTML to ensure full width
-          let langSection = `<img src="${svgDir}/${uniqueSvgFilename}" width="100%" alt="Code Composition">`;
+          // Create markdown for README
+          let langSection = `<img src="${svgDir}/${uniqueSvgFilename}" width="100%" alt="My Programming Languages">`;
           
-          // No explanatory text as requested
-          
-          // Replace existing section or append to the end
+          // Update README content
           const startMarker = "<!-- START_LANGUAGE_STATS -->";
           const endMarker = "<!-- END_LANGUAGE_STATS -->";
           
