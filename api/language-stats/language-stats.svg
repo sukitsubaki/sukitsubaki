@@ -1,20 +1,20 @@
-<svg width="900" height="40" viewBox="0 0 900 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-  <rect x="0" y="0" width="289" height="40" fill="#8993be" />
-  <rect x="287" y="0" width="275" height="40" fill="#563d7c" />
-  <rect x="562" y="0" width="128" height="40" fill="#f1e05a" />
-  <rect x="690" y="0" width="84" height="40" fill="#e34c26" />
-  <rect x="774" y="0" width="72" height="40" fill="#ffac45" />
-  <rect x="846" y="0" width="52" height="40" fill="#3572A5" />
-  <text x="144.5" y="14" text-anchor="middle" dominant-baseline="middle" font-family="'Noto Sans', Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" fill="#ffffff">31.92%</text>
+<svg width="900" height="35" viewBox="0 0 900 35" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="289" height="35" fill="#8993be" />
+  <rect x="287" y="0" width="275" height="35" fill="#563d7c" />
+  <rect x="562" y="0" width="128" height="35" fill="#f1e05a" />
+  <rect x="690" y="0" width="84" height="35" fill="#e34c26" />
+  <rect x="774" y="0" width="72" height="35" fill="#ffac45" />
+  <rect x="846" y="0" width="52" height="35" fill="#3572A5" />
+  <text x="144.5" y="14" text-anchor="middle" dominant-baseline="middle" font-family="'Noto Sans', Helvetica, Arial, sans-serif" font-size="10" font-weight="bold" fill="#ffffff">31.92%</text>
   <text x="144.5" y="28" text-anchor="middle" dominant-baseline="middle" font-family="'Noto Sans', Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff">PHP</text>
-  <text x="424.5" y="14" text-anchor="middle" dominant-baseline="middle" font-family="'Noto Sans', Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" fill="#ffffff">30.60%</text>
+  <text x="424.5" y="14" text-anchor="middle" dominant-baseline="middle" font-family="'Noto Sans', Helvetica, Arial, sans-serif" font-size="10" font-weight="bold" fill="#ffffff">30.60%</text>
   <text x="424.5" y="28" text-anchor="middle" dominant-baseline="middle" font-family="'Noto Sans', Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff">CSS</text>
-  <text x="626" y="14" text-anchor="middle" dominant-baseline="middle" font-family="'Noto Sans', Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" fill="#000000">14.23%</text>
+  <text x="626" y="14" text-anchor="middle" dominant-baseline="middle" font-family="'Noto Sans', Helvetica, Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000">14.23%</text>
   <text x="626" y="28" text-anchor="middle" dominant-baseline="middle" font-family="'Noto Sans', Helvetica, Arial, sans-serif" font-size="10" fill="#000000">JavaScript</text>
-  <text x="732" y="14" text-anchor="middle" dominant-baseline="middle" font-family="'Noto Sans', Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" fill="#ffffff">9.42%</text>
+  <text x="732" y="14" text-anchor="middle" dominant-baseline="middle" font-family="'Noto Sans', Helvetica, Arial, sans-serif" font-size="10" font-weight="bold" fill="#ffffff">9.42%</text>
   <text x="732" y="28" text-anchor="middle" dominant-baseline="middle" font-family="'Noto Sans', Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff">HTML</text>
-  <text x="810" y="14" text-anchor="middle" dominant-baseline="middle" font-family="'Noto Sans', Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" fill="#000000">8.01%</text>
+  <text x="810" y="14" text-anchor="middle" dominant-baseline="middle" font-family="'Noto Sans', Helvetica, Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000">8.01%</text>
   <text x="810" y="28" text-anchor="middle" dominant-baseline="middle" font-family="'Noto Sans', Helvetica, Arial, sans-serif" font-size="10" fill="#000000">Swift</text>
-  <text x="872" y="14" text-anchor="middle" dominant-baseline="middle" font-family="'Noto Sans', Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" fill="#ffffff">5.82%</text>
+  <text x="872" y="14" text-anchor="middle" dominant-baseline="middle" font-family="'Noto Sans', Helvetica, Arial, sans-serif" font-size="10" font-weight="bold" fill="#ffffff">5.82%</text>
   <text x="872" y="28" text-anchor="middle" dominant-baseline="middle" font-family="'Noto Sans', Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff">Python</text>
 </svg>
