@@ -40,7 +40,7 @@ async function getLanguageStats(username, token) {
   );
   
   if (!reposResponse.ok) {
-    throw new Error(`GitHub API error: ${reposResponse.status} ${reposResponse.statusText}`);
+    throw new Error(`GitHub API Fehler: ${reposResponse.status} ${reposResponse.statusText}`);
   }
   
   const repos = await reposResponse.json();
@@ -49,16 +49,18 @@ async function getLanguageStats(username, token) {
   const languageBytes = {};
   let totalBytes = 0;
   
+  // count in how many repositories a language is used
+  const languageRepoCount = {};
+  
   // iterate all repositories
   for (const repo of repos) {
-
-    // skip forks
+    // Überspringe Forks
     if (repo.fork) continue;
     
     const langResponse = await fetch(repo.languages_url, { headers });
     
     if (!langResponse.ok) {
-      console.warn(`Warning: Could not get languages for ${repo.name}: ${langResponse.status}`);
+      console.warn(`Warnung: Konnte Sprachen für ${repo.name} nicht abrufen: ${langResponse.status}`);
       continue;
     }
     
@@ -66,24 +68,52 @@ async function getLanguageStats(username, token) {
     
     // add bytes for each language
     for (const [language, bytes] of Object.entries(languages)) {
+      // sum up
       languageBytes[language] = (languageBytes[language] || 0) + bytes;
       totalBytes += bytes;
+      
+      // increase repository counter
+      languageRepoCount[language] = (languageRepoCount[language] || 0) + 1;
     }
   }
   
-  // convert bytes in percentage and sort
-  const languagePercentages = Object.entries(languageBytes)
-    .map(([language, bytes]) => ({
+  // calculate percentage for bytes
+  const bytesPercentages = {};
+  for (const [language, bytes] of Object.entries(languageBytes)) {
+    bytesPercentages[language] = (bytes / totalBytes) * 100;
+  }
+  
+  // calculate percentage for repositories
+  const totalReposCounted = Object.values(languageRepoCount).reduce((sum, count) => sum + count, 0);
+  const repoPercentages = {};
+  for (const [language, count] of Object.entries(languageRepoCount)) {
+    repoPercentages[language] = (count / totalReposCounted) * 100;
+  }
+  
+  // combine both metrics with 50-50 weighting
+  const combinedPercentages = {};
+  for (const language of Object.keys(languageBytes)) {
+    combinedPercentages[language] = 
+      (bytesPercentages[language] * 0.5) + 
+      (repoPercentages[language] * 0.5);
+  }
+  
+  // sort percentage results
+  const languagePercentages = Object.entries(combinedPercentages)
+    .map(([language, percentage]) => ({
       language,
-      bytes,
-      percentage: (bytes / totalBytes * 100).toFixed(2)
+      bytes: languageBytes[language],
+      repoCount: languageRepoCount[language],
+      bytesPercentage: bytesPercentages[language].toFixed(2),
+      repoPercentage: repoPercentages[language].toFixed(2),
+      percentage: percentage.toFixed(2)
     }))
-    .sort((a, b) => b.bytes - a.bytes);
+    .sort((a, b) => b.percentage - a.percentage);
   
   // format results
   const results = {
     username,
-    totalRepos: repos.length,
+    totalRepos: repos.filter(repo => !repo.fork).length,
     totalBytes,
     languages: {}
   };
@@ -91,6 +121,9 @@ async function getLanguageStats(username, token) {
   languagePercentages.forEach(item => {
     results.languages[item.language] = {
       bytes: item.bytes,
+      repoCount: item.repoCount,
+      bytesPercentage: `${item.bytesPercentage}%`,
+      repoPercentage: `${item.repoPercentage}%`,
       percentage: `${item.percentage}%`
     };
   });
