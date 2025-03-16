@@ -35,7 +35,7 @@ async function getLanguageStats(username, token) {
   // check all repositories (public and private)
   const reposResponse = await fetch(
     `https://api.github.com/user/repos?per_page=100&affiliation=owner`,
-    { headers }
+    { headers, timeout: 10000 }
   );
   
   if (!reposResponse.ok) {
@@ -48,155 +48,107 @@ async function getLanguageStats(username, token) {
   const languageBytes = {};
   let totalBytes = 0;
   
-  // count files per language
-  const languageFileCount = {};
-  let totalFiles = 0;
-  
   // filter out forks
   const relevantRepos = repos.filter(repo => !repo.fork);
   
-  // extension to language mapping
-  const extensionToLanguage = {
-    // Programming languages
-    '.js': 'JavaScript',
-    '.jsx': 'JavaScript',
-    '.ts': 'TypeScript',
-    '.tsx': 'TypeScript',
-    '.php': 'PHP',
-    '.py': 'Python',
-    '.rb': 'Ruby',
-    '.java': 'Java',
-    '.go': 'Go',
-    '.c': 'C',
-    '.cpp': 'C++',
-    '.h': 'C++',
-    '.hpp': 'C++',
-    '.cs': 'C#',
-    '.swift': 'Swift',
-    '.kt': 'Kotlin',
-    '.rs': 'Rust',
-    '.dart': 'Dart',
-    '.sh': 'Shell',
-    '.bash': 'Shell',
-    '.pl': 'Perl',
-    '.lua': 'Lua',
-    '.r': 'R',
-    '.scala': 'Scala',
-    
-    // Markup and styling
-    '.html': 'HTML',
-    '.htm': 'HTML',
-    '.css': 'CSS',
-    '.scss': 'SCSS',
-    '.sass': 'SCSS',
-    '.less': 'Less',
-    '.xml': 'XML',
-    '.md': 'Markdown',
-    '.json': 'JSON',
-    '.yaml': 'YAML',
-    '.yml': 'YAML',
-    
-    // Others
-    '.sql': 'SQL',
-    '.graphql': 'GraphQL'
-  };
-  
-  // iterate all repositories
+  // First, just collect the language bytes - this is more reliable
   for (const repo of relevantRepos) {
-    // Get language bytes
-    const langResponse = await fetch(repo.languages_url, { headers });
-    
-    if (!langResponse.ok) {
-      console.warn(`Warning: Could not fetch languages for ${repo.name}: ${langResponse.status}`);
-      continue;
-    }
-    
-    const languages = await langResponse.json();
-    
-    // add bytes for each language
-    for (const [language, bytes] of Object.entries(languages)) {
-      languageBytes[language] = (languageBytes[language] || 0) + bytes;
-      totalBytes += bytes;
-    }
-    
-    // Now get files and count them by language
     try {
-      // Get all files in the repository
-      const contentResponse = await fetch(`https://api.github.com/repos/${username}/${repo.name}/git/trees/HEAD?recursive=1`, { headers });
+      const langResponse = await fetch(repo.languages_url, { 
+        headers, 
+        timeout: 5000 
+      });
       
-      if (!contentResponse.ok) {
-        console.warn(`Warning: Could not fetch files for ${repo.name}: ${contentResponse.status}`);
+      if (!langResponse.ok) {
+        console.warn(`Warning: Could not fetch languages for ${repo.name}: ${langResponse.status}`);
         continue;
       }
       
-      const content = await contentResponse.json();
+      const languages = await langResponse.json();
       
-      // Filter only files (not directories)
-      const files = content.tree.filter(item => item.type === 'blob');
-      
-      // Count files by language
-      for (const file of files) {
-        // Get file extension
-        const path = file.path;
-        const lastDotIndex = path.lastIndexOf('.');
-        if (lastDotIndex === -1) continue; // Skip files without extension
-        
-        const extension = path.substring(lastDotIndex).toLowerCase();
-        const language = extensionToLanguage[extension];
-        
-        // Only count if we know the language and it exists in our byte calculation
-        if (language && languageBytes[language]) {
-          languageFileCount[language] = (languageFileCount[language] || 0) + 1;
-          totalFiles++;
-        }
+      // add bytes for each language
+      for (const [language, bytes] of Object.entries(languages)) {
+        languageBytes[language] = (languageBytes[language] || 0) + bytes;
+        totalBytes += bytes;
       }
     } catch (error) {
-      console.error(`Error fetching files for ${repo.name}:`, error);
-      // Continue with next repository
+      console.error(`Error processing repo ${repo.name}:`, error.message);
     }
   }
   
-  // calculate percentage for bytes
+  // Now try to estimate file counts based on typical code size per language
+  // This avoids the expensive tree fetching that can cause timeouts
+  const languageFileCount = {};
+  let totalFiles = 0;
+  
+  // Average bytes per file by language (rough estimates)
+  const avgBytesPerFile = {
+    'JavaScript': 3000,
+    'TypeScript': 2800,
+    'PHP': 4000,
+    'Python': 2500,
+    'HTML': 5000,
+    'CSS': 3500,
+    'Java': 4500,
+    'C#': 4000,
+    'C++': 3500,
+    'Ruby': 2000,
+    'Go': 3000,
+    'Rust': 3500,
+    'Shell': 1000,
+    // Default for other languages
+    'default': 3500
+  };
+  
+  // Estimate file counts based on bytes
+  for (const [language, bytes] of Object.entries(languageBytes)) {
+    const avgBytes = avgBytesPerFile[language] || avgBytesPerFile['default'];
+    const estimatedFiles = Math.ceil(bytes / avgBytes);
+    languageFileCount[language] = estimatedFiles;
+    totalFiles += estimatedFiles;
+  }
+  
+  // Calculate percentage for bytes
   const bytesPercentages = {};
   for (const [language, bytes] of Object.entries(languageBytes)) {
     bytesPercentages[language] = (bytes / totalBytes) * 100;
   }
   
-  // calculate percentage for files
+  // Calculate percentage for files
   const filePercentages = {};
   for (const [language, count] of Object.entries(languageFileCount)) {
     filePercentages[language] = (count / totalFiles) * 100;
   }
   
-  // combine both metrics with 50-50 weighting
+  // Combine both metrics with 50-50 weighting
   const combinedPercentages = {};
-  const allLanguages = new Set([...Object.keys(languageBytes), ...Object.keys(languageFileCount)]);
   
-  for (const language of allLanguages) {
-    const bytePercent = bytesPercentages[language] || 0;
-    const filePercent = filePercentages[language] || 0;
+  for (const language of Object.keys(languageBytes)) {
+    const bytePercent = bytesPercentages[language];
+    const filePercent = filePercentages[language];
     combinedPercentages[language] = (bytePercent * 0.5) + (filePercent * 0.5);
   }
   
-  // sort percentage results
+  // Sort percentage results
   const languagePercentages = Object.entries(combinedPercentages)
     .map(([language, percentage]) => ({
       language,
-      bytes: languageBytes[language] || 0,
-      fileCount: languageFileCount[language] || 0,
-      bytesPercentage: (bytesPercentages[language] || 0).toFixed(2),
-      filePercentage: (filePercentages[language] || 0).toFixed(2),
+      bytes: languageBytes[language],
+      fileCount: languageFileCount[language],
+      bytesPercentage: bytesPercentages[language].toFixed(2),
+      filePercentage: filePercentages[language].toFixed(2),
       percentage: percentage.toFixed(2)
     }))
     .sort((a, b) => b.percentage - a.percentage);
   
-  // format results
+  // Format results
   const results = {
     username,
     totalRepos: relevantRepos.length,
     totalBytes,
     totalFiles,
-    languages: {}
+    languages: {},
+    note: "File counts are estimated based on typical file sizes per language"
   };
   
   languagePercentages.forEach(item => {
