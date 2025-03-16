@@ -1,20 +1,20 @@
-<svg width="1280" height="40" xmlns="http://www.w3.org/2000/svg">
-  <rect x="0" y="0" width="566" height="40" fill="#8993be" />
-  <rect x="566" y="0" width="230" height="40" fill="#f1e05a" />
-  <rect x="796" y="0" width="168" height="40" fill="#e34c26" />
-  <rect x="964" y="0" width="138" height="40" fill="#ffac45" />
-  <rect x="1102" y="0" width="98" height="40" fill="#3572A5" />
-  <rect x="1200" y="0" width="80" height="40" fill="#563d7c" />
-  <text x="283" y="14" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff">44.28%</text>
-  <text x="283" y="28" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12" fill="#ffffff">PHP</text>
-  <text x="681" y="14" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#000000">18.01%</text>
-  <text x="681" y="28" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12" fill="#000000">JavaScript</text>
-  <text x="880" y="14" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff">13.19%</text>
-  <text x="880" y="28" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12" fill="#ffffff">HTML</text>
-  <text x="1033" y="14" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#000000">10.79%</text>
-  <text x="1033" y="28" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12" fill="#000000">Swift</text>
-  <text x="1151" y="14" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff">7.68%</text>
-  <text x="1151" y="28" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12" fill="#ffffff">Python</text>
-  <text x="1240" y="14" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff">6.05%</text>
-  <text x="1240" y="28" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12" fill="#ffffff">CSS</text>
+<svg width="900" height="40" viewBox="0 0 900 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="400" height="40" fill="#8993be" />
+  <rect x="398" y="0" width="162" height="40" fill="#f1e05a" />
+  <rect x="560" y="0" width="118" height="40" fill="#e34c26" />
+  <rect x="678" y="0" width="97" height="40" fill="#ffac45" />
+  <rect x="775" y="0" width="69" height="40" fill="#3572A5" />
+  <rect x="844" y="0" width="54" height="40" fill="#563d7c" />
+  <text x="200" y="14" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff">44.28%</text>
+  <text x="200" y="28" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12" fill="#ffffff">PHP</text>
+  <text x="479" y="14" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#000000">18.01%</text>
+  <text x="479" y="28" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12" fill="#000000">JavaScript</text>
+  <text x="619" y="14" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff">13.19%</text>
+  <text x="619" y="28" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12" fill="#ffffff">HTML</text>
+  <text x="726.5" y="14" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#000000">10.79%</text>
+  <text x="726.5" y="28" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12" fill="#000000">Swift</text>
+  <text x="809.5" y="14" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff">7.68%</text>
+  <text x="809.5" y="28" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12" fill="#ffffff">Python</text>
+  <text x="871" y="14" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff">6.05%</text>
+  <text x="871" y="28" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12" fill="#ffffff">CSS</text>
 </svg>
