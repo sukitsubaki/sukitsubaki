@@ -56,20 +56,20 @@ jobs:
               const totalDiscussionsAndComments = stats.discussions + stats.discussionComments;
               const totalPullRequestsAndReviews = stats.pullRequestsCreated + stats.pullRequestReviews;
               
-              // Create formatted markdown
-              const contributionStats = `## GitHub Contributions
-
-Contribution Stats
-
-- Total Contributions: ${formatNumber(stats.totalContributions)}
-- Commits: ${formatNumber(stats.commits)}
-- Issues Created: ${formatNumber(stats.issuesCreated)}
-- Issue Contributions: ${formatNumber(stats.issueContributions)}
-- Pull Requests & Reviews: ${formatNumber(totalPullRequestsAndReviews)}
-- Repositories: ${formatNumber(stats.repositoriesCount)}
-- Discussions & Comments: ${formatNumber(totalDiscussionsAndComments)}
-- Total Stars: ${formatNumber(stats.stars)}
-- Total Forks: ${formatNumber(stats.forks)}`;
+              // Format contribution stats
+              let statsText = "";
+              statsText += "Total Contributions: " + formatNumber(stats.totalContributions) + "\n";
+              statsText += "Commits:             " + formatNumber(stats.commits) + "\n";
+              statsText += "Issues Created:      " + formatNumber(stats.issuesCreated) + "\n";
+              statsText += "Issue Contributions: " + formatNumber(stats.issueContributions) + "\n";
+              statsText += "Pull Requests & Reviews: " + formatNumber(totalPullRequestsAndReviews) + "\n";
+              statsText += "Repositories:        " + formatNumber(stats.repositoriesCount) + "\n";
+              statsText += "Discussions & Comments: " + formatNumber(totalDiscussionsAndComments) + "\n";
+              statsText += "Total Stars:         " + formatNumber(stats.stars) + "\n";
+              statsText += "Total Forks:         " + formatNumber(stats.forks) + "\n";
+              
+              // Create markdown section with code block
+              const contributionStats = "## GitHub Contributions\n\n```\n#contributions\n\n" + statsText + "```";
               
               // Replace or add the stats section
               const startMarker = '<!-- START_CONTRIBUTION_STATS -->';
