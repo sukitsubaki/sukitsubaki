@@ -102,7 +102,9 @@ jobs:
           const svgWidth = 900;   // Width in pixels
           const svgHeight = 40;   // Height in pixels
           const barHeight = 40;   // Bar height equals SVG height to remove any margin
-          const fontSize = 12;    // Font size
+          const fontSize = 12;    // Font size for percentage
+          const fontSize = 10;    // smaller font size for language name
+          const fontFamily = "'Noto Sans', Helvetica, Arial, sans-serif";  // Font family with fallbacks
           
           // Calculate cumulative width for each language
           let totalWidth = 0;
@@ -139,11 +141,11 @@ jobs:
             // Only add text if there's enough space (bar width > 40px)
             if (lang.width > 40) {
               // Add percentage on top line
-              svg += `  <text x="${textX}" y="${percentY}" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="${fontSize}" font-weight="bold" fill="${lang.textColor}">${formatPercentage(lang.percentage)}</text>\n`;
+              svg += `  <text x="${textX}" y="${percentY}" text-anchor="middle" dominant-baseline="middle" font-family="${fontFamily}" font-size="${percentFontSize}" font-weight="bold" fill="${lang.textColor}">${formatPercentage(lang.percentage)}</text>\n`;
               
               // Add language name on bottom line
-              svg += `  <text x="${textX}" y="${langY}" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="${fontSize}" fill="${lang.textColor}">${lang.language}</text>\n`;
-            }
+              svg += `  <text x="${textX}" y="${langY}" text-anchor="middle" dominant-baseline="middle" font-family="${fontFamily}" font-size="${langFontSize}" fill="${lang.textColor}">${lang.language}</text>\n`;
+              }
           });
           
           svg += "</svg>";
