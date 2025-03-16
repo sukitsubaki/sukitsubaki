@@ -11,10 +11,11 @@
 ![](https://komarev.com/ghpvc/?username=sukitsubaki&color=3178c6&style=for-the-badge&label=№)
 
 </div>
-<p align="center">
-  <a href="https://github.com/anuraghazra/github-readme-stats"><img src="https://github-stats-omega-ebon.vercel.app/api?username=sukitsubaki&layout=donut&show_icons=true&number_format=short&bg_color=ffffff&border_color=ffffff&icon_color=f2487b&&title_color=ff506e&text_color=1f2328&count_private=true&include_all_commits=true&rank_icon=github&hide_title=true&cache_seconds=32400" height="180px" width="auto" /></a>
-  <a href="https://github.com/anuraghazra/github-readme-stats"><img src="https://github-stats-omega-ebon.vercel.app/api/top-langs/?username=sukitsubaki&layout=compact&bg_color=ffffff&border_color=ffffff&title_color=ff506e&text_color=1f2328&size_weight=0.5&count_weight=0.5&count_private=true&include_all_commits=true&custom_title=Code%20Composition&cache_seconds=32400" height="160px" width="auto" /></a>
-</p>
+
+<!-- START_LANGUAGE_STATS -->
+<img src="api/language-stats/language-stats-1742148657318.svg" width="100%" alt="My Programming Languages">
+<!-- END_LANGUAGE_STATS -->
+
 </p>
 
 ```json
@@ -57,11 +58,10 @@
 }
 ```
 
-<!-- START_LANGUAGE_STATS -->
-<img src="api/language-stats/language-stats-1742148657318.svg" width="100%" alt="My Programming Languages">
-
-
-<!-- END_LANGUAGE_STATS -->
+<p align="center">
+  <a href="https://github.com/anuraghazra/github-readme-stats"><img src="https://github-stats-omega-ebon.vercel.app/api?username=sukitsubaki&layout=donut&show_icons=true&number_format=short&bg_color=ffffff&border_color=ffffff&icon_color=f2487b&&title_color=ff506e&text_color=1f2328&count_private=true&include_all_commits=true&rank_icon=github&hide_title=true&cache_seconds=32400" height="180px" width="auto" /></a>
+  <a href="https://github.com/anuraghazra/github-readme-stats"><img src="https://github-stats-omega-ebon.vercel.app/api/top-langs/?username=sukitsubaki&layout=compact&bg_color=ffffff&border_color=ffffff&title_color=ff506e&text_color=1f2328&size_weight=0.5&count_weight=0.5&count_private=true&include_all_commits=true&custom_title=Code%20Composition&cache_seconds=32400" height="160px" width="auto" /></a>
+</p>
 
 <!--
 **sukitsubaki/sukitsubaki** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
