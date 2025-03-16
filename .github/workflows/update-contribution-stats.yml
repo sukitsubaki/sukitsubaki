@@ -106,7 +106,7 @@ jobs:
       
       - name: Fetch and update README
         run: |
-          # Set API URL to your deployed endpoint
+          # Set API URL to your deployed endpoint (ohne /api Präfix da api als Root-Verzeichnis verwendet wird)
           export API_URL="https://sukitsubaki.vercel.app/contribution-stats?username=sukitsubaki"
           
           # Run the Node.js script
