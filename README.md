@@ -4,12 +4,11 @@
 
 ![TYPO3](https://img.shields.io/badge/typo3-292929.svg?style=for-the-badge&logo=typo3&logoColor=)
 ![CSS](https://img.shields.io/badge/css-663399.svg?style=for-the-badge&logo=css&logoColor=white)
-![HTML](https://img.shields.io/badge/html-3366CC.svg?style=for-the-badge&logo=htmx&logoColor=white)
-![PHP](https://img.shields.io/badge/php-777BB4.svg?style=for-the-badge&logo=php&logoColor=white)
-![PYTHON](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffd43b)
-![TS](https://img.shields.io/badge/bash-4eaa25?style=for-the-badge&logo=gnu-bash&logoColor=white)
+![HTML](https://img.shields.io/badge/html-3366cc.svg?style=for-the-badge&logo=htmx&logoColor=white)
+![PHP](https://img.shields.io/badge/php-777bb4.svg?style=for-the-badge&logo=php&logoColor=white)
+![PYTHON](https://img.shields.io/badge/python-3670a0?style=for-the-badge&logo=python&logoColor=ffd43b)
 ![BASH](https://img.shields.io/badge/typoscript-3178c6?style=for-the-badge&logo=typescript&logoColor=white)
-![PI](https://img.shields.io/badge/raspberry_pi-A22846.svg?style=for-the-badge&logo=raspberrypi&logoColor=white)
+![PI](https://img.shields.io/badge/raspberry_pi-a22846.svg?style=for-the-badge&logo=raspberrypi&logoColor=white)
 
 </div>
 </p>
