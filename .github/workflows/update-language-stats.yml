@@ -151,23 +151,11 @@ jobs:
           // Create SVG with explicit viewBox and preserveAspectRatio
           let svg = `<svg width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">\n`;
           
-          // Add border-radius of 6px through rect with border-radius and clipping
-          svg += `  <defs>\n`;
-          svg += `    <clipPath id="roundedBar">\n`;
-          svg += `      <rect x="0" y="0" width="${svgWidth}" height="${barHeight}" rx="6" ry="6" />\n`;
-          svg += `    </clipPath>\n`;
-          svg += `  </defs>\n`;
-          
-          // Add a group with the clipping path
-          svg += `  <g clip-path="url(#roundedBar)">\n`;
-          
-          // Add bar segments
+          // Add bar segments directly without rounded corners
           sortedLanguages.forEach((lang, index) => {
             const x = lang.x;
-            svg += `    <rect x="${x}" y="0" width="${lang.width}" height="${barHeight}" fill="${lang.color}" />\n`;
+            svg += `  <rect x="${x}" y="0" width="${lang.width}" height="${barHeight}" fill="${lang.color}" />\n`;
           });
-          
-          svg += `  </g>\n`;
           
           // Add percentage text inside each bar segment
           sortedLanguages.forEach(lang => {
