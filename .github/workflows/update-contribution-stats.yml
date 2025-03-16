@@ -107,7 +107,7 @@ jobs:
       - name: Fetch and update README
         run: |
           # Set API URL to your deployed endpoint
-          export API_URL="https://sukitsubaki.vercel.app/api/contribution-stats?username=sukitsubaki"
+          export API_URL="https://sukitsubaki.vercel.app/contribution-stats?username=sukitsubaki"
           
           # Run the Node.js script
           node generate-contribution-stats.js
