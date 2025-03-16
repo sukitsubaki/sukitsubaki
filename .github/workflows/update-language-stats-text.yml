@@ -143,7 +143,7 @@ jobs:
           });
           
           // Create markdown for README with code block
-          let langSection = "```\n" + statsText + "```";
+          let langSection = "```io\n" + statsText + "```";
           
           // Update README content
           const startMarker = "<!-- START_LANGUAGE_STATS_TEXT -->";
