@@ -152,7 +152,8 @@ jobs:
           fs.writeFileSync(svgFilename, svg);
           
           // Create markdown for README with HTML to ensure full width
-          let langSection = `<img src="${svgFilename}" width="100%" alt="My Programming Languages">\n\n`;
+          const timestamp = new Date().getTime();
+          let langSection = `<img src="${svgFilename}?v=${timestamp}" width="100%" alt="My Programming Languages">\n\n`;
           
           // Add a note about the calculation method
           langSection += `*Top ${topCount} languages rescaled to 100%. Based on all repositories with 50/50 weighting between bytes and file count.*`;
