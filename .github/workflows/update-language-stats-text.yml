@@ -1,4 +1,4 @@
-name: Update Language Stats (TXT)
+name: Update Language Stats Text
 
 on:
   schedule:
@@ -133,9 +133,9 @@ jobs:
           });
           
           // Same for the total row
-          const [totalSizeValue, totalSizeUnit] = formatBytes(totalBytes);
-          maxSizeValueWidth = Math.max(maxSizeValueWidth, totalSizeValue.length);
-          maxSizeUnitWidth = Math.max(maxSizeUnitWidth, totalSizeUnit.length);
+          const [totalValueForWidth, totalUnitForWidth] = formatBytes(totalBytes);
+          maxSizeValueWidth = Math.max(maxSizeValueWidth, totalValueForWidth.length);
+          maxSizeUnitWidth = Math.max(maxSizeUnitWidth, totalUnitForWidth.length);
           
           // Add language stats
           topLanguages.forEach(lang => {
