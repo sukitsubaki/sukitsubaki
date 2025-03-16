@@ -101,12 +101,14 @@ jobs:
           }
           
           // Create SVG visualization
-          const svgWidth = 900;   // Width in pixels
-          const svgHeight = 30;   // Reduced to 30px as requested
-          const barHeight = 30;   // Bar height equals SVG height to remove any margin
-          const percentFontSize = 10;    // Font size for percentage
-          const langFontSize = 10;    // Font size for language name
+          const svgWidth = 900;         // Width in pixels
+          const barHeight = 20;         // Bar height 20px as requested
+          const percentFontSize = 14;   // Larger font for percentages (inside bar)
+          const langFontSize = 10;      // Font size for language names (below bar)
+          const textSpacing = 4;        // Space between bar and language text
+          const svgHeight = barHeight + textSpacing + langFontSize + 2; // Total SVG height
           const fontFamily = "'Noto Sans', Helvetica, Arial, sans-serif";  // Font family with fallbacks
+          const langTextColor = "#1f2328"; // Language text color
           
           // Calculate cumulative width for each language
           let totalWidth = 0;
@@ -134,20 +136,26 @@ jobs:
             svg += `  <rect x="${x}" y="0" width="${lang.width}" height="${barHeight}" fill="${lang.color}" />\n`;
           });
           
-          // Add text inside each bar segment - vertically centered positions
+          // Add percentage text inside each bar segment
           languages.forEach(lang => {
             const textX = lang.x + (lang.width / 2);
-            const percentY = 10;  // Adjusted for vertical centering with height 30
-            const langY = 21;     // Adjusted for vertical centering with height 30
+            const percentY = barHeight / 2; // Centered vertically in the bar
             
-            // Only add text if there's enough space (bar width > 40px)
+            // Only add percentage text if there's enough space (bar width > 40px)
             if (lang.width > 40) {
-              // Add percentage on top line
               svg += `  <text x="${textX}" y="${percentY}" text-anchor="middle" dominant-baseline="middle" font-family="${fontFamily}" font-size="${percentFontSize}" font-weight="bold" fill="${lang.textColor}">${formatPercentage(lang.percentage)}</text>\n`;
-              
-              // Add language name on bottom line
-              svg += `  <text x="${textX}" y="${langY}" text-anchor="middle" dominant-baseline="middle" font-family="${fontFamily}" font-size="${langFontSize}" fill="${lang.textColor}">${lang.language}</text>\n`;
-              }
+            }
+          });
+          
+          // Add language names below each bar segment
+          languages.forEach(lang => {
+            const textX = lang.x + (lang.width / 2);
+            const langY = barHeight + textSpacing + langFontSize; // Position below the bar
+            
+            // Only add language name if there's enough space (bar width > 30px)
+            if (lang.width > 30) {
+              svg += `  <text x="${textX}" y="${langY}" text-anchor="middle" dominant-baseline="middle" font-family="${fontFamily}" font-size="${langFontSize}" fill="${langTextColor}">${lang.language}</text>\n`;
+            }
           });
           
           svg += "</svg>";
@@ -179,7 +187,10 @@ jobs:
           
           // Create markdown for README with HTML to ensure full width
           let langSection = `<img src="${svgDir}/${uniqueSvgFilename}" width="100%" alt="My Programming Languages">\n\n`;
-                    
+          
+          // Add a note about the calculation method
+          langSection += `*Top ${topCount} languages rescaled to 100%. Based on all repositories with 50/50 weighting between bytes and file count.*`;
+          
           // Replace existing section or append to the end
           const startMarker = "<!-- START_LANGUAGE_STATS -->";
           const endMarker = "<!-- END_LANGUAGE_STATS -->";
