@@ -228,7 +228,7 @@ jobs:
           if (readme.includes(startMarker) && readme.includes(endMarker)) {
             // Replace existing section
             const regex = new RegExp(`${startMarker}[\\s\\S]*?${endMarker}`, "g");
-            readme = replace(regex, `${startMarker}\n${langSection}\n${endMarker}`);
+            readme = readme.replace(regex, `${startMarker}\n${langSection}\n${endMarker}`);
           } else {
             // Append at the end
             readme += `\n\n${startMarker}\n${langSection}\n${endMarker}`;
