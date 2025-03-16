@@ -1,0 +1,165 @@
+name: Update Language Stats (TXT)
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Runs every hour
+  workflow_dispatch:  # Allows manual triggering
+
+permissions:
+  contents: write
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          
+      - name: Create script file
+        run: |
+          cat > generate-stats-text.js << 'EOF'
+          const fs = require("fs");
+          const path = require("path");
+          const stats = JSON.parse(fs.readFileSync("stats.json", "utf8"));
+          let readme = fs.readFileSync("README.md", "utf8");
+          
+          // Configuration from environment variables
+          const topCount = parseInt(process.env.TOP_LANGUAGES) || 6;
+          
+          // Weights for calculation
+          const sizeWeight = 0.5;
+          const countWeight = 0.5;
+          
+          // Initialize language data structure
+          const languages = {};
+          
+          // Track totals
+          let totalBytes = 0;
+          let totalFiles = 0;
+          
+          // Parse stats data
+          Object.entries(stats.languages).forEach(([lang, data]) => {
+            // Initialize language entry
+            if (!languages[lang]) {
+              languages[lang] = {
+                name: lang,
+                size: 0,
+                fileCount: 0,
+                count: 0,
+                score: 0
+              };
+            }
+            
+            // Add byte count and file count
+            languages[lang].size = data.bytes;
+            languages[lang].fileCount = data.fileCount || 0;
+            languages[lang].count = 1; // Minimum count for each language
+            
+            // Track totals
+            totalBytes += data.bytes;
+            totalFiles += data.fileCount || 0;
+          });
+          
+          // Calculate weighted scores
+          Object.keys(languages).forEach(lang => {
+            languages[lang].score = 
+              Math.pow(languages[lang].size, sizeWeight) * 
+              Math.pow(languages[lang].count, countWeight);
+          });
+          
+          // Sort languages by score and limit to top count
+          const sortedLanguages = Object.values(languages)
+            .sort((a, b) => b.score - a.score)
+            .slice(0, topCount);
+          
+          // Calculate total score for percentage calculation
+          const totalScore = sortedLanguages.reduce((sum, lang) => sum + lang.score, 0);
+          
+          // Calculate percentages
+          sortedLanguages.forEach(lang => {
+            lang.percentage = (lang.score / totalScore) * 100;
+          });
+          
+          // Format numbers with comma separators
+          const formatNumber = (num) => {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          };
+          
+          // Function to create progress bar
+          const createProgressBar = (percentage) => {
+            const barLength = 25; // Total length of progress bar
+            const filledLength = Math.round((percentage / 100) * barLength);
+            const emptyLength = barLength - filledLength;
+            
+            return '█'.repeat(filledLength) + '░'.repeat(emptyLength);
+          };
+          
+          // Format file size in a human-readable way
+          const formatBytes = (bytes, decimals = 2) => {
+            if (bytes === 0) return '0 Bytes';
+            
+            const k = 1024;
+            const dm = decimals < 0 ? 0 : decimals;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+            
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+          };
+          
+          // Generate text output
+          let statsText = `Total Files: ${formatNumber(totalFiles)}  |  Total Size: ${formatBytes(totalBytes)}\n`;
+          
+          // Add language stats
+          sortedLanguages.forEach(lang => {
+            // Format language name and percentage with progress bar
+            const nameField = lang.name.padEnd(16, ' ');
+            const bytesField = formatBytes(lang.size).padEnd(10, ' ');
+            const progressBar = createProgressBar(lang.percentage);
+            const percentField = lang.percentage.toFixed(2).padStart(6, ' ') + ' %';
+            const filesField = formatNumber(lang.fileCount).padStart(5, ' ') + ' files';
+            
+            statsText += `${nameField} ${bytesField} ${progressBar} ${percentField} | ${filesField}\n`;
+          });
+          
+          // Create markdown for README with code block
+          let langSection = "```\n" + statsText + "```";
+          
+          // Update README content
+          const startMarker = "<!-- START_LANGUAGE_STATS_TEXT -->";
+          const endMarker = "<!-- END_LANGUAGE_STATS_TEXT -->";
+          
+          if (readme.includes(startMarker) && readme.includes(endMarker)) {
+            // Replace existing section
+            const regex = new RegExp(`${startMarker}[\\s\\S]*?${endMarker}`, "g");
+            readme = readme.replace(regex, `${startMarker}\n${langSection}\n${endMarker}`);
+          } else {
+            // Append at the end
+            readme += `\n\n${startMarker}\n${langSection}\n${endMarker}`;
+          }
+          
+          fs.writeFileSync("README.md", readme);
+          EOF
+      
+      - name: Generate Language Stats Text and Update README
+        run: |
+          # Configuration
+          export TOP_LANGUAGES=6      # Show top 6 languages
+          
+          # Fetch the API and save results
+          curl -s "https://sukitsubaki.vercel.app/language-stats" > stats.json
+          
+          # Run the Node.js script
+          node generate-stats-text.js
+          
+      - name: Commit changes
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add README.md
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update language stats text in README"
+          git push
