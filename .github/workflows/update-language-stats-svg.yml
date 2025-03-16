@@ -1,7 +1,6 @@
 name: Update Language Stats (SVG)
 
 on:
-  schedule:
   workflow_dispatch:  # Allows manual triggering
 
 permissions:
