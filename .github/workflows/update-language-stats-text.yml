@@ -1,4 +1,4 @@
-name: Update Language Stats Text
+name: Update Language Stats (TXT)
 
 on:
   schedule:
