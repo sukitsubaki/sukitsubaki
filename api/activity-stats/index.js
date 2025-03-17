@@ -44,11 +44,11 @@ async function fetchActivityStats(username, token) {
       user(login: $username) {
         contributionsCollection {
           contributionCalendar {
-            totalContributionDays
             weeks {
               contributionDays {
                 date
                 contributionCount
+                weekday
               }
             }
           }
@@ -97,8 +97,11 @@ async function fetchActivityStats(username, token) {
   // Extract user data
   const user = result.data.user;
   
-  // Get total days active
-  const totalDaysActive = user.contributionsCollection.contributionCalendar.totalContributionDays;
+  // Calculate total days active manually by counting days with contributions
+  const contributionDays = user.contributionsCollection.contributionCalendar.weeks
+    .flatMap(week => week.contributionDays);
+  
+  const totalDaysActive = contributionDays.filter(day => day.contributionCount > 0).length;
   
   // Get preferred coding hour
   const commitTimes = [];
@@ -127,15 +130,13 @@ async function fetchActivityStats(username, token) {
   });
   
   // Calculate longest commit streak
-  const contributionDays = user.contributionsCollection.contributionCalendar.weeks
-    .flatMap(week => week.contributionDays)
-    .sort((a, b) => new Date(a.date) - new Date(b.date));
+  const sortedDays = [...contributionDays].sort((a, b) => new Date(a.date) - new Date(b.date));
   
   let currentStreak = 0;
   let longestStreak = 0;
   let prevDate = null;
   
-  contributionDays.forEach(day => {
+  sortedDays.forEach(day => {
     if (day.contributionCount > 0) {
       const currentDate = new Date(day.date);
       
