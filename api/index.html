@@ -10,7 +10,7 @@
             --text-color: #333;
             --accent-color: #6e5494;
             --secondary-color: #2188ff;
-            --container-width: 800px;
+            --container-width: 900px;
         }
 
         * {
@@ -124,7 +124,7 @@
                 <h3><a href="https://sukitsubaki.vercel.app/language-stats">Language Stats</a></h3>
                 <p>Analyzes repositories and returns detailed statistics about programming languages used.</p>
                 <div class="endpoint-url">GET /api/language_stats</div>
-                <p>Returns a JSON object with programming languages as keys and comprehensive data including percentage usage, number of files, and file size for each language.</p>
+                <p>Returns a JSON object with programming languages as keys and comprehensive data including percentage usage, number of files and file size for each language.</p>
             </div>
 
             <div class="endpoint">
@@ -132,6 +132,20 @@
                 <p>Retrieves contribution activities on GitHub and categorizes them by type.</p>
                 <div class="endpoint-url">GET /api/contribution_stats</div>
                 <p>Returns a JSON object with counts of different contribution types (commits, issues, pull requests etc.).</p>
+            </div>
+
+            <div class="endpoint">
+                <h3><a href="https://sukitsubaki.vercel.app/activity-stats">Activity Stats</a></h3>
+                <p>Provides insights into coding habits and activity patterns on GitHub.</p>
+                <div class="endpoint-url">GET /api/activity_stats</div>
+                <p>Returns a JSON object with metrics like longest commit streak, preferred coding hour and total active days.</p>
+            </div>
+
+            <div class="endpoint">
+                <h3><a href="https://sukitsubaki.vercel.app/profile-views">Profile Views</a></h3>
+                <p>Tracks the number of views on the GitHub profile page.</p>
+                <div class="endpoint-url">GET /api/profile_views</div>
+                <p>Returns a JSON object with the current count of profile views.</p>
             </div>
         </main>
 
