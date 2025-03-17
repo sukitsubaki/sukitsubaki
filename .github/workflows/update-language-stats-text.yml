@@ -1,4 +1,4 @@
-name: Update Language Stats in README
+name: Update Language Stats (TXT)
 
 on:
   schedule:
