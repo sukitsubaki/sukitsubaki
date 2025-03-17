@@ -1,4 +1,4 @@
-name: Update Language Stats (TXT)
+name: Update Language Stats in README
 
 on:
   schedule:
@@ -104,60 +104,45 @@ jobs:
             return [value.toString(), sizes[i]];
           };
           
-          // Generate text output in Python format
-          let statsText = "language_stats = {\n";
-          
-          // Width settings for formatting
-          const percentWidth = 8;
-          
           // Find the length of the longest language name
           const maxNameLength = topLanguages.reduce((max, lang) => 
             Math.max(max, lang.name.length), 0);
           
-          // Add language stats in Python dictionary format
-          topLanguages.forEach((lang, index) => {
-            // Format language name - align all colons to the same position
-            const nameField = `    "${lang.name}"`;
-            // Calculate spaces needed to align colons 
-            // Adding +1 to make them have a bit more space than before
-            const colonPosition = maxNameLength + 10; // "    "" + name + "" + spaces
-            const spacesToColon = ' '.repeat(colonPosition - nameField.length);
+          // Generate formatted language stats
+          let languageEntries = [];
+          
+          topLanguages.forEach((lang) => {
+            // Format language name with padding
+            const nameField = `"${lang.name}"`;
+            
+            // Calculate spaces needed for alignment
+            const paddingNeeded = maxNameLength + 4 - nameField.length;
+            const padding = ' '.repeat(paddingNeeded);
             
             // Progress bar
             const progressBar = createProgressBar(lang.percentage);
             
-            // Format percentage (right-aligned with space before %)
-            const percentField = lang.percentage.toFixed(2).padStart(percentWidth - 1, ' ') + " %";
+            // Format percentage
+            const percentField = lang.percentage.toFixed(2).padStart(5, ' ');
             
-            // Build the line with Python syntax with 2 spaces after comma
-            statsText += `${nameField}${spacesToColon}: "${progressBar}",  # ${percentField}`;
-            
-            // Add comma if not the last item
-            if (index < topLanguages.length - 1) {
-              statsText += "\n";
-            }
+            // Build the formatted line
+            languageEntries.push(`            ${nameField}${padding}: "${progressBar}", # ${percentField} %`);
           });
           
-          // Close the Python dictionary
-          statsText += "\n}";
+          // Join entries with line breaks
+          const formattedLanguageStats = languageEntries.join('\n');
           
-          // Create markdown for README with Python code block
-          let langSection = "```python\n" + statsText + "\n```";
+          // Define the target patterns to replace in README
+          const languageStatsPattern = /(self\.language_stats = \{)[\s\S]*?(        \})/;
           
-          // Update README content
-          const startMarker = "<!-- START_LANGUAGE_STATS_TEXT -->";
-          const endMarker = "<!-- END_LANGUAGE_STATS_TEXT -->";
+          // Replace content in README
+          let updatedReadme = readme.replace(
+            languageStatsPattern, 
+            `$1\n${formattedLanguageStats}\n$2`
+          );
           
-          if (readme.includes(startMarker) && readme.includes(endMarker)) {
-            // Replace existing section
-            const regex = new RegExp(`${startMarker}[\\s\\S]*?${endMarker}`, "g");
-            readme = readme.replace(regex, `${startMarker}\n${langSection}\n${endMarker}`);
-          } else {
-            // Append at the end
-            readme += `\n\n${startMarker}\n${langSection}\n${endMarker}`;
-          }
-          
-          fs.writeFileSync("README.md", readme);
+          // Write updated README
+          fs.writeFileSync("README.md", updatedReadme);
           EOF
       
       - name: Generate Language Stats Text and Update README
@@ -176,5 +161,5 @@ jobs:
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           git add README.md
-          git diff --quiet && git diff --staged --quiet || git commit -m "Update language stats text in README"
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update language stats in README"
           git push
