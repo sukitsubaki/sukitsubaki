@@ -88,7 +88,7 @@ async function updateReadme() {
                 "Created" : ${formattedContribution.issuesCreated},
                 "Contrib" : ${formattedContribution.issueContrib},
             },
-            "PR": {
+            "PR": { # pull requests
                 "Created" : ${formattedContribution.prCreated},
                 "Review"  : ${formattedContribution.prReviews},
             },
