@@ -79,7 +79,7 @@ topLanguages.forEach((lang) => {
   const nameField = `"${lang.name}"`;
   
   // Calculate spaces needed for alignment
-  const paddingNeeded = maxNameLength + 4 - nameField.length;
+  const paddingNeeded = maxNameLength + 3 - nameField.length;
   const padding = ' '.repeat(paddingNeeded);
   
   // Progress bar
