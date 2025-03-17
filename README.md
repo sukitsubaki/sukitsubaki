@@ -31,10 +31,10 @@ class SukisDevStats:
             },
             "Discussions"   : 5,
         }
-        self.activity_stats = { # in progress
-            "longest_commit_streak" : 0,
-            "preferred_coding_hour" : 0,
-            "total_days_active"     : 0,
+        self.activity_stats = { # updated 2025-03-17
+            "longest_commit_streak" : 9,
+            "preferred_coding_hour" : 22,
+            "total_days_active"     : 12,
         }
         self.profile_views = 0 # in progress
 
