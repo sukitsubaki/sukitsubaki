@@ -1,5 +1,6 @@
 const fs = require("fs");
 const fetch = require("node-fetch");
+const path = require("path");
 
 // Fetch profile views from API
 async function fetchStats() {
@@ -20,6 +21,32 @@ function formatNumber(num) {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+// Update counter file to maintain state between runs
+async function updateCounter(stats) {
+  const username = stats.username;
+  const counterDir = path.join('.github');
+  const counterFile = path.join(counterDir, 'profile-views-alltime.json');
+  
+  // Ensure directory exists
+  if (!fs.existsSync(counterDir)) {
+    fs.mkdirSync(counterDir, { recursive: true });
+  }
+  
+  // Prepare counter data
+  const counterData = {
+    allTimeViews: stats.allTimeViews,
+    lastUpdated: stats.lastUpdated,
+    lastDailyViews: stats.lastDailyViews,
+    timestamp: stats.timestamp
+  };
+  
+  // Write counter file
+  fs.writeFileSync(counterFile, JSON.stringify(counterData, null, 2));
+  console.log(`Counter file updated: ${stats.allTimeViews} all-time views`);
+  
+  return counterData;
+}
+
 // Main function to update README
 async function updateReadme() {
   try {
@@ -29,8 +56,11 @@ async function updateReadme() {
     // Fetch stats
     const stats = await fetchStats();
     
+    // Update the persistent counter file
+    await updateCounter(stats);
+    
     // Format the profile views value
-    const formattedViews = formatNumber(stats.totalViews);
+    const formattedViews = formatNumber(stats.allTimeViews);
     
     // Find the profile_views line to update
     const profileViewsPattern = /self\.profile_views\s*=\s*\d+/;
