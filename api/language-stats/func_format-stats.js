@@ -6,9 +6,45 @@ let readme = fs.readFileSync("README.md", "utf8");
 // Configuration from environment variables
 const topCount = parseInt(process.env.TOP_LANGUAGES) || 6;
 
-// Weights for calculation
-const sizeWeight = 0.5;
-const countWeight = 0.5;
+// Dynamic weights based on language type
+const getLanguageWeights = (language) => {
+  // Language-specific weighting configuration
+  const weightConfig = {
+    // Programming languages - balanced weights
+    "PHP": { sizeWeight: 0.5, countWeight: 0.5 },
+    "JavaScript": { sizeWeight: 0.5, countWeight: 0.5 },
+    "TypeScript": { sizeWeight: 0.5, countWeight: 0.5 },
+    "Python": { sizeWeight: 0.5, countWeight: 0.5 },
+    "Ruby": { sizeWeight: 0.5, countWeight: 0.5 },
+    "Java": { sizeWeight: 0.5, countWeight: 0.5 },
+    "C#": { sizeWeight: 0.5, countWeight: 0.5 },
+    "Swift": { sizeWeight: 0.5, countWeight: 0.5 },
+    "Go": { sizeWeight: 0.5, countWeight: 0.5 },
+    "Rust": { sizeWeight: 0.5, countWeight: 0.5 },
+    "Kotlin": { sizeWeight: 0.5, countWeight: 0.5 },
+    "Dart": { sizeWeight: 0.5, countWeight: 0.5 },
+    
+    // Markup & style languages - higher weight on size
+    "HTML": { sizeWeight: 0.7, countWeight: 0.3 },
+    "CSS": { sizeWeight: 0.7, countWeight: 0.3 },
+    "SCSS": { sizeWeight: 0.7, countWeight: 0.3 },
+    "Less": { sizeWeight: 0.7, countWeight: 0.3 },
+    "XML": { sizeWeight: 0.7, countWeight: 0.3 },
+    
+    // Configuration & data languages - even higher weight on size
+    "JSON": { sizeWeight: 0.8, countWeight: 0.2 },
+    "YAML": { sizeWeight: 0.8, countWeight: 0.2 },
+    "Markdown": { sizeWeight: 0.8, countWeight: 0.2 },
+    
+    // Shell scripts - emphasis on file count
+    "Shell": { sizeWeight: 0.3, countWeight: 0.7 },
+    
+    // Default weights for unlisted languages
+    "default": { sizeWeight: 0.6, countWeight: 0.4 }
+  };
+  
+  return weightConfig[language] || weightConfig.default;
+};
 
 // Initialize language data structure
 const languages = {};
@@ -25,17 +61,18 @@ Object.entries(stats.languages).forEach(([lang, data]) => {
       name: lang,
       size: 0,
       count: 0,
-      score: 0
+      score: 0,
+      weights: getLanguageWeights(lang)
     };
   }
   
-  // Add byte count
+  // Add byte count and file count
   languages[lang].size = data.bytes;
-  languages[lang].count = data.fileCount || 1; // Use file count if available
+  languages[lang].count = parseInt(data.fileCount) || 1; // Use file count if available
   
   // Track totals
   totalBytes += data.bytes;
-  totalFiles += data.fileCount || 1;
+  totalFiles += parseInt(data.fileCount) || 1;
 });
 
 // Function to format file size
@@ -48,6 +85,9 @@ const formatFileSize = (bytes) => {
 
 // Calculate weighted scores
 Object.keys(languages).forEach(lang => {
+  const { sizeWeight, countWeight } = languages[lang].weights;
+  
+  // Apply dynamic weighting based on language type
   languages[lang].score = 
     Math.pow(languages[lang].size, sizeWeight) * 
     Math.pow(languages[lang].count, countWeight);
@@ -111,10 +151,10 @@ const languageStatsPattern = /(self\.language_stats = \{)[\s\S]*?(        \})/;
 // Replace content in README with added file count and size information
 let updatedReadme = readme.replace(
   languageStatsPattern, 
-  `$1 # ${totalFiles} files, ${formatFileSize(totalBytes)}\n${formattedLanguageStats}\n$2`
+  `$1 # ${totalFiles} files, ${formatFileSize(totalBytes)}, dynamic weighting\n${formattedLanguageStats}\n$2`
 );
 
 // Write updated README
 fs.writeFileSync("README.md", updatedReadme);
 
-console.log("Language stats in README successfully updated!");
+console.log("Language stats in README successfully updated with dynamic weighting!");

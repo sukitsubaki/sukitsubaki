@@ -93,6 +93,49 @@ async function getLanguageStats(username, token) {
     '.xml': 'XML'
   };
   
+  // Language-specific weighting configuration
+  const getLanguageWeights = (language) => {
+    const weightConfig = {
+      // Programming languages - balanced weights
+      "PHP": { sizeWeight: 0.5, countWeight: 0.5 },
+      "JavaScript": { sizeWeight: 0.5, countWeight: 0.5 },
+      "TypeScript": { sizeWeight: 0.5, countWeight: 0.5 },
+      "Python": { sizeWeight: 0.5, countWeight: 0.5 },
+      "Ruby": { sizeWeight: 0.5, countWeight: 0.5 },
+      "Java": { sizeWeight: 0.5, countWeight: 0.5 },
+      "C#": { sizeWeight: 0.5, countWeight: 0.5 },
+      "Swift": { sizeWeight: 0.5, countWeight: 0.5 },
+      "Go": { sizeWeight: 0.5, countWeight: 0.5 },
+      "Rust": { sizeWeight: 0.5, countWeight: 0.5 },
+      "Kotlin": { sizeWeight: 0.5, countWeight: 0.5 },
+      "Dart": { sizeWeight: 0.5, countWeight: 0.5 },
+      "C": { sizeWeight: 0.5, countWeight: 0.5 },
+      "C++": { sizeWeight: 0.5, countWeight: 0.5 },
+      
+      // Markup & style languages - higher weight on size
+      "HTML": { sizeWeight: 0.7, countWeight: 0.3 },
+      "CSS": { sizeWeight: 0.7, countWeight: 0.3 },
+      "SCSS": { sizeWeight: 0.7, countWeight: 0.3 },
+      "Less": { sizeWeight: 0.7, countWeight: 0.3 },
+      "XML": { sizeWeight: 0.7, countWeight: 0.3 },
+      "Vue": { sizeWeight: 0.6, countWeight: 0.4 },
+      
+      // Configuration & data languages - even higher weight on size
+      "JSON": { sizeWeight: 0.8, countWeight: 0.2 },
+      "YAML": { sizeWeight: 0.8, countWeight: 0.2 },
+      "Markdown": { sizeWeight: 0.8, countWeight: 0.2 },
+      "SQL": { sizeWeight: 0.7, countWeight: 0.3 },
+      
+      // Shell scripts - emphasis on file count
+      "Shell": { sizeWeight: 0.3, countWeight: 0.7 },
+      
+      // Default weights for unlisted languages
+      "default": { sizeWeight: 0.6, countWeight: 0.4 }
+    };
+    
+    return weightConfig[language] || weightConfig.default;
+  };
+  
   // iterate all repositories
   for (const repo of relevantRepos) {
     // Get language bytes
@@ -160,14 +203,16 @@ async function getLanguageStats(username, token) {
     filePercentages[language] = (count / totalFiles) * 100;
   }
   
-  // combine both metrics with 50-50 weighting
+  // combine metrics with dynamic weighting
   const combinedPercentages = {};
   const allLanguages = new Set([...Object.keys(languageBytes), ...Object.keys(languageFileCount)]);
   
   for (const language of allLanguages) {
     const bytePercent = bytesPercentages[language] || 0;
     const filePercent = filePercentages[language] || 0;
-    combinedPercentages[language] = (bytePercent * 0.5) + (filePercent * 0.5);
+    const weights = getLanguageWeights(language);
+    
+    combinedPercentages[language] = (bytePercent * weights.sizeWeight) + (filePercent * weights.countWeight);
   }
   
   // sort percentage results
@@ -178,7 +223,8 @@ async function getLanguageStats(username, token) {
       fileCount: languageFileCount[language] || 0,
       bytesPercentage: (bytesPercentages[language] || 0).toFixed(2),
       filePercentage: (filePercentages[language] || 0).toFixed(2),
-      percentage: percentage.toFixed(2)
+      percentage: percentage.toFixed(2),
+      weights: getLanguageWeights(language)
     }))
     .sort((a, b) => parseFloat(b.percentage) - parseFloat(a.percentage));
   
@@ -197,7 +243,9 @@ async function getLanguageStats(username, token) {
       fileCount: item.fileCount || 0,
       bytesPercentage: `${item.bytesPercentage}%`,
       filePercentage: `${item.filePercentage}%`,
-      percentage: `${item.percentage}%`
+      percentage: `${item.percentage}%`,
+      sizeWeight: item.weights.sizeWeight,
+      countWeight: item.weights.countWeight
     };
   });
   
