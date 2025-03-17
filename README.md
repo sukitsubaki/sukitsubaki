@@ -97,9 +97,9 @@ if __name__ == "__main__":
 
 ```json
 {
-  "thoughts": [
+  "closing_remarks": [
     "I don't know if you can tell, but I really enjoy Python. (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧",
-    "Between you and me, world, I'm relatively new to embracing this language."
+    "The first steps of my voyage with this language were taken not long ago.",
     "By the way, I pronounce it Python as in ˈpyːtɔn and not ˈpaɪθən or ˈpaɪθɑn.",
     "The word's origin is in Latin pyː.tʰoːn so I think I'm not too wrong with that."
   ],
