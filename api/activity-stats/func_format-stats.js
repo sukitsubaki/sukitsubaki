@@ -58,7 +58,7 @@ async function updateReadme() {
     const afterContent = readme.substring(endPosition);
     
     // Create the formatted activity stats block
-    const activityStatsContent = `        self.activity_stats = { # updated ${new Date().toISOString().split('T')[0]}
+    const activityStatsContent = `        self.activity_stats = {
             "longest_commit_streak" : ${stats.longestCommitStreak},
             "preferred_coding_hour" : ${stats.preferredCodingHour},
             "total_days_active"     : ${stats.totalDaysActive},
