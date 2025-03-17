@@ -2,11 +2,12 @@
 ----
 <!-- START_LANGUAGE_STATS_TEXT -->
 ```python
-#!/usr/bin/env github/sukitsubaki
-# © 2025 Suki Tsubaki
+#!/usr/bin/env python3
+# -*- coding: utf-8; project: github.profile -*-
+# Copyright (c) 2025 Suki Tsubaki
 
 """
-A code-based representation of who I am as a developer.
+A brief, code-based representation of who I am as a developer.
 """
 
 class SukisDevStats:
@@ -92,6 +93,18 @@ def generate_profile_summary():
 if __name__ == "__main__":
     # generate_profile_summary()
     print("Code is poetry, thanks for reading mine <3")
+```
+
+```json
+{
+  "thoughts": [
+    "I don't know if you can tell, but I enjoy Python.",
+    "It hasn't been that long since I dedicated myself to it.",
+    "By the way, I pronounce it Python as in ˈpyːtɔn and not ˈpaɪθən or ˈpaɪθɑn.",
+    "The origin of the word is actually in Latin pyː.tʰoːn, so I think I'm not too wrong with that."
+  ],
+  "hashtag": "#pühtonn"
+}
 ```
 <!-- END_LANGUAGE_STATS_TEXT -->
 <!-- START_CONTRIBUTION_STATS -->
