@@ -105,6 +105,8 @@ jobs:
         if: steps.determine-updates.outputs.run_activity_stats == 'true'
         run: |
           echo "Updating activity statistics..."
+          # Definiere eine vollständige URL für die API
+          export API_URL="https://sukitsubaki.vercel.app/activity-stats"
           # Run your activity stats update script
           node ./api/activity-stats/func_format-stats.js
       
@@ -119,6 +121,8 @@ jobs:
         if: steps.determine-updates.outputs.run_profile_views == 'true'
         run: |
           echo "Updating profile views..."
+          # Definiere eine vollständige URL für die API
+          export API_URL="https://sukitsubaki.vercel.app/profile-views"
           # Run your profile views update script
           node ./api/profile-views/func_format-stats.js
       
@@ -130,7 +134,7 @@ jobs:
           git add README.md
           
           # Create commit message based on what was updated
-          MESSAGE="Update README stats: "
+          MESSAGE="Update stats: "
           if [ "${{ steps.determine-updates.outputs.run_language_stats }}" == "true" ]; then
             MESSAGE+="language, "
           fi
