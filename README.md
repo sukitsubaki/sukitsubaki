@@ -1,6 +1,5 @@
 <a href="https://sukitsubaki.github.io">![Name banner](banner.svg)</a>
 ----
-<!-- START_LANGUAGE_STATS_TEXT -->
 ```python
 #!/usr/bin/env python3
 # -*- coding: utf-8; project: github.profile -*-
@@ -106,6 +105,8 @@ if __name__ == "__main__":
   "hashtag": "#pühtonn"
 }
 ```
+
+<!-- START_LANGUAGE_STATS_TEXT -->
 <!-- END_LANGUAGE_STATS_TEXT -->
 <!-- START_CONTRIBUTION_STATS -->
 <!-- END_CONTRIBUTION_STATS -->
