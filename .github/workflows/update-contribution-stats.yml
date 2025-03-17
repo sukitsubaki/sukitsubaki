@@ -56,42 +56,41 @@ jobs:
               // Fetch stats
               const stats = await fetchStats();
               
-              // Calculate combined metrics
-              const totalDiscussionsAndComments = stats.discussions + stats.discussionComments;
-              const totalPullRequestsAndReviews = stats.pullRequestsCreated + stats.pullRequestReviews;
+              // Format the values for contribution stats
+              const formattedContribution = {
+                commits: formatNumber(stats.commits),
+                issuesCreated: formatNumber(stats.issuesCreated),
+                issueContrib: formatNumber(stats.issueContributions),
+                prCreated: formatNumber(stats.pullRequestsCreated),
+                prReviews: formatNumber(stats.pullRequestReviews),
+                discussions: formatNumber(stats.discussions + stats.discussionComments)
+              };
               
-              // Format the contribution stats in a code block style
-              let statsText = "";
-              statsText += "Total Contributions: " + formatNumber(stats.totalContributions) + "\n";
-              statsText += "Commits:             " + formatNumber(stats.commits) + "\n";
-              statsText += "Issues Created:      " + formatNumber(stats.issuesCreated) + "\n";
-              statsText += "Issue Contributions: " + formatNumber(stats.issueContributions) + "\n";
-              statsText += "Pull Requests & Reviews: " + formatNumber(totalPullRequestsAndReviews) + "\n";
-              statsText += "Repositories:        " + formatNumber(stats.repositoriesCount) + "\n";
-              statsText += "Discussions & Comments: " + formatNumber(totalDiscussionsAndComments) + "\n";
-              statsText += "Total Stars:         " + formatNumber(stats.stars) + "\n";
-              statsText += "Total Forks:         " + formatNumber(stats.forks) + "\n";
+              // Create the formatted contribution stats block
+              const contributionStatsContent = `        self.contribution_stats = { # updated ${new Date().toISOString().split('T')[0]}
+            "Commits"       : ${formattedContribution.commits},
+            "Issues": {
+                "Created"   : ${formattedContribution.issuesCreated},
+                "Contrib"   : ${formattedContribution.issueContrib},
+            },
+            "PR": {
+                "Created"   : ${formattedContribution.prCreated},
+                "Review"    : ${formattedContribution.prReviews},
+            },
+            "Discussions"   : ${formattedContribution.discussions},
+        }`;
               
-              // Create markdown section with code block
-              const contributionStats = "## GitHub Contributions\n\n```\n#contributions\n\n" + statsText + "```";
+              // Define the pattern to find the contribution stats section
+              const contributionStatsPattern = /(self\.contribution_stats = \{)[\s\S]*?(        \})/;
               
-              // Replace or add the stats section
-              const startMarker = '<!-- START_CONTRIBUTION_STATS -->';
-              const endMarker = '<!-- END_CONTRIBUTION_STATS -->';
+              // Replace the content
+              const updatedReadme = readme.replace(
+                contributionStatsPattern,
+                contributionStatsContent
+              );
               
-              if (readme.includes(startMarker) && readme.includes(endMarker)) {
-                // Replace existing section
-                const regex = new RegExp(`${startMarker}[\\s\\S]*?${endMarker}`, 'g');
-                const newReadme = readme.replace(
-                  regex,
-                  `${startMarker}\n${contributionStats}\n${endMarker}`
-                );
-                fs.writeFileSync('README.md', newReadme);
-              } else {
-                // Add to the end
-                const newReadme = `${readme}\n\n${startMarker}\n${contributionStats}\n${endMarker}`;
-                fs.writeFileSync('README.md', newReadme);
-              }
+              // Write the updated README
+              fs.writeFileSync('README.md', updatedReadme);
               
               console.log('README updated successfully!');
             } catch (error) {
@@ -106,7 +105,7 @@ jobs:
       
       - name: Fetch and update README
         run: |
-          # Set API URL to your deployed endpoint (ohne /api Präfix da api als Root-Verzeichnis verwendet wird)
+          # Set API URL to your deployed endpoint
           export API_URL="https://sukitsubaki.vercel.app/contribution-stats?username=sukitsubaki"
           
           # Run the Node.js script
