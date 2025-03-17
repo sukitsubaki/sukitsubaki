@@ -1,0 +1,151 @@
+name: Master Scheduler
+
+on:
+  schedule:
+    - cron: '20 */2 * * *'  # Runs every 2 hours at XX:20
+  workflow_dispatch:      # Allows manual triggering with parameters
+    inputs:
+      run_language_stats:
+        description: 'Update language statistics'
+        type: boolean
+        default: true
+      run_contribution_stats:
+        description: 'Update contribution statistics'
+        type: boolean
+        default: true
+      run_activity_stats:
+        description: 'Update activity statistics'
+        type: boolean
+        default: true
+      run_profile_views:
+        description: 'Update profile views'
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  update-profile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Full git history
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      
+      - name: Install dependencies
+        run: |
+          npm install node-fetch@2
+      
+      - name: Determine which stats to update
+        id: determine-updates
+        run: |
+          # Get current hour (UTC)
+          HOUR=$(date -u +%H)
+          
+          # Default all to false
+          RUN_LANGUAGE_STATS="false"
+          RUN_CONTRIBUTION_STATS="false"
+          RUN_ACTIVITY_STATS="false"
+          RUN_PROFILE_VIEWS="false"
+          
+          # If triggered manually, use the input parameters
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            RUN_LANGUAGE_STATS="${{ github.event.inputs.run_language_stats }}"
+            RUN_CONTRIBUTION_STATS="${{ github.event.inputs.run_contribution_stats }}"
+            RUN_ACTIVITY_STATS="${{ github.event.inputs.run_activity_stats }}"
+            RUN_PROFILE_VIEWS="${{ github.event.inputs.run_profile_views }}"
+          else
+            # Every run updates language stats (always true)
+            RUN_LANGUAGE_STATS="true"
+            
+            # update-activity-stats.yml: 2x daily at 06:20 and 18:20
+            if [ "$HOUR" -eq 6 ] || [ "$HOUR" -eq 18 ]; then
+              RUN_ACTIVITY_STATS="true"
+            fi
+            
+            # update-contribution-stats.yml: 3x daily at 08:20, 16:20, and 00:20
+            if [ "$HOUR" -eq 8 ] || [ "$HOUR" -eq 16 ] || [ "$HOUR" -eq 0 ]; then
+              RUN_CONTRIBUTION_STATS="true"
+            fi
+            
+            # update-profile-views.yml: once daily at 11:20
+            if [ "$HOUR" -eq 10 ]; then
+              RUN_PROFILE_VIEWS="true"
+            fi
+          fi
+          
+          # Set outputs
+          echo "run_language_stats=$RUN_LANGUAGE_STATS" >> $GITHUB_OUTPUT
+          echo "run_contribution_stats=$RUN_CONTRIBUTION_STATS" >> $GITHUB_OUTPUT
+          echo "run_activity_stats=$RUN_ACTIVITY_STATS" >> $GITHUB_OUTPUT
+          echo "run_profile_views=$RUN_PROFILE_VIEWS" >> $GITHUB_OUTPUT
+          
+          echo "Will update: "
+          echo "Language stats: $RUN_LANGUAGE_STATS"
+          echo "Contribution stats: $RUN_CONTRIBUTION_STATS"
+          echo "Activity stats: $RUN_ACTIVITY_STATS"
+          echo "Profile views: $RUN_PROFILE_VIEWS"
+      
+      - name: Update language stats
+        if: steps.determine-updates.outputs.run_language_stats == 'true'
+        run: |
+          echo "Updating language statistics..."
+          export TOP_LANGUAGES=6
+          curl -s "https://sukitsubaki.vercel.app/language-stats" > ./stats.json
+          node ./api/language-stats/func_format-stats.js
+      
+      - name: Update activity stats
+        if: steps.determine-updates.outputs.run_activity_stats == 'true'
+        run: |
+          echo "Updating activity statistics..."
+          # Run your activity stats update script
+          node ./api/activity-stats/func_format-stats.js
+      
+      - name: Update contribution stats
+        if: steps.determine-updates.outputs.run_contribution_stats == 'true'
+        run: |
+          echo "Updating contribution statistics..."
+          export API_URL="https://sukitsubaki.vercel.app/contribution-stats"
+          node ./api/contribution-stats/func_format-stats.js
+      
+      - name: Update profile views
+        if: steps.determine-updates.outputs.run_profile_views == 'true'
+        run: |
+          echo "Updating profile views..."
+          # Run your profile views update script
+          node ./api/profile-views/func_format-stats.js
+      
+      - name: Commit changes
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          
+          git add README.md
+          
+          # Create commit message based on what was updated
+          MESSAGE="Update README stats: "
+          if [ "${{ steps.determine-updates.outputs.run_language_stats }}" == "true" ]; then
+            MESSAGE+="language, "
+          fi
+          if [ "${{ steps.determine-updates.outputs.run_contribution_stats }}" == "true" ]; then
+            MESSAGE+="contributions, "
+          fi
+          if [ "${{ steps.determine-updates.outputs.run_activity_stats }}" == "true" ]; then
+            MESSAGE+="activity, "
+          fi
+          if [ "${{ steps.determine-updates.outputs.run_profile_views }}" == "true" ]; then
+            MESSAGE+="profile views, "
+          fi
+          # Remove trailing comma and space
+          MESSAGE=${MESSAGE%, }
+          
+          # Check if there are changes to commit
+          git diff --quiet && git diff --staged --quiet || git commit -m "$MESSAGE"
+          git push
