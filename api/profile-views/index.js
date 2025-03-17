@@ -74,7 +74,7 @@ async function fetchProfileViews(username, token) {
     try {
       // Try to get the counter file from the repository
       const counterResponse = await fetch(
-        `https://raw.githubusercontent.com/${repoName}/main/.github/profile-views-alltime.json`,
+        `https://raw.githubusercontent.com/${repoName}/main/api/profile-views/profile-views.json`,
         { headers }
       );
       
