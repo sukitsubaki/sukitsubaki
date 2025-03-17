@@ -1,4 +1,4 @@
-name: Update Contribution Stats
+name: Update Language Stats
 
 on:
   schedule:
