@@ -19,12 +19,18 @@ class SukisDevStats:
             "CSS"         : "████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", #  9.99 %
             "Swift"       : "██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", #  4.25 %
         }
-        self.contribution_stats = { # in progress
-            "Commits"       : 0,
+                self.contribution_stats = { # updated 2025-03-17
+            "Commits"       : 491,
             "Issues": {
-                "Created"   : 0,
-                "Contrib"   : 0,
+                "Created"   : 54,
+                "Contrib"   : 46,
             },
+            "PR": {
+                "Created"   : 8,
+                "Review"    : 0,
+            },
+            "Discussions"   : 5,
+        },
             "PR": {
                 "Created"   : 0,
                 "Review"    : 0,
