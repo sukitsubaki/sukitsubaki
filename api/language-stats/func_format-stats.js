@@ -15,6 +15,7 @@ const languages = {};
 
 // Track totals
 let totalBytes = 0;
+let totalFiles = 0;
 
 // Parse stats data
 Object.entries(stats.languages).forEach(([lang, data]) => {
@@ -30,11 +31,20 @@ Object.entries(stats.languages).forEach(([lang, data]) => {
   
   // Add byte count
   languages[lang].size = data.bytes;
-  languages[lang].count = 1; // Minimum count for each language
+  languages[lang].count = data.fileCount || 1; // Use file count if available
   
   // Track totals
   totalBytes += data.bytes;
+  totalFiles += data.fileCount || 1;
 });
+
+// Function to format file size
+const formatFileSize = (bytes) => {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(2)} KB`;
+  if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+  return `${(bytes / (1024 * 1024 * 1024)).toFixed(2)} GB`;
+};
 
 // Calculate weighted scores
 Object.keys(languages).forEach(lang => {
@@ -98,10 +108,10 @@ const formattedLanguageStats = languageEntries.join('\n');
 // Define the target patterns to replace in README
 const languageStatsPattern = /(self\.language_stats = \{)[\s\S]*?(        \})/;
 
-// Replace content in README
+// Replace content in README with added file count and size information
 let updatedReadme = readme.replace(
   languageStatsPattern, 
-  `$1\n${formattedLanguageStats}\n$2`
+  `$1 # ${totalFiles} files, ${formatFileSize(totalBytes)}\n${formattedLanguageStats}\n$2`
 );
 
 // Write updated README
