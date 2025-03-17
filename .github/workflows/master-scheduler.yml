@@ -133,6 +133,11 @@ jobs:
           
           git add README.md
           
+          # Commit profile-views.json if it changed
+          if [ -f "./api/profile-views/profile-views.json" ]; then
+            git add -f api/profile-views/profile-views.json
+          fi
+          
           # Create commit message based on what was updated
           MESSAGE="Update README stats: "
           if [ "${{ steps.determine-updates.outputs.run_language_stats }}" == "true" ]; then
@@ -167,7 +172,19 @@ jobs:
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           
+          # Add README.md to the commit
           git add README.md
+          
+          # Add profile-views.json if it exists
+          if [ -f "./api/profile-views/profile-views.json" ]; then
+            git add -f api/profile-views/profile-views.json
+          fi
+          
+          # Ignore temporary files (explicitly excluding them from staging)
+          git reset HEAD node_modules/ package.json package-lock.json stats.json
+          
+          # Für zusätzliche Dateien, die ignoriert werden sollen, füge weitere Zeilen hinzu:
+          # git reset HEAD weitere_temporäre_datei.tmp
           
           # Check if there are changes to commit
           git diff --quiet && git diff --staged --quiet || git commit -m "Update last updated date: ${CURRENT_DATE}"
