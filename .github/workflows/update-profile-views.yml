@@ -1,4 +1,4 @@
-name: Update: Profile Views
+name: Update Profile Views
 
 on:
   workflow_dispatch:  # Allows manual triggering
