@@ -78,7 +78,7 @@ jobs:
                 "Review"    : ${formattedContribution.prReviews},
             },
             "Discussions"   : ${formattedContribution.discussions},
-        }`;
+        };
               
               // Define the pattern to find the contribution stats section
               const contributionStatsPattern = /(self\.contribution_stats = \{)[\s\S]*?(        \})/;
