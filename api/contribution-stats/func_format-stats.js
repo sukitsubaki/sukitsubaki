@@ -39,6 +39,39 @@ async function updateReadme() {
       discussions: formatNumber(stats.discussions + stats.discussionComments)
     };
     
+    // Find the position of the contribution_stats section with a more specific pattern
+    const startPattern = /^\s*self\.contribution_stats\s*=\s*\{/m;
+    const startMatch = readme.match(startPattern);
+    
+    if (!startMatch) {
+      throw new Error("Could not find the contribution_stats section in README.md");
+    }
+    
+    // Get the position of the match
+    const startPosition = startMatch.index;
+    
+    // Find the closing bracket for this section
+    // Count the opening and closing brackets to find the correct closing one
+    let openBrackets = 1;
+    let endPosition = startPosition + startMatch[0].length;
+    
+    while (openBrackets > 0 && endPosition < readme.length) {
+      if (readme[endPosition] === '{') {
+        openBrackets++;
+      } else if (readme[endPosition] === '}') {
+        openBrackets--;
+      }
+      endPosition++;
+    }
+    
+    if (openBrackets !== 0) {
+      throw new Error("Could not find the closing bracket for contribution_stats section");
+    }
+    
+    // Get content before and after the match
+    const beforeContent = readme.substring(0, startPosition);
+    const afterContent = readme.substring(endPosition);
+    
     // Create the formatted contribution stats block
     const contributionStatsContent = `        self.contribution_stats = { # updated ${new Date().toISOString().split('T')[0]}
             "Commits"       : ${formattedContribution.commits},
@@ -53,14 +86,8 @@ async function updateReadme() {
             "Discussions"   : ${formattedContribution.discussions},
         }`;
     
-    // Define the pattern to find the contribution stats section
-    const contributionStatsPattern = /(self\.contribution_stats = \{)[\s\S]*?(        \})/;
-    
-    // Replace the content
-    const updatedReadme = readme.replace(
-      contributionStatsPattern,
-      contributionStatsContent
-    );
+    // Create updated README
+    const updatedReadme = beforeContent + contributionStatsContent + afterContent;
     
     // Write the updated README
     fs.writeFileSync('README.md', updatedReadme);
