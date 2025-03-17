@@ -24,7 +24,7 @@ jobs:
           
       - name: Run contribution stats script
         run: |
-          export API_URL="https://sukitsubaki.vercel.app/contribution-stats?username=sukitsubaki"
+          export API_URL="https://sukitsubaki.vercel.app/contribution-stats"
           node ./api/contribution-stats/func_format-stats.js
           
       - name: Commit changes
