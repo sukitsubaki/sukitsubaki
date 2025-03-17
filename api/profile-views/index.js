@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
 };
 
 /**
- * Fetches profile view statistics using GitHub's REST API
+ * Fetches profile view statistics with alltime counter
  * @param {string} username - GitHub username
  * @param {string} token - GitHub personal access token
  * @returns {Object} Formatted profile view statistics
@@ -62,36 +62,54 @@ async function fetchProfileViews(username, token) {
 
     const viewsData = await viewsResponse.json();
     
-    // Sum up the views
-    const totalViews = viewsData.count || 0;
+    // Get today's new views
+    const todaysViews = viewsData.count || 0;
     const uniqueViews = viewsData.uniques || 0;
     
-    // Get tracker data if available (custom tracker in repo, optional)
-    let trackerViews = 0;
+    // Fetch the current stored counter
+    let allTimeViews = 0;
+    let lastUpdated = '';
+    let lastDailyViews = 0;
+    
     try {
-      const trackerResponse = await fetch(
-        `https://raw.githubusercontent.com/${repoName}/main/.github/profile-views-counter.json`,
+      // Try to get the counter file from the repository
+      const counterResponse = await fetch(
+        `https://raw.githubusercontent.com/${repoName}/main/.github/profile-views-alltime.json`,
         { headers }
       );
       
-      if (trackerResponse.ok) {
-        const trackerData = await trackerResponse.json();
-        trackerViews = trackerData.count || 0;
+      if (counterResponse.ok) {
+        const counterData = await counterResponse.json();
+        allTimeViews = counterData.allTimeViews || 0;
+        lastUpdated = counterData.lastUpdated || '';
+        lastDailyViews = counterData.lastDailyViews || 0;
       }
     } catch (error) {
-      // Ignore errors when fetching the tracker, it's optional
-      console.warn('Could not fetch profile view tracker data:', error.message);
+      console.warn('Could not fetch alltime counter, will create a new one:', error.message);
     }
     
-    // Use the higher value between GitHub traffic and custom tracker
-    const totalProfileViews = Math.max(totalViews, trackerViews);
+    // Get the current date in YYYY-MM-DD format
+    const today = new Date().toISOString().split('T')[0];
+    
+    // Calculate the new alltime views
+    // If this is a new day, add today's views
+    // If it's the same day as last update, use the higher value
+    if (lastUpdated !== today) {
+      allTimeViews += todaysViews;
+      lastDailyViews = todaysViews;
+    } else if (todaysViews > lastDailyViews) {
+      // If we have more views today than last recorded, add the difference
+      allTimeViews += (todaysViews - lastDailyViews);
+      lastDailyViews = todaysViews;
+    }
     
     return {
       username,
-      totalViews: totalProfileViews,
+      todaysViews,
       uniqueViews,
-      period: 'last 14 days',
-      trackerViews,
+      allTimeViews,
+      lastUpdated: today,
+      lastDailyViews,
       timestamp: new Date().toISOString()
     };
   } catch (error) {
