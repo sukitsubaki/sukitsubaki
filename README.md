@@ -12,6 +12,7 @@ class SukisDevStats:
             "CSS"           : "████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 10.01 %
             "Swift"         : "██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", #  4.25 %
         }
+
         self.contribution_stats = { # in progress
             "Commits"       : 0,
             "Issues": {
@@ -23,6 +24,12 @@ class SukisDevStats:
                 "Review"    : 0,
             },
             "Discussions"   : 0,
+        }
+
+        self.activity_stats = { # in progress
+            "longest_commit_streak" : 0,
+            "preferred_coding_hour" : 0,
+            "total_days_active"     : 0,
         }
 
         self.profile_views = 0 # in progress
