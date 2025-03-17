@@ -7,8 +7,8 @@ let readme = fs.readFileSync("README.md", "utf8");
 const topCount = parseInt(process.env.TOP_LANGUAGES) || 6;
 
 // Weights for calculation
-const sizeWeight = 0.6;
-const countWeight = 0.4;
+const sizeWeight = 0.5;
+const countWeight = 0.5;
 
 // Initialize language data structure
 const languages = {};
