@@ -39,6 +39,15 @@ async function updateReadme() {
       discussions: formatNumber(stats.discussions + stats.discussionComments)
     };
     
+    // Calculate sum of all contributions
+    const totalContributions = 
+      parseInt(stats.commits) + 
+      parseInt(stats.issuesCreated) + 
+      parseInt(stats.issueContributions) + 
+      parseInt(stats.pullRequestsCreated) + 
+      parseInt(stats.pullRequestReviews) + 
+      (parseInt(stats.discussions) + parseInt(stats.discussionComments));
+    
     // Find the position of the contribution_stats section with a more specific pattern
     const startPattern = /^\s*self\.contribution_stats\s*=\s*\{/m;
     const startMatch = readme.match(startPattern);
@@ -73,7 +82,7 @@ async function updateReadme() {
     const afterContent = readme.substring(endPosition);
     
     // Create the formatted contribution stats block
-    const contributionStatsContent = `        self.contribution_stats = {
+    const contributionStatsContent = `        self.contribution_stats = { # sum: ${formatNumber(totalContributions)}
             "Commits"     : ${formattedContribution.commits},
             "Issues": {
                 "Created" : ${formattedContribution.issuesCreated},
