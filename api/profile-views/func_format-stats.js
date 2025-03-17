@@ -24,8 +24,8 @@ function formatNumber(num) {
 // Update counter file to maintain state between runs
 async function updateCounter(stats) {
   const username = stats.username;
-  const counterDir = path.join('.github');
-  const counterFile = path.join(counterDir, 'profile-views-alltime.json');
+  const counterDir = path.join('api', 'profile-views');
+  const counterFile = path.join(counterDir, 'profile-views.json');
   
   // Ensure directory exists
   if (!fs.existsSync(counterDir)) {
