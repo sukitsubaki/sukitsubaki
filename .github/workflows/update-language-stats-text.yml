@@ -1,36 +1,156 @@
-name: Update Language Stats
+const fs = require("fs");
+const path = require("path");
 
-on:
-  schedule:
-    - cron: '0 * * * *'  # Runs every hour
-  workflow_dispatch:  # Allows manual triggering
+// Pfade explizit definieren
+const statsFilePath = path.resolve(process.cwd(), "stats.json");
+const readmePath = path.resolve(process.cwd(), "README.md");
 
-permissions:
-  contents: write
+console.log(`Reading stats from: ${statsFilePath}`);
+console.log(`Reading README from: ${readmePath}`);
 
-jobs:
-  update-readme:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-          
-      - name: Install node-fetch
-        run: npm install node-fetch@2
-          
-      - name: Run contribution stats script
-        run: |
-          export API_URL="https://sukitsubaki.vercel.app/language-stats"
-          node ./api/language-stats/func_format-stats.js
-          
-      - name: Commit changes
-        run: |
-          git config --global user.name "GitHub Action"
-          git config --global user.email "action@github.com"
-          git add README.md
-          git diff --quiet && git diff --staged --quiet || git commit -m "Update contribution stats in README"
-          git push
+try {
+  // Lese die Dateien
+  const stats = JSON.parse(fs.readFileSync(statsFilePath, "utf8"));
+  let readme = fs.readFileSync(readmePath, "utf8");
+
+  // Configuration from environment variables
+  const topCount = parseInt(process.env.TOP_LANGUAGES) || 6;
+
+  // Weights for calculation
+  const sizeWeight = 0.6;
+  const countWeight = 0.4;
+
+  // Initialize language data structure
+  const languages = {};
+
+  // Track totals
+  let totalBytes = 0;
+
+  // Parse stats data
+  Object.entries(stats.languages).forEach(([lang, data]) => {
+    // Initialize language entry
+    if (!languages[lang]) {
+      languages[lang] = {
+        name: lang,
+        size: 0,
+        count: 0,
+        score: 0
+      };
+    }
+    
+    // Add byte count
+    languages[lang].size = data.bytes;
+    languages[lang].count = 1; // Minimum count for each language
+    
+    // Track totals
+    totalBytes += data.bytes;
+  });
+
+  // Calculate weighted scores
+  Object.keys(languages).forEach(lang => {
+    languages[lang].score = 
+      Math.pow(languages[lang].size, sizeWeight) * 
+      Math.pow(languages[lang].count, countWeight);
+  });
+
+  // Sort languages by score and get top languages
+  const sortedLanguages = Object.values(languages)
+    .sort((a, b) => b.score - a.score);
+    
+  const topLanguages = sortedLanguages.slice(0, topCount);
+
+  // Calculate total score for percentage calculation
+  const totalScore = topLanguages.reduce((sum, lang) => sum + lang.score, 0);
+
+  // Calculate percentages
+  topLanguages.forEach(lang => {
+    lang.percentage = (lang.score / totalScore) * 100;
+  });
+
+  // Function to create progress bar
+  const createProgressBar = (percentage) => {
+    const barLength = 40; // Total length of progress bar
+    const filledLength = Math.round((percentage / 100) * barLength);
+    const emptyLength = barLength - filledLength;
+    
+    // Using black blocks and dotted blocks as seen in the screenshot
+    return '█'.repeat(filledLength) + '░'.repeat(emptyLength);
+  };
+
+  // Find the length of the longest language name
+  const maxNameLength = topLanguages.reduce((max, lang) => 
+    Math.max(max, lang.name.length), 0);
+
+  // Generate formatted language stats
+  let languageEntries = [];
+
+  topLanguages.forEach((lang) => {
+    // Format language name with padding
+    const nameField = `"${lang.name}"`;
+    
+    // Calculate spaces needed for alignment
+    const paddingNeeded = maxNameLength + 4 - nameField.length;
+    const padding = ' '.repeat(paddingNeeded);
+    
+    // Progress bar
+    const progressBar = createProgressBar(lang.percentage);
+    
+    // Format percentage
+    const percentField = lang.percentage.toFixed(2).padStart(5, ' ');
+    
+    // Build the formatted line
+    languageEntries.push(`            ${nameField}${padding}: "${progressBar}", # ${percentField} %`);
+  });
+
+  // Join entries with line breaks
+  const formattedLanguageStats = languageEntries.join('\n');
+
+  // Find the position of the language_stats section with a more specific pattern
+  const startPattern = /^\s*self\.language_stats\s*=\s*\{/m;
+  const startMatch = readme.match(startPattern);
+  
+  if (!startMatch) {
+    throw new Error("Could not find the language_stats section in README.md");
+  }
+  
+  // Get the position of the match
+  const startPosition = startMatch.index;
+  
+  // Find the closing bracket for this section
+  // Count the opening and closing brackets to find the correct closing one
+  let openBrackets = 1;
+  let endPosition = startPosition + startMatch[0].length;
+  
+  while (openBrackets > 0 && endPosition < readme.length) {
+    if (readme[endPosition] === '{') {
+      openBrackets++;
+    } else if (readme[endPosition] === '}') {
+      openBrackets--;
+    }
+    endPosition++;
+  }
+  
+  if (openBrackets !== 0) {
+    throw new Error("Could not find the closing bracket for language_stats section");
+  }
+  
+  // Get content before and after the match
+  const beforeContent = readme.substring(0, startPosition);
+  const afterContent = readme.substring(endPosition);
+  
+  // Create the formatted language stats block
+  const languageStatsContent = `        self.language_stats = { # updated ${new Date().toISOString().split('T')[0]}
+${formattedLanguageStats}
+        }`;
+  
+  // Create updated README
+  const updatedReadme = beforeContent + languageStatsContent + afterContent;
+  
+  // Write the updated README
+  fs.writeFileSync(readmePath, updatedReadme);
+  
+  console.log('Language stats in README successfully updated!');
+} catch (error) {
+  console.error('Error updating language stats:', error);
+  process.exit(1);
+}
