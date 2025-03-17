@@ -37,7 +37,7 @@
         }
 
         header {
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
             border-bottom: 1px solid #eaeaea;
             padding-bottom: 1rem;
         }
@@ -60,12 +60,20 @@
             margin-bottom: 2rem;
         }
 
+        .endpoints-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 1rem;
+        }
+
         .endpoint {
             background-color: white;
             border-radius: 8px;
             padding: 1.5rem;
-            margin-bottom: 1.5rem;
             border: 1px solid #eaeaea;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         .endpoint h3 {
@@ -99,6 +107,12 @@
             text-decoration: underline;
         }
 
+        @media (max-width: 768px) {
+            .endpoints-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         @media (max-width: 600px) {
             body {
                 padding: 1rem;
@@ -115,37 +129,39 @@
 
         <main>
             <div class="description">
-                <p>This API provides endpoints to retrieve statistics about my <a href="https://github.com/sukitsubaki" target="blank">GitHub account</a>, including language usage and contribution activities. The data collected through these endpoints is used to dynamically generate content for my GitHub profile page through <a href="https://github.com/sukitsubaki/sukitsubaki/actions" target="blank">automated workflows</a> (GitHub Actions).</p>
+                <p>This API provides endpoints to retrieve statistics about my <a href="https://github.com/sukitsubaki" target="blank">GitHub account</a>. The data collected through these endpoints is used to dynamically generate content for my GitHub profile page through <a href="https://github.com/sukitsubaki/sukitsubaki/actions" target="blank">automated workflows</a> (GitHub Actions).</p>
             </div>
 
             <h2>Available Endpoints</h2>
 
-            <div class="endpoint">
-                <h3><a href="https://sukitsubaki.vercel.app/language-stats">Language Stats</a></h3>
-                <p>Analyzes repositories and returns detailed statistics about programming languages used.</p>
-                <div class="endpoint-url">GET /api/language_stats</div>
-                <p>Returns a JSON object with programming languages as keys and comprehensive data including percentage usage, number of files and file size for each language.</p>
-            </div>
+            <div class="endpoints-grid">
+                <div class="endpoint">
+                    <h3><a href="https://sukitsubaki.vercel.app/language-stats">Language Stats</a></h3>
+                    <p>Analyzes repositories and returns detailed statistics about programming languages used.</p>
+                    <div class="endpoint-url">GET /api/language_stats</div>
+                    <p>Returns a JSON object with programming languages as keys and comprehensive data for each one.</p>
+                </div>
 
-            <div class="endpoint">
-                <h3><a href="https://sukitsubaki.vercel.app/contribution-stats">Contribution Stats</a></h3>
-                <p>Retrieves contribution activities on GitHub and categorizes them by type.</p>
-                <div class="endpoint-url">GET /api/contribution_stats</div>
-                <p>Returns a JSON object with counts of different contribution types (commits, issues, pull requests etc.).</p>
-            </div>
+                <div class="endpoint">
+                    <h3><a href="https://sukitsubaki.vercel.app/contribution-stats">Contribution Stats</a></h3>
+                    <p>Retrieves contribution activities on GitHub and categorizes them by type.</p>
+                    <div class="endpoint-url">GET /api/contribution_stats</div>
+                    <p>Returns a JSON object with counts of different contribution types (commits, issues etc.).</p>
+                </div>
 
-            <div class="endpoint">
-                <h3><a href="https://sukitsubaki.vercel.app/activity-stats">Activity Stats</a></h3>
-                <p>Provides insights into coding habits and activity patterns on GitHub.</p>
-                <div class="endpoint-url">GET /api/activity_stats</div>
-                <p>Returns a JSON object with metrics like longest commit streak, preferred coding hour and total active days.</p>
-            </div>
+                <div class="endpoint">
+                    <h3><a href="https://sukitsubaki.vercel.app/activity-stats">Activity Stats</a></h3>
+                    <p>Provides insights into coding habits and activity patterns on GitHub.</p>
+                    <div class="endpoint-url">GET /api/activity_stats</div>
+                    <p>Returns a JSON object with metrics like longest commit streak and total active days.</p>
+                </div>
 
-            <div class="endpoint">
-                <h3><a href="https://sukitsubaki.vercel.app/profile-views">Profile Views</a></h3>
-                <p>Tracks the number of views on the GitHub profile page.</p>
-                <div class="endpoint-url">GET /api/profile_views</div>
-                <p>Returns a JSON object with the current count of profile views.</p>
+                <div class="endpoint">
+                    <h3><a href="https://sukitsubaki.vercel.app/profile-views">Profile Views</a></h3>
+                    <p>Tracks the number of views on the GitHub profile page.</p>
+                    <div class="endpoint-url">GET /api/profile_views</div>
+                    <p>Returns a JSON object with the current count of profile views.</p>
+                </div>
             </div>
         </main>
 
