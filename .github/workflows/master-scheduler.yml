@@ -134,7 +134,7 @@ jobs:
           git add README.md
           
           # Create commit message based on what was updated
-          MESSAGE="Update stats: "
+          MESSAGE="Update README stats: "
           if [ "${{ steps.determine-updates.outputs.run_language_stats }}" == "true" ]; then
             MESSAGE+="language, "
           fi
