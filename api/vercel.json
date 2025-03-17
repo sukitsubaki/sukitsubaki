@@ -3,11 +3,13 @@
   "builds": [
     { "src": "language-stats/index.js", "use": "@vercel/node" },
     { "src": "contribution-stats/index.js", "use": "@vercel/node" },
-    { "src": "activity-stats/index.js", "use": "@vercel/node" }
+    { "src": "activity-stats/index.js", "use": "@vercel/node" },
+    { "src": "index.html", "use": "@vercel/static" }
   ],
   "routes": [
     { "src": "/language-stats", "dest": "/language-stats/index.js" },
     { "src": "/contribution-stats", "dest": "/contribution-stats/index.js" },
-    { "src": "/activity-stats", "dest": "/activity-stats/index.js" }
+    { "src": "/activity-stats", "dest": "/activity-stats/index.js" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
