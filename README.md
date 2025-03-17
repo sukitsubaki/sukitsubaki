@@ -77,7 +77,7 @@ class SukisSelfReview:
     def __init__(self):
         self.positive_evaluation = {
             "technical_strengths" : ["Analytical Problem Solving", "Creative Solutions"],
-            "expertise_areas"     : ["Architecture Design", "Clean Code", "User Experience"],
+            "expertise_areas"     : ["Architecture Design", "Clean Code"],
         }
         self.constructive_evaluation = {
             "improvement_areas"   : ["Complexity Management", "Project Scope Control"],
