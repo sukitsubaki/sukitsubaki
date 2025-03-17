@@ -30,12 +30,6 @@ class SukisDevStats:
                 "Review"    : 0,
             },
             "Discussions"   : 5,
-        },
-            "PR": {
-                "Created"   : 0,
-                "Review"    : 0,
-            },
-            "Discussions"   : 0,
         }
         self.activity_stats = { # in progress
             "longest_commit_streak" : 0,
