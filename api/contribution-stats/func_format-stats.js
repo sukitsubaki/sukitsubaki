@@ -73,7 +73,7 @@ async function updateReadme() {
     const afterContent = readme.substring(endPosition);
     
     // Create the formatted contribution stats block
-    const contributionStatsContent = `        self.contribution_stats = { # updated ${new Date().toISOString().split('T')[0]}
+    const contributionStatsContent = `        self.contribution_stats = {
             "Commits"       : ${formattedContribution.commits},
             "Issues": {
                 "Created"   : ${formattedContribution.issuesCreated},
