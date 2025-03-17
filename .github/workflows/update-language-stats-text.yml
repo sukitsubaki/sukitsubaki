@@ -1,4 +1,4 @@
-name: Update Language Stats
+name: Update Contribution Stats
 
 on:
   schedule:
@@ -19,20 +19,18 @@ jobs:
         with:
           node-version: '16'
           
-      - name: Download script file
+      - name: Install node-fetch
+        run: npm install node-fetch@2
+          
+      - name: Run contribution stats script
         run: |
-          curl -o generate-stats-text.js https://raw.githubusercontent.com/sukitsubaki/sukitsubaki/main/scripts/generate-stats-text.js
-      
-      - name: Generate Language Stats Text and Update README
-        run: |
-          export TOP_LANGUAGES=6
-          curl -s "https://sukitsubaki.vercel.app/language-stats" > stats.json
-          node generate-stats-text.js
+          export API_URL="https://sukitsubaki.vercel.app/language-stats"
+          node ./api/language-stats/func_format-stats.js
           
       - name: Commit changes
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           git add README.md
-          git diff --quiet && git diff --staged --quiet || git commit -m "Update language stats in README"
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update contribution stats in README"
           git push
