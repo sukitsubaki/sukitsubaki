@@ -161,5 +161,5 @@ jobs:
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           git add README.md
-          git diff --quiet && git diff --staged --quiet || git commit -m "Update language stats in README"
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update language stats"
           git push
