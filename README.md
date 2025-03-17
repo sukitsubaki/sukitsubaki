@@ -2,6 +2,13 @@
 ----
 <!-- START_LANGUAGE_STATS_TEXT -->
 ```python
+#!/usr/bin/env github/sukitsubaki
+# © 2025 Suki Tsubaki
+
+"""
+A code-based representation of who I am as a developer.
+"""
+
 class SukisDevStats:
     def __init__(self):
         self.language_stats = {
@@ -75,6 +82,16 @@ class SukisSelfReview:
             "improvement_areas"   : ["Complexity Management", "Project Scope Control"],
             "skill_refinements"   : ["Time Estimation", "Documentation Consistency"],
         }
+
+
+def generate_profile_summary():
+    # ... hidden for readability ...
+    pass
+
+
+if __name__ == "__main__":
+    # generate_profile_summary()
+    print("Code is poetry, thanks for reading mine <3")
 ```
 <!-- END_LANGUAGE_STATS_TEXT -->
 <!-- START_CONTRIBUTION_STATS -->
