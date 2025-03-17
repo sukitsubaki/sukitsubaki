@@ -20,16 +20,16 @@ class SukisDevStats:
             "Swift"       : "██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", #  4.25 %
         }
                 self.contribution_stats = { # updated 2025-03-17
-            "Commits"       : 491,
+            "Commits"       : 0,
             "Issues": {
-                "Created"   : 54,
-                "Contrib"   : 46,
+                "Created"   : 0,
+                "Contrib"   : 0,
             },
             "PR": {
-                "Created"   : 8,
-                "Review"    : 0,
+                "Created"   : 0,
+                "Review"    : 1,
             },
-            "Discussions"   : 5,
+            "Discussions"   : 0,
         }
         self.activity_stats = { # in progress
             "longest_commit_streak" : 0,
