@@ -2,7 +2,7 @@
 ----
 <!-- START_LANGUAGE_STATS_TEXT -->
 ```python
-class SukisGithubStats:
+class SukisDevStats:
     def __init__(self):
         self.language_stats = {
             "PHP"           : "███████████████░░░░░░░░░░░░░░░░░░░░░░░░░", # 37.22 %
