@@ -53,7 +53,7 @@ class SukisProjectLog:
     def __init__(self):
         self.active_projects = {
             "primary"   : ["CSS Animations", "Machine Learning"],
-            "secondary" : ["Task Automation", "AI Assistant", "Self-Hosted Email Server"],
+            "secondary" : ["Task Automation", "Self-Hosted Email Server"],
         }
 
 
