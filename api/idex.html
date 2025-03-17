@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SukiTsubaki API</title>
+    <style>
+        :root {
+            --bg-color: #fafafa;
+            --text-color: #333;
+            --accent-color: #6e5494;
+            --secondary-color: #2188ff;
+            --container-width: 800px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            text-align: justify;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: var(--container-width);
+            width: 100%;
+        }
+
+        header {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #eaeaea;
+            padding-bottom: 1rem;
+        }
+
+        h1 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+        }
+
+        h2 {
+            margin-bottom: 0.5rem;
+        }
+
+        main {
+            margin-bottom: 3rem;
+        }
+
+        .description {
+            margin-bottom: 2rem;
+        }
+
+        .endpoint {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #eaeaea;
+        }
+
+        .endpoint h3 {
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .endpoint-url {
+            font-family: monospace;
+            background-color: #f6f8fa;
+            padding: 0.5rem;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            word-break: break-all;
+        }
+
+        footer {
+            font-size: 0.9rem;
+            color: #666;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        a {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SukiTsubaki API</h1>
+            <p>A simple, personal API for GitHub stats and analytics</p>
+        </header>
+
+        <main>
+            <div class="description">
+                <p>This API provides endpoints to retrieve statistics about my GitHub account, including language usage and contribution activities. The data collected through these endpoints is used to dynamically generate content for my GitHub profile page through automated GitHub Actions workflows.</p>
+            </div>
+
+            <h2>Available Endpoints</h2>
+
+            <div class="endpoint">
+                <h3><a href="https://sukitsubaki.vercel.app/language-stats">Language Stats</a></h3>
+                <p>Analyzes repositories and returns detailed statistics about programming languages used.</p>
+                <div class="endpoint-url">GET /api/language_stats</div>
+                <p>Returns a JSON object with programming languages as keys and comprehensive data including percentage usage, number of files, and file size for each language.</p>
+            </div>
+
+            <div class="endpoint">
+                <h3><a href="https://sukitsubaki.vercel.app/contribution-stats">Contribution Stats</a></h3>
+                <p>Retrieves contribution activities on GitHub and categorizes them by type.</p>
+                <div class="endpoint-url">GET /api/contribution_stats</div>
+                <p>Returns a JSON object with counts of different contribution types (commits, issues, pull requests, etc.).</p>
+            </div>
+        </main>
+
+        <footer>
+            <p>Made with ❤️ by <a href="https://github.com/sukitsubaki" target="_blank">sukitsubaki</a> | View the <a href="https://github.com/sukitsubaki/sukitsubaki" target="_blank">source code</a></p>
+        </footer>
+    </div>
+</body>
+</html>
