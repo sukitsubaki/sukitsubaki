@@ -12,7 +12,7 @@ A brief, code-based representation of who I am as a developer.
 
 class SukisDevStats:
     def __init__(self):
-        self.language_stats = { # 333 files, 2.11 MB, dynamic weighting
+        self.language_stats = { # 334 files, 2.11 MB, dynamic weighting
             "HTML"       : "███████████████████░░░░░░░░░░░░░░░░░░░░░", # 46.71 %
             "PHP"        : "██████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 25.48 %
             "CSS"        : "████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 19.30 %
