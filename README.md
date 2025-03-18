@@ -14,7 +14,7 @@ class SukisDevStats:
     def __init__(self):
         self.language_stats = { # 335 files, 2.08 MB, dynamic weighting
             "HTML"       : "██████████████████░░░░░░░░░░░░░░░░░░░░░░", # 45.89 %
-            "PHP"        : "██████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 25.94 %
+            "PHP"        : "██████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 25.93 %
             "CSS"        : "████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 19.51 %
             "Python"     : "██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", #  4.96 %
             "JavaScript" : "█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", #  2.36 %
@@ -34,7 +34,7 @@ class SukisDevStats:
         }
         self.activity_stats = {
             "longest_commit_streak" : 10, # days
-            "preferred_coding_hour" : 20,
+            "preferred_coding_hour" : 17,
             "total_days_active"     : 13,
         }
         self.profile_views = 213 # unique
