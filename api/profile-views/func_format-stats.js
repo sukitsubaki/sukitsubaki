@@ -71,7 +71,7 @@ async function updateReadme() {
     }
     
     // Create the updated profile views line
-    const updatedProfileViewsLine = `self.profile_views = ${formattedViews} # unique`;
+    const updatedProfileViewsLine = `self.profile_views = ${formattedViews}`;
     
     // Replace the original line with the updated one
     const updatedReadme = readme.replace(profileViewsPattern, updatedProfileViewsLine);
