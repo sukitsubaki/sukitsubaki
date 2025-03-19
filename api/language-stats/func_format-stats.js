@@ -25,16 +25,16 @@ const getLanguageWeights = (language) => {
     "Dart": { sizeWeight: 0.5, countWeight: 0.5 },
     
     // Markup & style languages - higher weight on size
-    "HTML": { sizeWeight: 0.7, countWeight: 0.3 },
-    "CSS": { sizeWeight: 0.7, countWeight: 0.3 },
-    "SCSS": { sizeWeight: 0.7, countWeight: 0.3 },
-    "Less": { sizeWeight: 0.7, countWeight: 0.3 },
-    "XML": { sizeWeight: 0.7, countWeight: 0.3 },
+    "HTML": { sizeWeight: 0.6, countWeight: 0.4 },
+    "CSS": { sizeWeight: 0.6, countWeight: 0.4 },
+    "SCSS": { sizeWeight: 0.6, countWeight: 0.4 },
+    "Less": { sizeWeight: 0.6, countWeight: 0.4 },
+    "XML": { sizeWeight: 0.6, countWeight: 0.4 },
     
     // Configuration & data languages - even higher weight on size
-    "JSON": { sizeWeight: 0.8, countWeight: 0.2 },
-    "YAML": { sizeWeight: 0.8, countWeight: 0.2 },
-    "Markdown": { sizeWeight: 0.8, countWeight: 0.2 },
+    "JSON": { sizeWeight: 0.7, countWeight: 0.3 },
+    "YAML": { sizeWeight: 0.7, countWeight: 0.3 },
+    "Markdown": { sizeWeight: 0.7, countWeight: 0.3 },
     
     // Shell scripts - emphasis on file count
     "Shell": { sizeWeight: 0.3, countWeight: 0.7 },
