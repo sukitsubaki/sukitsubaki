@@ -90,18 +90,18 @@ class SukisDevEnvironment:
         self.fonts = {
             "coding"    : ["Source Code Pro"],
             "texting"   : ["Karla", "Ubuntu Sans"],
-            "terminal"  : ["Menlo", "SF Mono"]
+            "terminal"  : ["Menlo", "SF Mono"],
         }
         
         self.editors = {
             "primary"   : ["Brackets"],
-            "secondary" : ["TextEdit", "Xcode"]
+            "secondary" : ["TextEdit", "Xcode"],
         }
         
         self.dev_setup = {
             "os"        : ["macOS", "Raspberry Pi OS"],
             "terminal"  : "Terminal.app",
-            "browser"   : ["Safari", "Firefox"]
+            "browser"   : ["Safari", "Firefox"],
         }
 
 
