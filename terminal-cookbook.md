@@ -20,3 +20,15 @@ python -m twine check dist/*
 python -m twine upload dist/*
 ```
 5. Enter API token
+
+# Archiving
+## .tar.gz
+- Archive current directory: `tar -czvf "$(basename $(pwd)).tar.gz" .`
+- Archive current directory with rename: `tar -czvf archive.tar.gz .`
+- Extract archive in current directory: `tar -xzvf archive.tar.gz`
+- Extract archive to different directory: `tar -xzvf archive.tar.gz -C /path/to/target`
+## .zip
+- Archive current directory: `zip -r "$(basename $(pwd)).zip" .`
+- Archive current directory with rename: `zip -r custom_name.zip .`
+- Extract archive in current directory: `unzip archive.zip`
+- Extract archive to different directory: `unzip archive.zip -d /path/to/target`
