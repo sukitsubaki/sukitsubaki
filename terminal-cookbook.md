@@ -44,12 +44,17 @@ python -m twine upload dist/*
 - Prompt before overwrite: `i`
 - Verbose: `v`
 - Combined: `-rn`, `rf`, etc.
-### Copy, Move, Rename
+### Copy, Move, Rename, Create, Delete
 - Copy file to another directory: `cp filename /path/to/destination/`
-- Copy directory to another location: `cp directory/ /path/to/destination/`
-- Move file to another directory: `cp filename /path/to/destination/`
-- Move directory to another location: `mv source_directory/ /path/to/destination/`
+- Copy directory to another location: `cp -r directory/ /path/to/destination/`
+- Move file to another directory: `mv filename /path/to/destination/`
+- Move directory to another location: `mv directory/ /path/to/destination/`
 - Rename file: `mv oldname.txt newname.txt`
 - Rename directory: `mv olddirectory/ newdirectory/`
 - Rename file by copy/move: `cp/mv oldname.txt /path/to/destination/newname.txt`
-- Rename directory by copy/move: `cp/mv oldname/ path/to/destination/newname/`
+- Rename directory by copy/move: `cp/mv oldname/ /path/to/destination/newname/`
+- Create new file: `touch filename`
+- Create new directory: `mkdir directory/`
+- Delete file: `rm filename`
+- Delete directory: `rm -r directory/`
+- Delete files in directory: `rm directory/*` or `rm -r directory/*`
