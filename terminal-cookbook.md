@@ -25,36 +25,42 @@ python -m twine upload dist/*
 5. Enter API token
 
 ## Archiving
-### .tar.gz
-- Archive current directory: `tar -czvf "$(basename $(pwd)).tar.gz" .`
-- Archive current directory with rename: `tar -czvf archive.tar.gz .`
-- Extract archive in current directory: `tar -xzvf archive.tar.gz`
-- Extract archive to different directory: `tar -xzvf archive.tar.gz -C /path/to/target`
-### .zip
-- Archive current directory: `zip -r "$(basename $(pwd)).zip" .`
-- Archive current directory with rename: `zip -r custom_name.zip .`
-- Extract archive in current directory: `unzip archive.zip`
-- Extract archive to different directory: `unzip archive.zip -d /path/to/target`
+| Command                                       | Description                            |
+| ----------------------------------------------| -------------------------------------- |
+| `tar -czvf "$(basename $(pwd)).tar.gz" .`     | Archive current directory              |
+| `tar -czvf archive.tar.gz .`                  | Archive current directory with rename  |
+| `tar -xzvf archive.tar.gz`                    | Extract archive in current directory   |
+| `tar -xzvf archive.tar.gz -C /path/to/target` | Extract archive to different directory |
+| `zip -r "$(basename $(pwd)).zip" .`           | Archive current directory              |
+| `zip -r custom_name.zip .`                    | Archive current directory with rename  |
+| `unzip archive.zip`                           | Extract archive in current directory   |
+| `unzip archive.zip -d /path/to/target`        | Extract archive to different directory |
 
 ## File and Directory
 ### Flags
-- No overwrite: `-n` (no-clobber)
-- Force overwrite: `-f` (force)
-- All subdirectories: `-r` (recursive; to get whole directory)
-- Prompt before overwrite: `i`
-- Verbose: `v`
-- Combined: `-rn`, `rf`, etc.
+| Command           | Description                           |
+| ----------------- | ------------------------------------- |
+| `-rn`, `rf`, etc. | Combine multiple flags                |
+| `-n`              | Don't overwrite anything (no-clobber) |
+| `-f`              | Force overwrite (force)               |
+| `-r`              | Get all subdirectories (recursive)    |
+| `-i`              | Prompt before overwrite something     |
+| `-v`              | Verbose                               |
+
 ### Copy, Move, Rename, Create, Delete
-- Copy file to another directory: `cp filename /path/to/destination/`
-- Copy directory to another location: `cp -r directory/ /path/to/destination/`
-- Move file to another directory: `mv filename /path/to/destination/`
-- Move directory to another location: `mv directory/ /path/to/destination/`
-- Rename file: `mv oldname.txt newname.txt`
-- Rename directory: `mv olddirectory/ newdirectory/`
-- Rename file by copy/move: `cp/mv oldname.txt /path/to/destination/newname.txt`
-- Rename directory by copy/move: `cp/mv oldname/ /path/to/destination/newname/`
-- Create new file: `touch filename`
-- Create new directory: `mkdir directory/`
-- Delete file: `rm filename`
-- Delete directory: `rm -r directory/`
-- Delete files in directory: `rm directory/*` or `rm -r directory/*`
+| Command                                              | Description                               |
+| ---------------------------------------------------- | ----------------------------------------- |
+| `cp filename /path/to/destination/`                  | Copy file to another directory            |
+| `cp -r directory/ /path/to/destination/`             | Copy directory to another location        |
+| `mv filename /path/to/destination/`                  | Move file to another directory            |
+| `mv directory/ /path/to/destination/`                | Move directory to another location        |
+| `mv oldname.txt newname.txt`                         | Rename file                               |
+| `mv olddirectory/ newdirectory/`                     | Rename directory                          |
+| `cp/mv oldname.txt /path/to/destination/newname.txt` | Rename file by copy/move                  |
+| `cp/mv oldname/ /path/to/destination/newname/`       | Rename directory by copy/move             |
+| `touch filename`                                     | Create new file                           |
+| `mkdir directory/`                                   | Create new directory                      |
+| `rm filename`                                        | Delete file                               |
+| `rm -r directory/`                                   | Delete directory                          |
+| `rm directory/*`                                     | Delete files in directory                 |
+| `rm -r directory/*`                                  | Delete files and directories in directory |
