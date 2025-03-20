@@ -85,6 +85,26 @@ class SukisSelfReview:
         }
 
 
+class SukisDevEnvironment:
+    def __init__(self):
+        self.fonts = {
+            "coding"    : ["Source Code Pro"],
+            "texting"   : ["Karla", "Ubuntu"],
+            "terminal"  : ["Menlo", "SF Mono"]
+        }
+        
+        self.editors = {
+            "primary"   : ["Brackets"],
+            "secondary" : ["TextEdit", "Xcode"]
+        }
+        
+        self.dev_setup = {
+            "os"        : ["macOS", "Raspberry Pi OS"],
+            "terminal"  : "Terminal.app",
+            "browser"   : ["Safari", "Firefox"]
+        }
+
+
 def generate_profile_summary():
     # ... hidden for readability ...
     pass
