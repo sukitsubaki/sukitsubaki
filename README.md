@@ -89,7 +89,7 @@ class SukisDevEnvironment:
     def __init__(self):
         self.fonts = {
             "coding"    : ["Source Code Pro"],
-            "texting"   : ["Karla", "Ubuntu"],
+            "texting"   : ["Karla", "Ubuntu Sans"],
             "terminal"  : ["Menlo", "SF Mono"]
         }
         
