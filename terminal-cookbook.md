@@ -5,7 +5,7 @@ A personal collection of terminal commands and shortcuts that I find useful but 
 - [File and Directory](#file-and-directory)
 
 ## PyPI Publishing
-1. Update `setup.py` and `repository/__init__.py`
+1. Update `setup.py`, `repository/__init__.py`, `pyproject.toml`
 2. `cd path/to/repository/`
 3. Create distribution packages with:
 ```python
