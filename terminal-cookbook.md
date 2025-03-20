@@ -32,3 +32,21 @@ python -m twine upload dist/*
 - Archive current directory with rename: `zip -r custom_name.zip .`
 - Extract archive in current directory: `unzip archive.zip`
 - Extract archive to different directory: `unzip archive.zip -d /path/to/target`
+
+# File and Directory
+## Flags
+- No overwrite: `-n` (no-clobber)
+- Force overwrite: `-f` (force)
+- All subdirectories: `-r` (recursive; to get whole directory)
+- Prompt before overwrite: `i`
+- Verbose: `v`
+- Combined: `-rn`, `rf`, etc.
+## Copy, Move, Rename
+- Copy file to another directory: `cp filename /path/to/destination/`
+- Copy directory to another location: `cp directory/ /path/to/destination/`
+- Move file to another directory: `cp filename /path/to/destination/`
+- Move directory to another location: `mv source_directory/ /path/to/destination/`
+- Rename file: `mv oldname.txt newname.txt`
+- Rename directory: `mv olddirectory/ newdirectory/`
+- Rename file by copy/move: `cp/mv oldname.txt /path/to/destination/newname.txt`
+- Rename directory by copy/move: `cp/mv oldname/ path/to/destination/newname/`
