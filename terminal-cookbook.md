@@ -1,7 +1,10 @@
-A personal collection of terminal commands and shortcuts that I find useful but tend to forget. This document serves as my go-to resource when I need to recall specific command line operations for development and system management tasks.
-This reference will grow over time as I discover new useful commands worth remembering.
+A personal collection of terminal commands and shortcuts that I find useful but tend to forget. This document serves as my go-to resource when I need to recall specific command line operations for development and system management tasks. This reference will grow over time as I discover new useful commands worth remembering.
 
-# PyPI: Publishing
+- [PyPi Publishing](#pypi-publishing)
+- [Archiving](#archiving)
+- [File and Directory](#file-and-directory)
+
+## PyPI Publishing
 1. Update `setup.py` and `repository/__init__.py`
 2. `cd path/to/repository/`
 3. Create distribution packages with:
@@ -21,27 +24,27 @@ python -m twine upload dist/*
 ```
 5. Enter API token
 
-# Archiving
-## .tar.gz
+## Archiving
+### .tar.gz
 - Archive current directory: `tar -czvf "$(basename $(pwd)).tar.gz" .`
 - Archive current directory with rename: `tar -czvf archive.tar.gz .`
 - Extract archive in current directory: `tar -xzvf archive.tar.gz`
 - Extract archive to different directory: `tar -xzvf archive.tar.gz -C /path/to/target`
-## .zip
+### .zip
 - Archive current directory: `zip -r "$(basename $(pwd)).zip" .`
 - Archive current directory with rename: `zip -r custom_name.zip .`
 - Extract archive in current directory: `unzip archive.zip`
 - Extract archive to different directory: `unzip archive.zip -d /path/to/target`
 
-# File and Directory
-## Flags
+## File and Directory
+### Flags
 - No overwrite: `-n` (no-clobber)
 - Force overwrite: `-f` (force)
 - All subdirectories: `-r` (recursive; to get whole directory)
 - Prompt before overwrite: `i`
 - Verbose: `v`
 - Combined: `-rn`, `rf`, etc.
-## Copy, Move, Rename
+### Copy, Move, Rename
 - Copy file to another directory: `cp filename /path/to/destination/`
 - Copy directory to another location: `cp directory/ /path/to/destination/`
 - Move file to another directory: `cp filename /path/to/destination/`
