@@ -27,7 +27,7 @@ jobs:
           
           // Configuration from environment variables
           const showOthers = process.env.SHOW_OTHERS === "true";
-          const topCount = parseInt(process.env.TOP_LANGUAGES) || 6;
+          const topCount = parseInt(process.env.TOP_LANGUAGES) || 7;
           const svgFilename = "language-stats.svg";
           const svgDir = path.dirname(process.env.SVG_FILENAME) || "api/language-stats";
           
