@@ -35,6 +35,7 @@ async function updateReadme() {
       issuesCreated: formatNumber(stats.issuesCreated),
       issueContrib: formatNumber(stats.issueContributions),
       prCreated: formatNumber(stats.pullRequestsCreated),
+      prComments: formatNumber(stats.pullRequestComments || 0),
       prReviews: formatNumber(stats.pullRequestReviews),
       discussions: formatNumber(stats.discussions + stats.discussionComments)
     };
@@ -45,6 +46,7 @@ async function updateReadme() {
       parseInt(stats.issuesCreated) + 
       parseInt(stats.issueContributions) + 
       parseInt(stats.pullRequestsCreated) + 
+      parseInt(stats.pullRequestComments || 0) + 
       parseInt(stats.pullRequestReviews) + 
       (parseInt(stats.discussions) + parseInt(stats.discussionComments));
     
@@ -89,8 +91,9 @@ async function updateReadme() {
                 "Contrib" : ${formattedContribution.issueContrib},
             },
             "PR": { # pull requests
-                "Created" : ${formattedContribution.prCreated},
-                "Review"  : ${formattedContribution.prReviews},
+                "Created"  : ${formattedContribution.prCreated},
+                "Comments" : ${formattedContribution.prComments},
+                "Review"   : ${formattedContribution.prReviews},
             },
             "Discussions" : ${formattedContribution.discussions},
         }`;
