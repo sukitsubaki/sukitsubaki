@@ -114,9 +114,9 @@ async function getLanguageStats(username, token) {
       
       // Markup & style languages - higher weight on size
       "HTML": { sizeWeight: 0.6, countWeight: 0.4 },
-      "CSS": { sizeWeight: 0.6, countWeight: 0.4 },
-      "SCSS": { sizeWeight: 0.6, countWeight: 0.4 },
-      "Less": { sizeWeight: 0.6, countWeight: 0.4 },
+      "CSS": { sizeWeight: 0.625, countWeight: 0.375 },
+      "SCSS": { sizeWeight: 0.625, countWeight: 0.375 },
+      "Less": { sizeWeight: 0.625, countWeight: 0.375 },
       "XML": { sizeWeight: 0.6, countWeight: 0.4 },
       "Vue": { sizeWeight: 0.55, countWeight: 0.45 },
       
