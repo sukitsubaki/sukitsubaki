@@ -85,17 +85,17 @@ async function updateReadme() {
     
     // Create the formatted contribution stats block
     const contributionStatsContent = `        self.contribution_stats = { # sum: ${formatNumber(totalContributions)}
-            "Commits"     : ${formattedContribution.commits},
+            "Commits"       : ${formattedContribution.commits},
             "Issues": {
-                "Created" : ${formattedContribution.issuesCreated},
-                "Contrib" : ${formattedContribution.issueContrib},
+                "Created"   : ${formattedContribution.issuesCreated},
+                "Contrib"   : ${formattedContribution.issueContrib},
             },
             "PR": { # pull requests
-                "Created"  : ${formattedContribution.prCreated},
-                "Comments" : ${formattedContribution.prComments},
-                "Review"   : ${formattedContribution.prReviews},
+                "Created"   : ${formattedContribution.prCreated},
+                "Commented" : ${formattedContribution.prComments},
+                "Reviewed"  : ${formattedContribution.prReviews},
             },
-            "Discussions" : ${formattedContribution.discussions},
+            "Discussions"  : ${formattedContribution.discussions},
         }`;
     
     // Create updated README
