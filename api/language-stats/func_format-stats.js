@@ -26,9 +26,9 @@ const getLanguageWeights = (language) => {
     
     // Markup & style languages - higher weight on size
     "HTML": { sizeWeight: 0.6, countWeight: 0.4 },
-    "CSS": { sizeWeight: 0.6, countWeight: 0.4 },
-    "SCSS": { sizeWeight: 0.6, countWeight: 0.4 },
-    "Less": { sizeWeight: 0.6, countWeight: 0.4 },
+    "CSS": { sizeWeight: 0.625, countWeight: 0.375 },
+    "SCSS": { sizeWeight: 0.625, countWeight: 0.375 },
+    "Less": { sizeWeight: 0.625, countWeight: 0.375 },
     "XML": { sizeWeight: 0.6, countWeight: 0.4 },
     
     // Configuration & data languages - even higher weight on size
