@@ -14,7 +14,7 @@ const getLanguageWeights = (language) => {
     "PHP": { sizeWeight: 0.5, countWeight: 0.5 },
     "JavaScript": { sizeWeight: 0.5, countWeight: 0.5 },
     "TypeScript": { sizeWeight: 0.5, countWeight: 0.5 },
-    "Python": { sizeWeight: 0.525, countWeight: 0.475 },
+    "Python": { sizeWeight: 0.55, countWeight: 0.45 },
     "Ruby": { sizeWeight: 0.5, countWeight: 0.5 },
     "Java": { sizeWeight: 0.5, countWeight: 0.5 },
     "C#": { sizeWeight: 0.5, countWeight: 0.5 },
