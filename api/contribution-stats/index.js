@@ -70,9 +70,6 @@ async function fetchContributionStats(username, token) {
         repositoryDiscussionComments(first: 1) {
           totalCount
         }
-        pullRequestComments: issueComments(first: 1) {
-          totalCount
-        }
       }
     }
   `;
@@ -115,8 +112,27 @@ async function fetchContributionStats(username, token) {
   const totalDiscussions = user.repositoryDiscussions.totalCount;
   const totalDiscussionComments = user.repositoryDiscussionComments.totalCount;
   
-  // Get pull request comments
-  const pullRequestComments = user.pullRequestComments ? user.pullRequestComments.totalCount : 0;
+  // For PR comments, we'll query a separate REST API endpoint
+  let pullRequestComments = 0;
+  
+  try {
+    // Query the REST API to get PR comments count
+    // This requires a separate call since the GraphQL API doesn't easily separate PR comments
+    const restResponse = await fetch(`https://api.github.com/search/issues?q=author:${username}+is:pr-review-comment`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    });
+    
+    if (restResponse.ok) {
+      const prCommentsData = await restResponse.json();
+      pullRequestComments = prCommentsData.total_count || 0;
+    }
+  } catch (error) {
+    console.warn('Could not fetch PR comments count:', error.message);
+    // Continue with zero PR comments if there's an error
+  }
   
   // Combine discussions and comments
   const totalDiscussionsAndComments = totalDiscussions + totalDiscussionComments;
@@ -127,7 +143,7 @@ async function fetchContributionStats(username, token) {
   // Combine pull requests and reviews
   const totalPullRequestsAndReviews = user.pullRequests.totalCount + contribs.totalPullRequestReviewContributions;
   
-  // Calculate total contributions (now including PR comments)
+  // Calculate total contributions (including PR comments)
   const totalContributions = 
     contribs.totalCommitContributions +
     contribs.totalIssueContributions +
