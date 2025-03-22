@@ -4,7 +4,7 @@ const stats = JSON.parse(fs.readFileSync("stats.json", "utf8"));
 let readme = fs.readFileSync("README.md", "utf8");
 
 // Configuration from environment variables
-const topCount = parseInt(process.env.TOP_LANGUAGES) || 6;
+const topCount = parseInt(process.env.TOP_LANGUAGES) || 7;
 
 // Dynamic weights based on language type
 const getLanguageWeights = (language) => {
