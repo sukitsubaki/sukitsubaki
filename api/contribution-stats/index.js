@@ -70,6 +70,9 @@ async function fetchContributionStats(username, token) {
         repositoryDiscussionComments(first: 1) {
           totalCount
         }
+        pullRequestComments: issueComments(first: 1) {
+          totalCount
+        }
       }
     }
   `;
@@ -112,6 +115,9 @@ async function fetchContributionStats(username, token) {
   const totalDiscussions = user.repositoryDiscussions.totalCount;
   const totalDiscussionComments = user.repositoryDiscussionComments.totalCount;
   
+  // Get pull request comments
+  const pullRequestComments = user.pullRequestComments ? user.pullRequestComments.totalCount : 0;
+  
   // Combine discussions and comments
   const totalDiscussionsAndComments = totalDiscussions + totalDiscussionComments;
 
@@ -121,7 +127,7 @@ async function fetchContributionStats(username, token) {
   // Combine pull requests and reviews
   const totalPullRequestsAndReviews = user.pullRequests.totalCount + contribs.totalPullRequestReviewContributions;
   
-  // Calculate total contributions
+  // Calculate total contributions (now including PR comments)
   const totalContributions = 
     contribs.totalCommitContributions +
     contribs.totalIssueContributions +
@@ -129,7 +135,8 @@ async function fetchContributionStats(username, token) {
     contribs.totalPullRequestReviewContributions +
     contribs.totalRepositoryContributions +
     totalDiscussions +
-    totalDiscussionComments;
+    totalDiscussionComments +
+    pullRequestComments;
 
   // Format final statistics
   return {
@@ -141,6 +148,7 @@ async function fetchContributionStats(username, token) {
     issueContributions: contribs.totalIssueContributions,
     pullRequestsCreated: user.pullRequests.totalCount,
     pullRequestContributions: contribs.totalPullRequestContributions,
+    pullRequestComments: pullRequestComments,
     pullRequestReviews: contribs.totalPullRequestReviewContributions,
     pullRequestsAndReviews: totalPullRequestsAndReviews,
     repositoriesCreated: contribs.totalRepositoryContributions,
