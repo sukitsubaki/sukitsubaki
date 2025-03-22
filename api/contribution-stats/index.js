@@ -64,6 +64,9 @@ async function fetchContributionStats(username, token) {
         issues(first: 1) {
           totalCount
         }
+        issueComments(first: 1) {
+          totalCount
+        }
         repositoryDiscussions(first: 1) {
           totalCount
         }
@@ -108,81 +111,15 @@ async function fetchContributionStats(username, token) {
     totalForks += repo.forkCount;
   });
   
-  // Calculate total discussions and discussion comments
-  const totalDiscussions = user.repositoryDiscussions.totalCount;
-  const totalDiscussionComments = user.repositoryDiscussionComments.totalCount;
+  // Get total comments, issue contributions, and discussion comments
+  const totalIssueComments = user.issueComments ? user.issueComments.totalCount : 0;
+  const totalIssueContributions = user.contributionsCollection.totalIssueContributions || 0;
+  const totalDiscussions = user.repositoryDiscussions ? user.repositoryDiscussions.totalCount : 0;
+  const totalDiscussionComments = user.repositoryDiscussionComments ? user.repositoryDiscussionComments.totalCount : 0;
   
-  // For PR comments, we need to make a specific request
-  let pullRequestComments = 0;
-  
-  // Query to get PR comments using a more reliable approach
-  const prCommentsQuery = `
-    query($username: String!) {
-      user(login: $username) {
-        contributionsCollection {
-          pullRequestReviewContributions(first: 1) {
-            totalCount
-          }
-          pullRequestReviewContributionsByRepository {
-            repository {
-              name
-            }
-            contributions {
-              totalCount
-            }
-          }
-        }
-        issueComments(first: 100) {
-          totalCount
-          nodes {
-            issue {
-              isPullRequest
-            }
-          }
-        }
-      }
-    }
-  `;
-  
-  try {
-    // Make another GraphQL request specifically for PR comments
-    const prCommentsResponse = await fetch('https://api.github.com/graphql', {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({ 
-        query: prCommentsQuery, 
-        variables: { username } 
-      })
-    });
-    
-    if (prCommentsResponse.ok) {
-      const prCommentsData = await prCommentsResponse.json();
-      
-      if (prCommentsData.data && prCommentsData.data.user) {
-        // Count PR comments from the issue comments
-        let prCommentCount = 0;
-        
-        // Check if we have issue comments nodes to examine
-        if (prCommentsData.data.user.issueComments && 
-            prCommentsData.data.user.issueComments.nodes) {
-          
-          // Count comments that are on pull requests
-          prCommentsData.data.user.issueComments.nodes.forEach(comment => {
-            if (comment.issue && comment.issue.isPullRequest) {
-              prCommentCount++;
-            }
-          });
-        }
-        
-        // Use the counted value, or set a reasonable default if we couldn't count properly
-        pullRequestComments = prCommentCount || 5;
-      }
-    }
-  } catch (error) {
-    console.warn('Could not fetch PR comments count:', error.message);
-    // Set a default fallback value based on activity level
-    pullRequestComments = 4; // Reasonable fallback for active users
-  }
+  // Calculate PR comments by subtracting issue contributions and discussion comments from total comments
+  // We add a safeguard to ensure we don't get a negative number
+  const pullRequestComments = Math.max(0, totalIssueComments - totalIssueContributions - totalDiscussionComments);
   
   // Combine discussions and comments
   const totalDiscussionsAndComments = totalDiscussions + totalDiscussionComments;
