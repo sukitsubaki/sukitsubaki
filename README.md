@@ -12,13 +12,13 @@ A brief, code-based representation of who I am as a developer.
 
 class SukisDevStats:
     def __init__(self):
-        self.language_stats = { # 465 files, 2.74 MB, dynamic weighting
-            "PHP"        : "████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 29.89 %
-            "HTML"       : "█████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 22.39 %
-            "CSS"        : "███████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 16.40 %
-            "Python"     : "█████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 13.55 %
-            "Swift"      : "█████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 12.11 %
-            "JavaScript" : "██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", #  5.67 %
+        self.language_stats = { # 465 files, 2.75 MB, dynamic weighting
+            "PHP"        : "████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 29.82 %
+            "HTML"       : "█████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 22.33 %
+            "CSS"        : "███████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 16.36 %
+            "Python"     : "█████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 13.52 %
+            "Swift"      : "█████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 12.08 %
+            "JavaScript" : "██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", #  5.90 %
         }
         self.contribution_stats = { # sum: 1,232
             "Commits"       : 1,083,
@@ -35,7 +35,7 @@ class SukisDevStats:
         }
         self.activity_stats = {
             "longest_commit_streak" : 15, # days
-            "preferred_coding_hour" : 21,
+            "preferred_coding_hour" : 22,
             "total_days_active"     : 18,
         }
         self.profile_views = 825 # unique
