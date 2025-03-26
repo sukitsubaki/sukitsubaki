@@ -3,6 +3,7 @@ A personal collection of terminal commands and shortcuts that I find useful but 
 - [PyPi Publishing](#pypi-publishing)
 - [Archiving](#archiving)
 - [File and Directory](#file-and-directory)
+- [User](#user)
 
 ## PyPI Publishing
 1. Update `setup.py`, `pyproject.toml`, `repository/__init__.py`, `README.md`
@@ -64,3 +65,10 @@ python -m twine upload dist/*
 | `rm -r directory/`                                   | Delete directory                          |
 | `rm directory/*`                                     | Delete files in directory                 |
 | `rm -r directory/*`                                  | Delete files and directories in directory |
+
+## User
+| Command                          | Description                           |
+| -------------------------------- | ------------------------------------- |
+| `sudo adduser username`          | Add new user                          |
+| `sudo usermod -aG sudo username` | Give sudo rights                      |
+| `su - username`                  | Switch user                           |
