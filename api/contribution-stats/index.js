@@ -67,12 +67,6 @@ async function fetchContributionStats(username, token) {
         issueComments(first: 1) {
           totalCount
         }
-        pullRequestComments: issueComments(first: 1, filters: {pullRequest: true}) {
-          totalCount
-        }
-        regularIssueComments: issueComments(first: 1, filters: {pullRequest: false}) {
-          totalCount
-        }
         repositoryDiscussions(first: 1) {
           totalCount
         }
@@ -117,14 +111,17 @@ async function fetchContributionStats(username, token) {
     totalForks += repo.forkCount;
   });
   
-  // Get issue comments and contributions
+  // Get total comments, issue contributions, and discussion comments
   const totalIssueComments = user.issueComments ? user.issueComments.totalCount : 0;
-  const regularIssueComments = user.regularIssueComments ? user.regularIssueComments.totalCount : 0;
-  const pullRequestComments = user.pullRequestComments ? user.pullRequestComments.totalCount : 0;
-  
   const totalIssueContributions = user.contributionsCollection.totalIssueContributions || 0;
   const totalDiscussions = user.repositoryDiscussions ? user.repositoryDiscussions.totalCount : 0;
   const totalDiscussionComments = user.repositoryDiscussionComments ? user.repositoryDiscussionComments.totalCount : 0;
+  
+  // Note that totalIssueContributions already includes all issue contributions
+  // We assume that totalIssueContributions includes all issue comments we want to count
+  
+  // We'll set PR comments to 0 as we can't reliably calculate them without additional API calls
+  const pullRequestComments = 0;
   
   // Combine discussions and comments
   const totalDiscussionsAndComments = totalDiscussions + totalDiscussionComments;
@@ -143,8 +140,7 @@ async function fetchContributionStats(username, token) {
     contribs.totalPullRequestReviewContributions +
     contribs.totalRepositoryContributions +
     totalDiscussions +
-    totalDiscussionComments +
-    pullRequestComments;
+    totalDiscussionComments;
 
   // Format final statistics
   return {
@@ -154,10 +150,9 @@ async function fetchContributionStats(username, token) {
     commits: contribs.totalCommitContributions,
     issuesCreated: user.issues.totalCount,
     issueContributions: contribs.totalIssueContributions,
-    regularIssueComments: regularIssueComments, 
+    // We don't include pullRequestComments since we can't calculate it reliably
     pullRequestsCreated: user.pullRequests.totalCount,
     pullRequestContributions: contribs.totalPullRequestContributions,
-    pullRequestComments: pullRequestComments,
     pullRequestReviews: contribs.totalPullRequestReviewContributions,
     pullRequestsAndReviews: totalPullRequestsAndReviews,
     repositoriesCreated: contribs.totalRepositoryContributions,
