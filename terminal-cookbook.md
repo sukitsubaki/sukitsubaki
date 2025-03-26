@@ -4,6 +4,7 @@ A personal collection of terminal commands and shortcuts that I find useful but 
 - [Archiving](#archiving)
 - [File and Directory](#file-and-directory)
 - [User](#user)
+- [GitHub self-hosted runner](#github-self-hosted-runner)
 
 ## PyPI Publishing
 1. Update `setup.py`, `pyproject.toml`, `repository/__init__.py`, `README.md`
@@ -72,3 +73,7 @@ python -m twine upload dist/*
 | `sudo adduser username`          | Add new user                          |
 | `sudo usermod -aG sudo username` | Give sudo rights                      |
 | `su - username`                  | Switch user                           |
+
+## GitHub self-hosted runner
+1. `cd actions-runner`
+2. `./run.sh`
