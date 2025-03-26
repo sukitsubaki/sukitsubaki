@@ -63,7 +63,7 @@ async function updateReadme() {
     const formattedViews = formatNumber(stats.allTimeViews);
     
     // Find the profile_views line to update
-    const profileViewsPattern = /self\.profile_views\s*=\s*\d+/;
+    const profileViewsPattern = /self\.profile_views\s*=\s*[0-9,]+(\s*#\s*unique)?/;
     const profileViewsMatch = readme.match(profileViewsPattern);
     
     if (!profileViewsMatch) {
