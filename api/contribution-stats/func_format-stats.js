@@ -34,8 +34,8 @@ async function updateReadme() {
       commits: formatNumber(stats.commits),
       issuesCreated: formatNumber(stats.issuesCreated),
       issueContrib: formatNumber(stats.issueContributions),
-      issueComments: formatNumber(stats.regularIssueComments || 0),
       prCreated: formatNumber(stats.pullRequestsCreated),
+      // PR comments are not reliably available, so we use 0 if unavailable
       prComments: formatNumber(stats.pullRequestComments || 0),
       prReviews: formatNumber(stats.pullRequestReviews),
       discussions: formatNumber(stats.discussions + stats.discussionComments)
@@ -46,7 +46,6 @@ async function updateReadme() {
       parseInt(stats.commits) + 
       parseInt(stats.issuesCreated) + 
       parseInt(stats.issueContributions) + 
-      parseInt(stats.regularIssueComments || 0) + 
       parseInt(stats.pullRequestsCreated) + 
       parseInt(stats.pullRequestComments || 0) + 
       parseInt(stats.pullRequestReviews) + 
@@ -86,12 +85,12 @@ async function updateReadme() {
     const afterContent = readme.substring(endPosition);
     
     // Create the formatted contribution stats block
+    // Note: Issue comments are considered part of issue contributions
     const contributionStatsContent = `        self.contribution_stats = { # sum: ${formatNumber(totalContributions)}
             "Commits"       : ${formattedContribution.commits},
             "Issues": {
                 "Created"   : ${formattedContribution.issuesCreated},
                 "Contrib"   : ${formattedContribution.issueContrib},
-                "Commented" : ${formattedContribution.issueComments},
             },
             "PR": { # pull requests
                 "Created"   : ${formattedContribution.prCreated},
