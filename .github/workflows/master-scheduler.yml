@@ -17,10 +17,10 @@ on:
         description: 'Update activity statistics'
         type: boolean
         default: true
-#      run_profile_views:
-#        description: 'Update profile views'
-#        type: boolean
-#        default: true
+      run_profile_views:
+        description: 'Update profile views'
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -53,14 +53,14 @@ jobs:
           RUN_LANGUAGE_STATS="false"
           RUN_CONTRIBUTION_STATS="false"
           RUN_ACTIVITY_STATS="false"
-#          RUN_PROFILE_VIEWS="false"
+          RUN_PROFILE_VIEWS="false"
           
           # If triggered manually, use the input parameters
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
             RUN_LANGUAGE_STATS="${{ github.event.inputs.run_language_stats }}"
             RUN_CONTRIBUTION_STATS="${{ github.event.inputs.run_contribution_stats }}"
             RUN_ACTIVITY_STATS="${{ github.event.inputs.run_activity_stats }}"
-#            RUN_PROFILE_VIEWS="${{ github.event.inputs.run_profile_views }}"
+            RUN_PROFILE_VIEWS="${{ github.event.inputs.run_profile_views }}"
           else
             # Every run updates language stats (always true)
             RUN_LANGUAGE_STATS="true"
@@ -75,23 +75,23 @@ jobs:
               RUN_CONTRIBUTION_STATS="true"
             fi
             
-#            # update-profile-views.yml: once daily at 11:20
-#            if [ "$HOUR" -eq 10 ]; then
-#              RUN_PROFILE_VIEWS="true"
-#            fi
+            # update-profile-views.yml: once daily at 11:20
+            if [ "$HOUR" -eq 10 ]; then
+              RUN_PROFILE_VIEWS="true"
+            fi
           fi
           
           # Set outputs
           echo "run_language_stats=$RUN_LANGUAGE_STATS" >> $GITHUB_OUTPUT
           echo "run_contribution_stats=$RUN_CONTRIBUTION_STATS" >> $GITHUB_OUTPUT
           echo "run_activity_stats=$RUN_ACTIVITY_STATS" >> $GITHUB_OUTPUT
-#          echo "run_profile_views=$RUN_PROFILE_VIEWS" >> $GITHUB_OUTPUT
+          echo "run_profile_views=$RUN_PROFILE_VIEWS" >> $GITHUB_OUTPUT
           
           echo "Will update: "
           echo "Language stats: $RUN_LANGUAGE_STATS"
           echo "Contribution stats: $RUN_CONTRIBUTION_STATS"
           echo "Activity stats: $RUN_ACTIVITY_STATS"
-#          echo "Profile views: $RUN_PROFILE_VIEWS"
+          echo "Profile views: $RUN_PROFILE_VIEWS"
       
       - name: Update language stats
         if: steps.determine-updates.outputs.run_language_stats == 'true'
@@ -117,13 +117,13 @@ jobs:
           export API_URL="https://sukitsubaki.vercel.app/contribution-stats"
           node ./api/contribution-stats/func_format-stats.js
       
-#      - name: Update profile views
-#        if: steps.determine-updates.outputs.run_profile_views == 'true'
-#        run: |
-#          echo "Updating profile views..."
-#          export API_URL="https://sukitsubaki.vercel.app/profile-views"
-#          # Run your profile views update script
-#          node ./api/profile-views/func_format-stats.js
+      - name: Update profile views
+        if: steps.determine-updates.outputs.run_profile_views == 'true'
+        run: |
+          echo "Updating profile views..."
+          export API_URL="https://sukitsubaki.vercel.app/profile-views"
+          # Run your profile views update script
+          node ./api/profile-views/func_format-stats.js
       
       - name: Commit changes
         run: |
