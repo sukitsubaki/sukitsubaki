@@ -13,15 +13,15 @@ A brief, code-based representation of who I am as a developer.
 class SukisDevStats:
     def __init__(self):
         self.language_stats = { # 490 files, 2.92 MB, dynamic weighting
-            "PHP"        : "███████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 27.95 %
+            "PHP"        : "███████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 27.96 %
             "HTML"       : "█████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 22.06 %
             "CSS"        : "███████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 16.96 %
             "Python"     : "██████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 14.95 %
             "Swift"      : "█████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 11.32 %
             "JavaScript" : "███░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", #  6.75 %
         }
-        self.contribution_stats = { # sum: 2,036
-            "Commits"       : 1,730,
+        self.contribution_stats = { # sum: 2,050
+            "Commits"       : 1,744,
             "Issues": {
                 "Created"   : 55,
                 "Commented" : 223,
@@ -30,12 +30,12 @@ class SukisDevStats:
                 "Created"   : 17,
                 "Reviewed"  : 4,
             },
-            "Discussions"  : 7,
+            "Discussions"   : 7,
         }
         self.activity_stats = {
-            "longest_commit_streak" : 16, # days
+            "longest_commit_streak" : 18, # days
             "preferred_coding_hour" : 23,
-            "total_days_active"     : 19,
+            "total_days_active"     : 21,
         }
         self.profile_views = 1,202 # unique
 
