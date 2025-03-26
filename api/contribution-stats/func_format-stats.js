@@ -92,7 +92,7 @@ async function updateReadme() {
                 "Created"   : ${formattedContribution.prCreated},
                 "Reviewed"  : ${formattedContribution.prReviews},
             },
-            "Discussions"  : ${formattedContribution.discussions},
+            "Discussions"   : ${formattedContribution.discussions},
         }`;
     
     // Create updated README
