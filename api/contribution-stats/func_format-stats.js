@@ -34,6 +34,7 @@ async function updateReadme() {
       commits: formatNumber(stats.commits),
       issuesCreated: formatNumber(stats.issuesCreated),
       issueContrib: formatNumber(stats.issueContributions),
+      issueComments: formatNumber(stats.regularIssueComments || 0),
       prCreated: formatNumber(stats.pullRequestsCreated),
       prComments: formatNumber(stats.pullRequestComments || 0),
       prReviews: formatNumber(stats.pullRequestReviews),
@@ -45,6 +46,7 @@ async function updateReadme() {
       parseInt(stats.commits) + 
       parseInt(stats.issuesCreated) + 
       parseInt(stats.issueContributions) + 
+      parseInt(stats.regularIssueComments || 0) + 
       parseInt(stats.pullRequestsCreated) + 
       parseInt(stats.pullRequestComments || 0) + 
       parseInt(stats.pullRequestReviews) + 
@@ -89,6 +91,7 @@ async function updateReadme() {
             "Issues": {
                 "Created"   : ${formattedContribution.issuesCreated},
                 "Contrib"   : ${formattedContribution.issueContrib},
+                "Commented" : ${formattedContribution.issueComments},
             },
             "PR": { # pull requests
                 "Created"   : ${formattedContribution.prCreated},
