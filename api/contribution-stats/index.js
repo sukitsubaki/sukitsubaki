@@ -113,15 +113,15 @@ async function fetchContributionStats(username, token) {
   
   // Get total comments, issue contributions, and discussion comments
   const totalIssueComments = user.issueComments ? user.issueComments.totalCount : 0;
-  const totalIssueContributions = user.contributionsCollection.totalIssueContributions || 0;
   const totalDiscussions = user.repositoryDiscussions ? user.repositoryDiscussions.totalCount : 0;
   const totalDiscussionComments = user.repositoryDiscussionComments ? user.repositoryDiscussionComments.totalCount : 0;
   
-  // Note that totalIssueContributions already includes all issue contributions
-  // We assume that totalIssueContributions includes all issue comments we want to count
+  // We'll count all comments as part of issue contributions
+  // Since we can't reliably distinguish between PR and issue comments
+  const issueContributions = user.contributionsCollection.totalIssueContributions || 0;
   
-  // We'll set PR comments to 0 as we can't reliably calculate them without additional API calls
-  const pullRequestComments = 0;
+  // Add all comments to issue contributions total
+  const totalIssueContributions = issueContributions + totalIssueComments;
   
   // Combine discussions and comments
   const totalDiscussionsAndComments = totalDiscussions + totalDiscussionComments;
@@ -135,7 +135,7 @@ async function fetchContributionStats(username, token) {
   // Calculate total contributions
   const totalContributions = 
     contribs.totalCommitContributions +
-    contribs.totalIssueContributions +
+    totalIssueContributions + // Use our adjusted value that includes all comments
     contribs.totalPullRequestContributions +
     contribs.totalPullRequestReviewContributions +
     contribs.totalRepositoryContributions +
@@ -149,10 +149,10 @@ async function fetchContributionStats(username, token) {
     totalContributions,
     commits: contribs.totalCommitContributions,
     issuesCreated: user.issues.totalCount,
-    issueContributions: contribs.totalIssueContributions,
-    // We don't include pullRequestComments since we can't calculate it reliably
+    issueContributions: totalIssueContributions, // Including all comments
     pullRequestsCreated: user.pullRequests.totalCount,
     pullRequestContributions: contribs.totalPullRequestContributions,
+    // pullRequestComments field removed
     pullRequestReviews: contribs.totalPullRequestReviewContributions,
     pullRequestsAndReviews: totalPullRequestsAndReviews,
     repositoriesCreated: contribs.totalRepositoryContributions,
