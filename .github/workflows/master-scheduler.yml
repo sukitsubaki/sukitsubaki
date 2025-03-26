@@ -3,7 +3,7 @@ name: Master Scheduler
 on:
   schedule:
     - cron: '20 */2 * * *'  # Runs every 2 hours at XX:20
-  workflow_dispatch:      # Allows manual triggering with parameters
+  workflow_dispatch:       # Allows manual triggering with parameters
     inputs:
       run_language_stats:
         description: 'Update language statistics'
@@ -17,10 +17,10 @@ on:
         description: 'Update activity statistics'
         type: boolean
         default: true
-      run_profile_views:
-        description: 'Update profile views'
-        type: boolean
-        default: true
+#      run_profile_views:
+#        description: 'Update profile views'
+#        type: boolean
+#        default: true
 
 permissions:
   contents: write
