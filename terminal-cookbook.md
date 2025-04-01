@@ -6,6 +6,7 @@ A personal collection of terminal commands and shortcuts that I find useful but 
 - [User](#user)
 - [GitHub self-hosted runner](#github-self-hosted-runner)
 - [Docker](#docker)
+- [Packages](#packages)
 
 ## PyPI Publishing
 1. Update `setup.py`, `pyproject.toml`, `repository/__init__.py`, `README.md`
@@ -85,3 +86,10 @@ python -m twine upload dist/*
 | `docker compose pull`    | Get latest version                    |
 | `docker compose down`    | Stop container                        |
 | `docker compose up -d`   | Start container                       |
+
+## Packages
+| Command                          | Description                           |
+| -------------------------------- | ------------------------------------- |
+| `sudo apt-get remove`            | Uninstall package                     |
+| `sudo apt-get purge`             | Uninstall config files                |
+| `sudo apt-get autoremove`        | Uninstall unused dependencies         |
