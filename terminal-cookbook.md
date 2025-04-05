@@ -98,5 +98,6 @@ python -m twine upload dist/*
 ## General
 | Command                                                           | Description                           |
 | ----------------------------------------------------------------- | ------------------------------------- |
-| `watch -n 1 vcgencmd measure_temp`                                | CPU temp (1 s)         |
-| `cat /sys/devices/platform/cooling_fan/hwmon/hwmon3/fan1_input`   | Fan rpm                |
+| `watch -n 1 vcgencmd measure_temp`                                | CPU temp (1 s)                        |
+| `cat /sys/devices/platform/cooling_fan/hwmon/hwmon3/fan1_input`   | Fan rpm                               |
+| `sudo iotop`                                                      | Show IO stats                         |
