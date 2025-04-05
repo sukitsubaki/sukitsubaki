@@ -7,6 +7,7 @@ A personal collection of terminal commands and shortcuts that I find useful but 
 - [GitHub self-hosted runner](#github-self-hosted-runner)
 - [Docker](#docker)
 - [Packages](#packages)
+- [General](#general)
 
 ## PyPI Publishing
 1. Update `setup.py`, `pyproject.toml`, `repository/__init__.py`, `README.md`
@@ -93,3 +94,9 @@ python -m twine upload dist/*
 | `sudo apt-get remove`            | Uninstall package                     |
 | `sudo apt-get purge`             | Uninstall config files                |
 | `sudo apt-get autoremove`        | Uninstall unused dependencies         |
+
+## General
+| Command                                                           | Description                           |
+| ----------------------------------------------------------------- | ------------------------------------- |
+| `watch -n 1 vcgencmd measure_temp`                                | CPU temp (1 s)         |
+| `cat /sys/devices/platform/cooling_fan/hwmon/hwmon3/fan1_input`   | Fan rpm                |
