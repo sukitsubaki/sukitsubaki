@@ -12,22 +12,22 @@ A brief, code-based representation of who I am as a developer.
 
 class SukisDevStats:
     def __init__(self):
-        self.language_stats = { # 609 files, 2.86 MB, dynamic weighting
-            "HTML"       : "██████████████░░░░░░░░░░░░░░░░░░░░░░░░░░", # 35.72 %
-            "PHP"        : "██████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 24.66 %
-            "CSS"        : "██████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 15.53 %
-            "Python"     : "█████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 12.68 %
-            "JavaScript" : "███░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", #  6.31 %
-            "Swift"      : "██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", #  5.10 %
+        self.language_stats = { # 616 files, 3.16 MB, dynamic weighting
+            "HTML"       : "█████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 31.44 %
+            "CSS"        : "██████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 25.66 %
+            "PHP"        : "█████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 21.71 %
+            "Python"     : "████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 11.16 %
+            "JavaScript" : "██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", #  5.55 %
+            "Swift"      : "██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", #  4.49 %
         }
-        self.contribution_stats = { # sum: 2,065
-            "Commits"       : 1,716,
+        self.contribution_stats = { # sum: 2,134
+            "Commits"       : 1,746,
             "Issues": {
-                "Created"   : 57,
-                "Commented" : 251,
+                "Created"   : 62,
+                "Commented" : 283,
             },
             "PR": { # pull requests
-                "Created"   : 19,
+                "Created"   : 21,
                 "Reviewed"  : 5,
             },
             "Discussions"   : 17,
@@ -35,9 +35,9 @@ class SukisDevStats:
         self.activity_stats = {
             "longest_commit_streak" : 18, # days
             "preferred_coding_hour" : 2,
-            "total_days_active"     : 30,
+            "total_days_active"     : 35,
         }
-        self.profile_views = 4,313 # unique
+        self.profile_views = 4,317 # unique
 
 
 class SukisSkillSet:
