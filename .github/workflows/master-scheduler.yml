@@ -27,7 +27,7 @@ permissions:
 
 jobs:
   update-profile:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest # self-hosted
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
