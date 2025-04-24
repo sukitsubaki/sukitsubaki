@@ -37,7 +37,7 @@ class SukisDevStats:
             "preferred_coding_hour" : 2,
             "total_days_active"     : 36,
         }
-        self.profile_views = 4,337 # unique
+        self.profile_views = 4,341 # unique
 
 
 class SukisSkillSet:
