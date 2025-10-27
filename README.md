@@ -51,12 +51,6 @@ class SukisSkillSet:
 
 class SukisDevBackground:
     def __init__(self):
-        self.origin_story = [
-            "Discovered the magic of coding as a child",
-            "Loves crafting digital solutions just for fun",
-            "Enjoys traveling back in time to fix past coding mistakes",
-            "Believes that code is not just logic, but also art",
-        ]
         self.milestones = {
             "first_line_of_code" : 2003, # C++
             "first_website"      : 2004, # about penguins
