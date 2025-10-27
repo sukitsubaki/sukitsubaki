@@ -49,14 +49,6 @@ class SukisSkillSet:
         }
 
 
-class SukisProjectLog:
-    def __init__(self):
-        self.active_projects = {
-            "primary"   : ["CSS Animations", "Task Automation"],
-            "secondary" : ["Machine Learning", "Self-Hosted Email Server"],
-        }
-
-
 class SukisDevBackground:
     def __init__(self):
         self.origin_story = [
@@ -70,18 +62,6 @@ class SukisDevBackground:
             "first_website"      : 2004, # about penguins
             "first_app"          : 2008, # calculator with Java
             "first_contribution" : 2006, # in a tech forum
-        }
-
-
-class SukisSelfReview:
-    def __init__(self):
-        self.positive_evaluation = {
-            "technical_strengths" : ["Analytical Problem Solving", "Creative Solutions"],
-            "expertise_areas"     : ["Architecture Design", "Clean Code"],
-        }
-        self.constructive_evaluation = {
-            "improvement_areas"   : ["Complexity Management", "Project Scope Control"],
-            "skill_refinements"   : ["Time Estimation", "Documentation Consistency"],
         }
 
 
