@@ -7,7 +7,7 @@
 # Updated 2025-10-27
 
 """
-A brief, code-based representation of who I am as a developer.
+A brief, code-based representation of me
 """
 
 class SukisDevStats:
