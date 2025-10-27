@@ -83,6 +83,7 @@ if __name__ == "__main__":
       "cpu": "Apple M2 Max (12C/12T)",
       "ram": "64 GB",
       "storage": "1 TB SSD + 2x 2 TB SSD + 2x 4 TB HDD",
+      "os": "macOS",
     },
     "sunshine_server": {
       "type": "custom"
@@ -90,12 +91,14 @@ if __name__ == "__main__":
       "gpu": "AMD Radeon RX 6090XT",
       "ram": "32 GB",
       "storage": "1 TB SSD",
+      "os": "CachyOS",
     },
     "mobile": {
       "type": "Lenovo ThinkPad T14 Gen 3",
       "cpu": "AMD Ryzen 5 PRO 6650U (6C/12T)",
       "ram": "16 GB",
       "storage": "2 TB SSD",
+      "os": "Arch Linux",
     },
     "homelab": {
       "server": {
@@ -103,6 +106,7 @@ if __name__ == "__main__":
         "cpu": "Cortex-A76 (4C/4T)",
         "ram": "16 GB",
         "storage": "512 GB SSD",
+        "os": "Debian",
       },
       "expansion": {
         "type": "QNAP TR-004",
