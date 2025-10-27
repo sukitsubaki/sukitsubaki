@@ -60,8 +60,8 @@ class SukisDevBackground:
         self.milestones = {
             "first_line_of_code" : 2003, # C++
             "first_website"      : 2004, # about penguins
-            "first_app"          : 2008, # calculator with Java
             "first_contribution" : 2006, # in a tech forum
+            "first_app"          : 2008, # calculator with Java
         }
 
 
