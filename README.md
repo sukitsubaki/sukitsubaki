@@ -77,13 +77,47 @@ if __name__ == "__main__":
 
 ```json
 {
-  "closing_remarks": [
-    "I don't know if you can tell, but I really enjoy Python. (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧",
-    "The first steps of my voyage with this language were taken not long ago.",
-    "By the way, I pronounce it Python as in ˈpyːtɔn and not ˈpaɪθən or ˈpaɪθɑn.",
-    "The word's origin is in Latin pyː.tʰoːn so I think I'm not too wrong with that."
+  "machines": {
+    "workstation": {
+      "type": "Mac Studio",
+      "cpu": "Apple M2 Max (12C/12T)",
+      "ram": "64 GB",
+      "storage": "1 TB SSD + 2x 2 TB SSD + 2x 4 TB HDD",
+    },
+    "sunshine_server": {
+      "name": "Custom Build Desktop PC",
+      "form_factor": "ITX",
+      "cpu": "AMD Ryzen 7 7700 (8C/16T)",
+      "gpu": "AMD Radeon RX 6090XT",
+      "ram": "32 GB",
+      "storage": "1 TB SSD",
+    },
+    "mobile": {
+      "name": "Lenovo ThinkPad T14 Gen 3",
+      "cpu": "AMD Ryzen 5 PRO 6650U (6C/12T)",
+      "ram": "16 GB",
+      "storage": "2 TB SSD",
+    },
+    "homelab": {
+      "server": {
+        "type": "Raspberry Pi 5",
+        "cpu": "Cortex-A76 (4C/4T)",
+        "ram": "16 GB",
+        "storage": "512 GB SSD",
+      },
+      "expansion": {
+        "type": "QNAP TR-004",
+        "storage": "4x 12 TB HDD",
+        "raid": "10",
+      }
+    }
+  },
+  "philosophy": [
+    "Build once, tinker forever",
+    "Self-hosting > Cloud dependency",
+    "The best setup is the one you can fix yourself"
   ],
-  "hashtag": "#pühtonn"
+  "hashtag": "#homelablife"
 }
 ```
 
