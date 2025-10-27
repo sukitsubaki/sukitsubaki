@@ -85,15 +85,14 @@ if __name__ == "__main__":
       "storage": "1 TB SSD + 2x 2 TB SSD + 2x 4 TB HDD",
     },
     "sunshine_server": {
-      "name": "Custom Build Desktop PC",
-      "form_factor": "ITX",
+      "type": "custom"
       "cpu": "AMD Ryzen 7 7700 (8C/16T)",
       "gpu": "AMD Radeon RX 6090XT",
       "ram": "32 GB",
       "storage": "1 TB SSD",
     },
     "mobile": {
-      "name": "Lenovo ThinkPad T14 Gen 3",
+      "type": "Lenovo ThinkPad T14 Gen 3",
       "cpu": "AMD Ryzen 5 PRO 6650U (6C/12T)",
       "ram": "16 GB",
       "storage": "2 TB SSD",
