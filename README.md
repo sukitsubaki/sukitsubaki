@@ -20,11 +20,11 @@ class SukisDevStats:
             "Swift"      : "███░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", #  7.82 %
             "JavaScript" : "██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", #  5.69 %
         }
-        self.contribution_stats = { # sum: 2,237
-            "Commits"       : 1,799,
+        self.contribution_stats = { # sum: 1,889
+            "Commits"       : 1,495,
             "Issues": {
                 "Created"   : 69,
-                "Commented" : 326,
+                "Commented" : 282,
             },
             "PR": { # pull requests
                 "Created"   : 21,
