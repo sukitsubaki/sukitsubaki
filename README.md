@@ -33,9 +33,9 @@ class SukisDevStats:
             "Discussions"   : 17,
         }
         self.activity_stats = {
-            "longest_commit_streak" : 6, # days
+            "longest_commit_streak" : 4, # days
             "preferred_coding_hour" : 0,
-            "total_days_active"     : 29,
+            "total_days_active"     : 23,
         }
         self.profile_views = 302 # unique
 
