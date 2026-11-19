@@ -12,16 +12,16 @@ A brief, code-based representation of me
 
 class SukisDevStats:
     def __init__(self):
-        self.language_stats = { # 671 files, 3.73 MB, dynamic weighting
-            "CSS"        : "████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 29.30 %
-            "PHP"        : "█████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 23.22 %
+        self.language_stats = { # 672 files, 3.74 MB, dynamic weighting
+            "CSS"        : "████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 29.29 %
+            "PHP"        : "█████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 23.21 %
             "HTML"       : "████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 20.54 %
-            "Python"     : "█████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 13.73 %
+            "Python"     : "█████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", # 13.74 %
             "JavaScript" : "███░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", #  7.36 %
             "Swift"      : "██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░", #  5.85 %
         }
-        self.contribution_stats = { # sum: 432
-            "Commits"       : 164,
+        self.contribution_stats = { # sum: 455
+            "Commits"       : 187,
             "Issues": {
                 "Created"   : 68,
                 "Commented" : 160,
